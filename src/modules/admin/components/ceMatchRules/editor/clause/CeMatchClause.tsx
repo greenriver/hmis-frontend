@@ -10,6 +10,7 @@ import CeMatchClauseComparatorSelect, {
 import CeMatchClauseFieldSelect from './CeMatchClauseFieldSelect';
 import CeMatchClauseFieldSourceSelect from './CeMatchClauseFieldSourceSelect';
 import CeMatchClauseValueInput from './CeMatchClauseValueInput';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   CeMatchCustomAssessmentFormFieldsFragment,
   CeMatchFieldDetailsFragment,
@@ -149,9 +150,9 @@ const CeMatchClause: React.FC<Props> = ({
             control={control}
             fields={fields}
             fieldLabel={
-              source === CeMatchRuleFieldSource.Client
-                ? 'Client Field'
-                : 'Custom Field'
+              source
+                ? `${HmisEnums.CeMatchRuleFieldSource[source]} Field`
+                : 'Field'
             }
             disabled={fieldSelectDisabled}
             helperText={fieldSelectHelperText}

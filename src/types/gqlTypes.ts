@@ -504,7 +504,7 @@ export enum BoundType {
 export type BulkAssignServiceInput = {
   /** Clients that should receive service. Clients that are unenrolled in the project will be enrolled in the project. */
   clientIds: Array<Scalars['ID']['input']>;
-  /** CoC code to store as EnrollmentCoC when enrolling a new client. Only needed if Project operaties in multiple CoCs. */
+  /** CoC code to store as EnrollmentCoC when enrolling a new client. Only needed if Project operates in multiple CoCs. */
   cocCode?: InputMaybe<Scalars['String']['input']>;
   dateProvided: Scalars['ISO8601Date']['input'];
   projectId: Scalars['ID']['input'];
@@ -836,9 +836,9 @@ export enum CeMatchRuleComparator {
 }
 
 export enum CeMatchRuleFieldSource {
-  /** A client field, such as current_age */
+  /** Client */
   Client = 'CLIENT',
-  /** A custom data element, such as cde.custom_assessment.my_score */
+  /** Custom */
   CustomDataElement = 'CUSTOM_DATA_ELEMENT',
 }
 

@@ -3228,7 +3228,7 @@
           },
           {
             "name": "cocCode",
-            "description": "CoC code to store as EnrollmentCoC when enrolling a new client. Only needed if Project operaties in multiple CoCs.",
+            "description": "CoC code to store as EnrollmentCoC when enrolling a new client. Only needed if Project operates in multiple CoCs.",
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -5898,13 +5898,13 @@
         "enumValues": [
           {
             "name": "CLIENT",
-            "description": "A client field, such as current_age",
+            "description": "Client",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "CUSTOM_DATA_ELEMENT",
-            "description": "A custom data element, such as cde.custom_assessment.my_score",
+            "description": "Custom",
             "isDeprecated": false,
             "deprecationReason": null
           }
