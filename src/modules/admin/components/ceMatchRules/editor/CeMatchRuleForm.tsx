@@ -98,11 +98,9 @@ const CeMatchRuleForm: React.FC<Props> = ({
       return;
     }
 
-    // If this is an existing rule, reset the form and exit edit mode
-    clearErrors();
-    reset(defaultValues);
+    // If this is an existing rule, just exit edit mode
     setEditing(false);
-  }, [clearErrors, defaultValues, onCancel, reset, ruleId]);
+  }, [onCancel, ruleId]);
 
   const handleUnlock = useCallback(() => {
     clearErrors();
