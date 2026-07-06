@@ -1,6 +1,6 @@
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Alert, AlertTitle, Card, Grid, Typography } from '@mui/material';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import theme from '@/config/theme';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import ValidationErrorList from '@/modules/errors/components/ValidationErrorList';
@@ -51,12 +51,17 @@ const NewStaffAssignmentForm: React.FC<NewStaffAssignmentFormProps> = ({
       pickListType: PickListType.StaffAssignmentRelationships,
       projectId: projectId,
     },
-    onCompleted: (data) => {
-      if (data.pickList?.length === 1) {
-        setRelationshipId(data.pickList[0].code);
-      }
-    },
   });
+
+  // This effect could be avoided by splitting the component into
+  // an outer query-loading component and an inner component that holds the state.
+  // We're avoiding that refactor for now; see comments on #8958
+  useEffect(() => {
+    if (relationshipPickList?.length !== 1) return;
+
+    // If the picklist returned has only 1 option, auto-select it.
+    setRelationshipId(relationshipPickList[0].code);
+  }, [relationshipPickList]);
 
   const [assignStaff, { error: assignmentError, loading: assignmentLoading }] =
     useAssignStaffMutation({

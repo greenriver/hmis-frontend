@@ -12,13 +12,19 @@ import {
   useGetPickListQuery,
 } from '@/types/gqlTypes';
 
+export type PickListFetchOptions = Omit<
+  QueryHookOptions<GetPickListQuery, GetPickListQueryVariables>,
+  // Omit deprecated Apollo callbacks to make sure we don't re-introduce them.
+  'onCompleted' | 'onError'
+>;
+
 export function usePickList({
   item,
   fetchOptions,
   ...pickListArgs
 }: {
   item: FormItem;
-  fetchOptions?: QueryHookOptions<GetPickListQuery, GetPickListQueryVariables>;
+  fetchOptions?: PickListFetchOptions;
 } & PickListArgs) {
   const resolved = useMemo(() => resolveOptionList(item), [item]);
   const isKnownType = useMemo(
