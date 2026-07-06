@@ -7509,6 +7509,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
+        name: 'effectiveCeMatchRuleCount',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -7517,7 +7525,47 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'localCeMatchRuleCount',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
+      },
+      {
         name: 'name',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'organizationId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'organizationName',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'projectId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'projectName',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -10276,28 +10324,12 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'UnitCeReferralFilterOptions',
     args: [
       {
-        name: 'assignedToUser',
-        type: { kind: 'SCALAR', name: 'ID', ofType: null },
-      },
-      {
         name: 'assignedToYou',
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
       {
         name: 'onCurrentTaskSince',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
-      },
-      {
-        name: 'organization',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-          },
-        },
       },
       {
         name: 'origin',
@@ -10308,34 +10340,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             kind: 'NON_NULL',
             name: null,
             ofType: { kind: 'ENUM', name: 'CeReferralOrigin', ofType: null },
-          },
-        },
-      },
-      {
-        name: 'project',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-          },
-        },
-      },
-      {
-        name: 'projectGroupId',
-        type: { kind: 'SCALAR', name: 'ID', ofType: null },
-      },
-      {
-        name: 'projectType',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
           },
         },
       },
@@ -10354,18 +10358,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'searchTerm',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-      {
-        name: 'workflowTemplate',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-          },
-        },
       },
     ],
   },
@@ -10399,6 +10391,19 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
           },
         },
+      },
+    ],
+  },
+  {
+    name: 'UnitGroupFilterOptions',
+    args: [
+      {
+        name: 'ceWaitlistsEnabled',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
+        name: 'searchTerm',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
     ],
   },

@@ -504,7 +504,7 @@ export enum BoundType {
 export type BulkAssignServiceInput = {
   /** Clients that should receive service. Clients that are unenrolled in the project will be enrolled in the project. */
   clientIds: Array<Scalars['ID']['input']>;
-  /** CoC code to store as EnrollmentCoC when enrolling a new client. Only needed if Project operaties in multiple CoCs. */
+  /** CoC code to store as EnrollmentCoC when enrolling a new client. Only needed if Project operates in multiple CoCs. */
   cocCode?: InputMaybe<Scalars['String']['input']>;
   dateProvided: Scalars['ISO8601Date']['input'];
   projectId: Scalars['ID']['input'];
@@ -7001,6 +7001,7 @@ export type Query = {
   tableConfigLookup: TableConfigLookup;
   unit?: Maybe<Unit>;
   unitGroup?: Maybe<UnitGroup>;
+  unitGroups: UnitGroupsPaginated;
   /** User lookup */
   user?: Maybe<ApplicationUser>;
   userDashboard: UserDashboard;
@@ -7256,6 +7257,12 @@ export type QueryUnitArgs = {
 
 export type QueryUnitGroupArgs = {
   id: Scalars['ID']['input'];
+};
+
+export type QueryUnitGroupsArgs = {
+  filters?: InputMaybe<UnitGroupFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryUserArgs = {
@@ -8661,18 +8668,11 @@ export type UnitCeReferralsArgs = {
 };
 
 export type UnitCeReferralFilterOptions = {
-  assignedToUser?: InputMaybe<Scalars['ID']['input']>;
   assignedToYou?: InputMaybe<Scalars['Boolean']['input']>;
   onCurrentTaskSince?: InputMaybe<Scalars['ISO8601Date']['input']>;
-  organization?: InputMaybe<Array<Scalars['ID']['input']>>;
   origin?: InputMaybe<Array<CeReferralOrigin>>;
-  project?: InputMaybe<Array<Scalars['ID']['input']>>;
-  /** Filter to referrals where the target project belongs to the specified project group */
-  projectGroupId?: InputMaybe<Scalars['ID']['input']>;
-  projectType?: InputMaybe<Array<ProjectType>>;
   referralStatus?: InputMaybe<Array<Scalars['String']['input']>>;
   searchTerm?: InputMaybe<Scalars['String']['input']>;
-  workflowTemplate?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type UnitFilterOptions = {
@@ -8690,10 +8690,20 @@ export type UnitGroup = {
   ceEventType?: Maybe<EventType>;
   directReferralWorkflowTemplateIdentifier?: Maybe<Scalars['String']['output']>;
   directReferralWorkflowTemplateName?: Maybe<Scalars['String']['output']>;
+  /** Number of CE match rules that apply to this record, including inherited rules. */
+  effectiveCeMatchRuleCount: Scalars['Int']['output'];
+  /** All CE match rules that apply to this record, including inherited rules, grouped by their owner. */
+  effectiveCeMatchRuleGroups: Array<CeMatchRuleGroup>;
   eligibilityRequirements?: Maybe<Array<CeMatchRule>>;
   id: Scalars['ID']['output'];
+  /** Number of CE match rules owned directly by this record. */
+  localCeMatchRuleCount: Scalars['Int']['output'];
   name: Scalars['String']['output'];
+  organizationId: Scalars['ID']['output'];
+  organizationName: Scalars['String']['output'];
   prioritySchemes?: Maybe<Array<CeMatchRule>>;
+  projectId: Scalars['ID']['output'];
+  projectName: Scalars['String']['output'];
   unitType?: Maybe<UnitTypeObject>;
   unitTypes: Array<UnitTypeCapacity>;
   units: UnitsPaginated;
@@ -8705,6 +8715,11 @@ export type UnitGroupUnitsArgs = {
   filters?: InputMaybe<UnitFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type UnitGroupFilterOptions = {
+  ceWaitlistsEnabled?: InputMaybe<Scalars['Boolean']['input']>;
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UnitGroupInput = {
