@@ -11,6 +11,7 @@ type UseNetworkDataReadyProps<Query> = {
 
 /**
  * Calls `callback` after an Apollo query moves from an in-flight networkStatus to ready.
+ * The query must pass `notifyOnNetworkStatusChange: true` so status transitions are observable. 
  */
 export function useNetworkDataReady<Query>({
   data,
