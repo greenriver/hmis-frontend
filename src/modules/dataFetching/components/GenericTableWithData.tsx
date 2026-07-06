@@ -21,6 +21,7 @@ import TableControls, {
 } from '@/components/elements/tableFilters/TableControls';
 import useHasRefetched from '@/hooks/useHasRefetched';
 import usePrevious from '@/hooks/usePrevious';
+import { useNetworkDataReady } from '@/modules/dataFetching/hooks/useNetworkDataReady';
 import { useOptionalColumns } from '@/modules/dataFetching/hooks/useOptionalColumns';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
@@ -88,8 +89,8 @@ export interface Props<
   >['tableDisplayOptionButtons'];
   /** Fires when data is available (network or cache). Use to gate actions until results are shown, e.g. to reduce duplicate client record creation. */
   onDataReady?: (data: Query) => void;
-  /** Fires when data is fetched from network */
-  onCompleted?: (data: Query) => void;
+  /** Fires when data is available after a network fetch completes. */
+  onNetworkDataReady?: (data: Query) => void;
   filterRows?: (rows: RowDataType) => boolean; // Client-side row filtering
   loading?: boolean;
 }
@@ -138,7 +139,7 @@ const GenericTableWithData = <
   rowsPerPageOptions,
   tableDisplayOptionButtons,
   onDataReady,
-  onCompleted,
+  onNetworkDataReady,
   paginationItemName,
   filterRows,
   vertical,
@@ -223,14 +224,16 @@ const GenericTableWithData = <
     },
     notifyOnNetworkStatusChange: true,
     fetchPolicy,
-    onCompleted,
   });
 
   const hasRefetched = useHasRefetched(networkStatus);
 
-  // Fire onDataReady when data is available (from network or cache). Apollo's onCompleted
-  // only runs for network completions, so we use this effect to run the callback whenever
-  // the table has data to show.
+  // Fire onNetworkDataReady after the query moves from an in-flight networkStatus to ready.
+  // Only runs the callback when the table has data to show from a network call, not a cache hit.
+  useNetworkDataReady({ data, networkStatus, callback: onNetworkDataReady });
+
+  // Fire onDataReady when data is available from either cache or network.
+  // Runs the callback whenever the table has data to show.
   useEffect(() => {
     if (onDataReady && data) onDataReady(data);
   }, [onDataReady, data]);

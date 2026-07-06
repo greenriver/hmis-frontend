@@ -1,5 +1,11 @@
 import { Typography } from '@mui/material';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { generatePath } from 'react-router-dom';
 import Loading from '@/components/elements/Loading';
 import Wayfinder from '@/components/elements/navigation/Wayfinder';
@@ -71,32 +77,42 @@ const JoinHouseholdDialog = ({
     error: fetchError,
   } = useGetEnrollmentWithHouseholdQuery({
     variables: { id: initiatorEnrollmentId },
-    onCompleted: (data) => {
-      const household = data?.enrollment?.household;
-
-      const initiator = household?.householdClients.find(
-        (hc) => hc.enrollment.id === initiatorEnrollmentId
-      );
-
-      if (!household || !initiator) {
-        throw new Error(`Enrollment ${initiatorEnrollmentId} not found`);
-      }
-
-      // Set the joining clients list to the initiator client, plus, if they are the HoH, all their household members.
-      if (
-        initiator.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
-      ) {
-        setJoiningClients(sortHouseholdMembers(household.householdClients));
-      } else {
-        setJoiningClients([initiator]);
-      }
-    },
   });
 
   const donorHousehold = useMemo(
     () => initiatorEnrollment?.household,
     [initiatorEnrollment]
   );
+
+  const initiator = useMemo(
+    () =>
+      donorHousehold?.householdClients.find(
+        (hc) => hc.enrollment.id === initiatorEnrollmentId
+      ),
+    [donorHousehold?.householdClients, initiatorEnrollmentId]
+  );
+
+  // Track initiator enrollment in a ref to avoid re-running the effect
+  const initializedEnrollmentId = useRef<string | null>(null);
+
+  // This effect could be avoided by splitting the component into
+  // an outer query-loading component and an inner component that holds the state.
+  // We're avoiding that refactor for now; see comments on #8958
+  useEffect(() => {
+    if (!initiatorEnrollment) return;
+    if (initiatorEnrollment.id !== initiatorEnrollmentId) return;
+    if (!donorHousehold || !initiator) return;
+    if (initializedEnrollmentId.current === initiatorEnrollmentId) return;
+
+    // Set the joining clients list to the initiator client, plus, if they are the HoH, all their household members.
+    if (initiator.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold) {
+      setJoiningClients(sortHouseholdMembers(donorHousehold.householdClients));
+    } else {
+      setJoiningClients([initiator]);
+    }
+    setRelationships({});
+    initializedEnrollmentId.current = initiatorEnrollmentId;
+  }, [donorHousehold, initiator, initiatorEnrollment, initiatorEnrollmentId]);
 
   const receivingHoh = useMemo(
     () => findHohOrRep(receivingHousehold.householdClients),
@@ -273,6 +289,10 @@ const JoinHouseholdDialog = ({
   );
 
   if (fetchError) throw fetchError;
+  if (initiatorEnrollment && (!donorHousehold || !initiator)) {
+    // unexpected
+    throw new Error(`Enrollment ${initiatorEnrollmentId} not found`);
+  }
   if (joinError) throw joinError;
 
   return (
