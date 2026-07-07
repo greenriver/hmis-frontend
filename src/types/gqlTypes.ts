@@ -504,7 +504,7 @@ export enum BoundType {
 export type BulkAssignServiceInput = {
   /** Clients that should receive service. Clients that are unenrolled in the project will be enrolled in the project. */
   clientIds: Array<Scalars['ID']['input']>;
-  /** CoC code to store as EnrollmentCoC when enrolling a new client. Only needed if Project operaties in multiple CoCs. */
+  /** CoC code to store as EnrollmentCoC when enrolling a new client. Only needed if Project operates in multiple CoCs. */
   cocCode?: InputMaybe<Scalars['String']['input']>;
   dateProvided: Scalars['ISO8601Date']['input'];
   projectId: Scalars['ID']['input'];
@@ -809,6 +809,8 @@ export type CeMatchRuleClause = {
   comparator: CeMatchRuleComparator;
   /** The name of the field for comparison, such as client_age or cde.custom_assessment.my_score */
   field: Scalars['String']['output'];
+  fieldSource: CeMatchRuleFieldSource;
+  formDefinitionIdentifier?: Maybe<Scalars['String']['output']>;
   /**
    * The value to compare the field against, such as 18 or "1 Bed". JSON scalar
    * (e.g. integer, float, string, boolean, or null). Not a list or nested object.
@@ -831,6 +833,13 @@ export enum CeMatchRuleComparator {
   Lt = 'LT',
   Lte = 'LTE',
   NotEq = 'NOT_EQ',
+}
+
+export enum CeMatchRuleFieldSource {
+  /** Client */
+  Client = 'CLIENT',
+  /** Custom */
+  CustomDataElement = 'CUSTOM_DATA_ELEMENT',
 }
 
 export type CeMatchRuleFilterOptions = {
@@ -22533,6 +22542,8 @@ export type CeMatchRuleDetailsFragment = {
     clauses: Array<{
       __typename?: 'CeMatchRuleClause';
       field: string;
+      fieldSource: CeMatchRuleFieldSource;
+      formDefinitionIdentifier?: string | null;
       comparator: CeMatchRuleComparator;
       value?: any | null;
     }>;
@@ -22727,6 +22738,110 @@ export type CreateCeMatchRuleMutation = {
         clauses: Array<{
           __typename?: 'CeMatchRuleClause';
           field: string;
+          fieldSource: CeMatchRuleFieldSource;
+          formDefinitionIdentifier?: string | null;
+          comparator: CeMatchRuleComparator;
+          value?: any | null;
+        }>;
+      } | null;
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
+export type UpdateCeMatchRuleMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  input: CeMatchRuleInput;
+  confirmed?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+export type UpdateCeMatchRuleMutation = {
+  __typename?: 'Mutation';
+  updateCeMatchRule?: {
+    __typename?: 'UpdateCeMatchRulePayload';
+    rule?: {
+      __typename?: 'CeMatchRule';
+      ownerId: string;
+      ownerName: string;
+      ruleType: CeMatchRuleType;
+      priorityRank?: number | null;
+      id: string;
+      name: string;
+      ownerType: CeMatchRuleOwnerType;
+      expression: string;
+      projectTypes: Array<ProjectType>;
+      funders?: Array<FundingSource> | null;
+      structuredExpression?: {
+        __typename?: 'CeMatchRuleStructuredExpression';
+        operator: CeMatchRuleBooleanOperator;
+        clauses: Array<{
+          __typename?: 'CeMatchRuleClause';
+          field: string;
+          fieldSource: CeMatchRuleFieldSource;
+          formDefinitionIdentifier?: string | null;
+          comparator: CeMatchRuleComparator;
+          value?: any | null;
+        }>;
+      } | null;
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
+export type DeleteCeMatchRuleMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type DeleteCeMatchRuleMutation = {
+  __typename?: 'Mutation';
+  deleteCeMatchRule?: {
+    __typename?: 'DeleteCeMatchRulePayload';
+    rule?: {
+      __typename?: 'CeMatchRule';
+      ownerId: string;
+      ownerName: string;
+      ruleType: CeMatchRuleType;
+      priorityRank?: number | null;
+      id: string;
+      name: string;
+      ownerType: CeMatchRuleOwnerType;
+      expression: string;
+      projectTypes: Array<ProjectType>;
+      funders?: Array<FundingSource> | null;
+      structuredExpression?: {
+        __typename?: 'CeMatchRuleStructuredExpression';
+        operator: CeMatchRuleBooleanOperator;
+        clauses: Array<{
+          __typename?: 'CeMatchRuleClause';
+          field: string;
+          fieldSource: CeMatchRuleFieldSource;
+          formDefinitionIdentifier?: string | null;
           comparator: CeMatchRuleComparator;
           value?: any | null;
         }>;
@@ -22845,6 +22960,39 @@ export type GetCeMatchGlobalRulesQuery = {
       projectTypes: Array<ProjectType>;
       funders?: Array<FundingSource> | null;
     }>;
+  };
+};
+
+export type GetCeMatchRuleQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type GetCeMatchRuleQuery = {
+  __typename?: 'Query';
+  ceMatchRule: {
+    __typename?: 'CeMatchRule';
+    ownerId: string;
+    ownerName: string;
+    ruleType: CeMatchRuleType;
+    priorityRank?: number | null;
+    id: string;
+    name: string;
+    ownerType: CeMatchRuleOwnerType;
+    expression: string;
+    projectTypes: Array<ProjectType>;
+    funders?: Array<FundingSource> | null;
+    structuredExpression?: {
+      __typename?: 'CeMatchRuleStructuredExpression';
+      operator: CeMatchRuleBooleanOperator;
+      clauses: Array<{
+        __typename?: 'CeMatchRuleClause';
+        field: string;
+        fieldSource: CeMatchRuleFieldSource;
+        formDefinitionIdentifier?: string | null;
+        comparator: CeMatchRuleComparator;
+        value?: any | null;
+      }>;
+    } | null;
   };
 };
 
@@ -52701,6 +52849,8 @@ export const CeMatchRuleDetailsFragmentDoc = gql`
       operator
       clauses {
         field
+        fieldSource
+        formDefinitionIdentifier
         comparator
         value
       }
@@ -58730,6 +58880,126 @@ export type CreateCeMatchRuleMutationOptions = Apollo.BaseMutationOptions<
   CreateCeMatchRuleMutation,
   CreateCeMatchRuleMutationVariables
 >;
+export const UpdateCeMatchRuleDocument = gql`
+  mutation UpdateCeMatchRule(
+    $id: ID!
+    $input: CeMatchRuleInput!
+    $confirmed: Boolean
+  ) {
+    updateCeMatchRule(id: $id, input: $input, confirmed: $confirmed) {
+      rule {
+        ...CeMatchRuleDetails
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${CeMatchRuleDetailsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type UpdateCeMatchRuleMutationFn = Apollo.MutationFunction<
+  UpdateCeMatchRuleMutation,
+  UpdateCeMatchRuleMutationVariables
+>;
+
+/**
+ * __useUpdateCeMatchRuleMutation__
+ *
+ * To run a mutation, you first call `useUpdateCeMatchRuleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCeMatchRuleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCeMatchRuleMutation, { data, loading, error }] = useUpdateCeMatchRuleMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *      confirmed: // value for 'confirmed'
+ *   },
+ * });
+ */
+export function useUpdateCeMatchRuleMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateCeMatchRuleMutation,
+    UpdateCeMatchRuleMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateCeMatchRuleMutation,
+    UpdateCeMatchRuleMutationVariables
+  >(UpdateCeMatchRuleDocument, options);
+}
+export type UpdateCeMatchRuleMutationHookResult = ReturnType<
+  typeof useUpdateCeMatchRuleMutation
+>;
+export type UpdateCeMatchRuleMutationResult =
+  Apollo.MutationResult<UpdateCeMatchRuleMutation>;
+export type UpdateCeMatchRuleMutationOptions = Apollo.BaseMutationOptions<
+  UpdateCeMatchRuleMutation,
+  UpdateCeMatchRuleMutationVariables
+>;
+export const DeleteCeMatchRuleDocument = gql`
+  mutation DeleteCeMatchRule($id: ID!) {
+    deleteCeMatchRule(id: $id) {
+      rule {
+        ...CeMatchRuleDetails
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${CeMatchRuleDetailsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type DeleteCeMatchRuleMutationFn = Apollo.MutationFunction<
+  DeleteCeMatchRuleMutation,
+  DeleteCeMatchRuleMutationVariables
+>;
+
+/**
+ * __useDeleteCeMatchRuleMutation__
+ *
+ * To run a mutation, you first call `useDeleteCeMatchRuleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCeMatchRuleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCeMatchRuleMutation, { data, loading, error }] = useDeleteCeMatchRuleMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteCeMatchRuleMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteCeMatchRuleMutation,
+    DeleteCeMatchRuleMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteCeMatchRuleMutation,
+    DeleteCeMatchRuleMutationVariables
+  >(DeleteCeMatchRuleDocument, options);
+}
+export type DeleteCeMatchRuleMutationHookResult = ReturnType<
+  typeof useDeleteCeMatchRuleMutation
+>;
+export type DeleteCeMatchRuleMutationResult =
+  Apollo.MutationResult<DeleteCeMatchRuleMutation>;
+export type DeleteCeMatchRuleMutationOptions = Apollo.BaseMutationOptions<
+  DeleteCeMatchRuleMutation,
+  DeleteCeMatchRuleMutationVariables
+>;
 export const GetCeMatchClientFieldsDocument = gql`
   query GetCeMatchClientFields {
     ceMatchClientFields {
@@ -59137,6 +59407,110 @@ export type GetCeMatchGlobalRulesSuspenseQueryHookResult = ReturnType<
 export type GetCeMatchGlobalRulesQueryResult = Apollo.QueryResult<
   GetCeMatchGlobalRulesQuery,
   GetCeMatchGlobalRulesQueryVariables
+>;
+export const GetCeMatchRuleDocument = gql`
+  query GetCeMatchRule($id: ID!) {
+    ceMatchRule(id: $id) {
+      ...CeMatchRuleDetails
+    }
+  }
+  ${CeMatchRuleDetailsFragmentDoc}
+`;
+
+/**
+ * __useGetCeMatchRuleQuery__
+ *
+ * To run a query within a React component, call `useGetCeMatchRuleQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCeMatchRuleQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCeMatchRuleQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetCeMatchRuleQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetCeMatchRuleQuery,
+    GetCeMatchRuleQueryVariables
+  > &
+    (
+      | { variables: GetCeMatchRuleQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetCeMatchRuleQuery, GetCeMatchRuleQueryVariables>(
+    GetCeMatchRuleDocument,
+    options
+  );
+}
+export function useGetCeMatchRuleLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCeMatchRuleQuery,
+    GetCeMatchRuleQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetCeMatchRuleQuery, GetCeMatchRuleQueryVariables>(
+    GetCeMatchRuleDocument,
+    options
+  );
+}
+// @ts-ignore
+export function useGetCeMatchRuleSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetCeMatchRuleQuery,
+    GetCeMatchRuleQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchRuleQuery,
+  GetCeMatchRuleQueryVariables
+>;
+export function useGetCeMatchRuleSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchRuleQuery,
+        GetCeMatchRuleQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchRuleQuery | undefined,
+  GetCeMatchRuleQueryVariables
+>;
+export function useGetCeMatchRuleSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchRuleQuery,
+        GetCeMatchRuleQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetCeMatchRuleQuery,
+    GetCeMatchRuleQueryVariables
+  >(GetCeMatchRuleDocument, options);
+}
+export type GetCeMatchRuleQueryHookResult = ReturnType<
+  typeof useGetCeMatchRuleQuery
+>;
+export type GetCeMatchRuleLazyQueryHookResult = ReturnType<
+  typeof useGetCeMatchRuleLazyQuery
+>;
+export type GetCeMatchRuleSuspenseQueryHookResult = ReturnType<
+  typeof useGetCeMatchRuleSuspenseQuery
+>;
+export type GetCeMatchRuleQueryResult = Apollo.QueryResult<
+  GetCeMatchRuleQuery,
+  GetCeMatchRuleQueryVariables
 >;
 export const GetCeMatchRuleOrganizationsDocument = gql`
   query GetCeMatchRuleOrganizations(

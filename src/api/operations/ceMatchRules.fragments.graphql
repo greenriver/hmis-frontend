@@ -40,6 +40,8 @@ fragment CeMatchRuleDetails on CeMatchRule {
     operator
     clauses {
       field
+      fieldSource
+      formDefinitionIdentifier
       comparator
       value
     }

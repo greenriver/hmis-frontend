@@ -985,6 +985,22 @@ export const HmisObjectSchemas: GqlSchema[] = [
           ofType: { kind: 'SCALAR', name: 'String', ofType: null },
         },
       },
+      {
+        name: 'fieldSource',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'ENUM',
+            name: 'CeMatchRuleFieldSource',
+            ofType: null,
+          },
+        },
+      },
+      {
+        name: 'formDefinitionIdentifier',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
       { name: 'value', type: { kind: 'SCALAR', name: 'JSON', ofType: null } },
     ],
   },

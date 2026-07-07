@@ -59,7 +59,6 @@ const CeMatchRuleUnitGroupEditorPage: React.FC = () => {
         ownerType={CeMatchRuleOwnerType.UnitGroup}
         ownerId={unitGroupId}
         ownerName={unitGroup.name}
-        onSaved={returnToRulesOverview}
         onCancel={returnToRulesOverview}
       />
     </>

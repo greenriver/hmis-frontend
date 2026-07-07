@@ -33,6 +33,7 @@ import AdminDashboard, {
 
 import CeMatchOrganizationRulesPage from '@/modules/admin/components/ceMatchRules/pages/CeMatchOrganizationRulesPage';
 import CeMatchProjectRulesPage from '@/modules/admin/components/ceMatchRules/pages/CeMatchProjectRulesPage';
+import CeMatchRuleDetailPage from '@/modules/admin/components/ceMatchRules/pages/CeMatchRuleDetailPage';
 import CeMatchRuleGlobalEditorPage from '@/modules/admin/components/ceMatchRules/pages/CeMatchRuleGlobalEditorPage';
 import CeMatchRuleOrganizationEditorPage from '@/modules/admin/components/ceMatchRules/pages/CeMatchRuleOrganizationEditorPage';
 import CeMatchRuleProjectEditorPage from '@/modules/admin/components/ceMatchRules/pages/CeMatchRuleProjectEditorPage';
@@ -1197,6 +1198,18 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
+            path: AdminDashboardRoutes.CE_RULE_GLOBAL_DETAIL,
+            element: (
+              <RootPermissionsFilter
+                // TODO(#7544): swap to canAdministrateCoordinatedEntry
+                permissions='canAdministrateConfig'
+                otherwise={<NotFound />}
+              >
+                <CeMatchRuleDetailPage />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
             path: AdminDashboardRoutes.CE_RULE_ORGANIZATION_NEW,
             element: (
               <RootPermissionsFilter
@@ -1205,6 +1218,18 @@ export const protectedRoutes: RouteNode[] = [
                 otherwise={<NotFound />}
               >
                 <CeMatchRuleOrganizationEditorPage />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.CE_RULE_ORGANIZATION_DETAIL,
+            element: (
+              <RootPermissionsFilter
+                // TODO(#7544): swap to canAdministrateCoordinatedEntry
+                permissions='canAdministrateConfig'
+                otherwise={<NotFound />}
+              >
+                <CeMatchRuleDetailPage />
               </RootPermissionsFilter>
             ),
           },
@@ -1221,6 +1246,18 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
+            path: AdminDashboardRoutes.CE_RULE_PROJECT_DETAIL,
+            element: (
+              <RootPermissionsFilter
+                // TODO(#7544): swap to canAdministrateCoordinatedEntry
+                permissions='canAdministrateConfig'
+                otherwise={<NotFound />}
+              >
+                <CeMatchRuleDetailPage />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
             path: AdminDashboardRoutes.CE_RULE_UNIT_GROUP_NEW,
             element: (
               <RootPermissionsFilter
@@ -1229,6 +1266,18 @@ export const protectedRoutes: RouteNode[] = [
                 otherwise={<NotFound />}
               >
                 <CeMatchRuleUnitGroupEditorPage />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.CE_RULE_UNIT_GROUP_DETAIL,
+            element: (
+              <RootPermissionsFilter
+                // TODO(#7544): swap to canAdministrateCoordinatedEntry
+                permissions='canAdministrateConfig'
+                otherwise={<NotFound />}
+              >
+                <CeMatchRuleDetailPage />
               </RootPermissionsFilter>
             ),
           },

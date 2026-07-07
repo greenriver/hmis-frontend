@@ -37,7 +37,9 @@ const CeMatchEffectiveRulesCard: React.FC<Props> = ({
       <Typography variant='cardTitle' component='h2' fontWeight='600'>
         Effective Rules for{' '}
         {ownerTo ? (
-          <RouterLink to={ownerTo}>{ownerName}</RouterLink>
+          <RouterLink to={ownerTo} openInNew>
+            {ownerName}
+          </RouterLink>
         ) : (
           ownerName
         )}{' '}
