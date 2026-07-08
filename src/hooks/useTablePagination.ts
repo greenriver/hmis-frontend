@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
 
 import useSearchParamsState from '@/hooks/useSearchParamState';
-import { DEFAULT_TABLE_PAGE_SIZE } from '@/modules/dataFetching/constants';
+import { DEFAULT_TABLE_PAGE_SIZE } from '@/modules/dataFetching/util';
 
 // Shared defaults keep table pagination URLs consistent unless a page needs custom param names.
 const DEFAULT_PAGE_PARAM = 'page';

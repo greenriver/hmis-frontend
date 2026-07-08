@@ -22,9 +22,9 @@ import TableControls, {
 import useHasRefetched from '@/hooks/useHasRefetched';
 import usePrevious from '@/hooks/usePrevious';
 import type { TablePaginationState } from '@/hooks/useTablePagination';
-import { DEFAULT_TABLE_PAGE_SIZE } from '@/modules/dataFetching/constants';
 import { useNetworkDataReady } from '@/modules/dataFetching/hooks/useNetworkDataReady';
 import { useOptionalColumns } from '@/modules/dataFetching/hooks/useOptionalColumns';
+import { DEFAULT_TABLE_PAGE_SIZE } from '@/modules/dataFetching/util';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
