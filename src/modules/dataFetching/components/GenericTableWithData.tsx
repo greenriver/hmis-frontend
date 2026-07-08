@@ -306,6 +306,8 @@ const GenericTableWithData = <
       ) => {
         const newRowsPerPage = parseInt(event.target.value) || defaultPageSize;
         setRowsPerPage(newRowsPerPage);
+        // Uncontrolled pagination is managed here, so reset to the first page when rows per page changes.
+        // Controlled pagination owns that behavior externally, such as useTablePagination resetting the URL page param.
         if (!hasControlledPagination) setPage(0);
       },
       count: nodesCount,
