@@ -1,6 +1,8 @@
 import { useCallback, useMemo } from 'react';
 
-import useSearchParamsState from '@/hooks/useSearchParamState';
+import useSearchParamsState, {
+  SearchParamsStateType,
+} from '@/hooks/useSearchParamState';
 import { DEFAULT_TABLE_PAGE_SIZE } from '@/modules/dataFetching/util';
 
 // Shared defaults keep table pagination URLs consistent unless a page needs custom param names.
@@ -36,14 +38,14 @@ const useTablePagination = ({
   pageSizeParam = DEFAULT_PAGE_SIZE_PARAM,
 }: Args = {}): TablePaginationState => {
   // Define the URL-backed keys that this hook owns. Other query params are preserved by useSearchParamsState.
-  const paramsDefinition = useMemo(
+  const paramsDefinition: SearchParamsStateType = useMemo(
     () => ({
       [pageParam]: {
-        type: 'number' as const,
+        type: 'number',
         default: 1,
       },
       [pageSizeParam]: {
-        type: 'number' as const,
+        type: 'number',
         default: defaultPageSize,
       },
     }),
