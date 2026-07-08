@@ -158,16 +158,16 @@ const GenericTableWithData = <
   const [internalPage, setInternalPage] = useState(0);
   const [internalRowsPerPage, setInternalRowsPerPage] =
     useState(defaultPageSize);
-  const previousQueryVariables = usePrevious(queryVariables);
-  const [internalFilterValues, setInternalFilterValues] =
-    useState(defaultFilterValues);
-  const [sortOrder, setSortOrder] = useState<typeof defaultSortOptionProp>();
-
   const page = pagination?.page ?? internalPage;
   const rowsPerPage = pagination?.rowsPerPage ?? internalRowsPerPage;
   const setPage = pagination?.setPage ?? setInternalPage;
   const setRowsPerPage = pagination?.setRowsPerPage ?? setInternalRowsPerPage;
   const hasControlledPagination = !!pagination;
+
+  const previousQueryVariables = usePrevious(queryVariables);
+  const [internalFilterValues, setInternalFilterValues] =
+    useState(defaultFilterValues);
+  const [sortOrder, setSortOrder] = useState<typeof defaultSortOptionProp>();
 
   const filterValues =
     filterValuesProp !== undefined && onFilterChange
