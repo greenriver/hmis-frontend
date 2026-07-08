@@ -10337,6 +10337,47 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'UnitCeReferralFilterOptions',
+    args: [
+      {
+        name: 'assignedToYou',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
+        name: 'onCurrentTaskSince',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'origin',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'CeReferralOrigin', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'referralStatus',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'searchTerm',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'UnitFilterOptions',
     args: [
       {
