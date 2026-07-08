@@ -105,10 +105,7 @@ const ReferralsTable: React.FC<Props> = ({
     type: 'CeReferralFilterOptions',
     omit: ['projectGroupId'], // only exposed via Workspaces
   });
-  const pagination = useTablePagination({
-    pageParam: 'referralsPage',
-    pageSizeParam: 'referralsPageSize',
-  });
+  const pagination = useTablePagination();
 
   const rowSecondaryActions = useCallback(
     (row: CeReferralTableFieldsFragment) => {

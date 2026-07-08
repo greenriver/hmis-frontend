@@ -67,10 +67,7 @@ const AdminOpportunitiesTable: React.FC<Props> = ({ projectGroupId }) => {
       'projectGroupId', // only exposed via Workspaces
     ],
   });
-  const pagination = useTablePagination({
-    pageParam: 'availableUnitsPage',
-    pageSizeParam: 'availableUnitsPageSize',
-  });
+  const pagination = useTablePagination();
 
   return (
     <Paper>

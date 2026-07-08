@@ -107,10 +107,7 @@ const AdminCeClientsTable: React.FC<Props> = ({ projectGroupId }) => {
     dynamicFilters: tableConfigLookup?.ceClientsGlobalConfig?.filters,
     omit: ['projectGroupId'], // only exposed via Workspaces
   });
-  const pagination = useTablePagination({
-    pageParam: 'eligibleClientsPage',
-    pageSizeParam: 'eligibleClientsPageSize',
-  });
+  const pagination = useTablePagination();
 
   const rowSecondaryActionConfigs = useCallback(
     (row: CeClientFieldsFragment) => {
