@@ -1,17 +1,19 @@
 import { Paper, Stack, Typography } from '@mui/material';
+import { generatePath } from 'react-router-dom';
 
-import { ceMatchRuleOwnerLevelConfigs } from '../../ceMatchRuleOwnerLevelConfig';
 import RuleCountSummary from '../RuleCountSummary';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
+import { AdminDashboardRoutes, Routes } from '@/routes/routes';
 import {
   CeMatchRuleOrganizationFieldsFragment,
   GetCeMatchRuleOrganizationsDocument,
   GetCeMatchRuleOrganizationsQuery,
   GetCeMatchRuleOrganizationsQueryVariables,
 } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const ORGANIZATION_COLUMNS: DataColumnDef<
   CeMatchRuleOrganizationFieldsFragment,
@@ -25,19 +27,12 @@ const ORGANIZATION_COLUMNS: DataColumnDef<
   {
     header: 'Effective Rules',
     key: 'effectiveCeMatchRuleCount',
-    render: (organization) => {
-      const inheritedCount =
-        organization.effectiveCeMatchRuleCount -
-        organization.localCeMatchRuleCount;
-
-      return (
-        <RuleCountSummary
-          total={organization.effectiveCeMatchRuleCount}
-          localCount={organization.localCeMatchRuleCount}
-          inheritedCount={inheritedCount}
-        />
-      );
-    },
+    render: (organization) => (
+      <RuleCountSummary
+        total={organization.effectiveCeMatchRuleCount}
+        localCount={organization.localCeMatchRuleCount}
+      />
+    ),
   },
   {
     header: 'Unit Groups',
@@ -84,13 +79,27 @@ const CeMatchRuleOrganizations: React.FC = () => {
           queryDocument={GetCeMatchRuleOrganizationsDocument}
           columns={ORGANIZATION_COLUMNS}
           rowLinkTo={(organization) =>
-            ceMatchRuleOwnerLevelConfigs.organization.getRulesPath({
-              ownerId: organization.id,
+            generatePath(AdminDashboardRoutes.CE_RULE_ORGANIZATION, {
+              organizationId: organization.id,
             })
           }
           rowName={(organization) => organization.organizationName}
           rowActionTitle='View Organization Rules'
-          noData='No organizations with waitlist referrals enabled'
+          rowSecondaryActionConfigs={(organization) => [
+            {
+              title: 'View Organization',
+              key: 'viewOrganization',
+              ariaLabel: `View Organization, ${organization.organizationName}`,
+              to: generateSafePath(Routes.ORGANIZATION, {
+                organizationId: organization.id,
+              }),
+            },
+          ]}
+          noData={
+            debouncedSearch
+              ? 'No organizations found'
+              : 'No organizations with waitlist referrals enabled'
+          }
           pagePath='organizations'
           recordType='Organization'
           queryVariables={{

@@ -11,57 +11,58 @@ import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   CeMatchRuleOwnerType,
-  useGetCeMatchProjectRulesQuery,
+  useGetCeMatchUnitGroupRulesQuery,
 } from '@/types/gqlTypes';
 
-const CeMatchRuleProjectEditorPage: React.FC = () => {
+const CeMatchRuleUnitGroupEditorPage: React.FC = () => {
   const navigate = useNavigate();
-  const { projectId } = useSafeParams<{ projectId?: string }>();
+  const { unitGroupId } = useSafeParams<{ unitGroupId?: string }>();
   const { overrideBreadcrumbTitles } = useAdminDashboardContext();
-  const { data, loading, error } = useGetCeMatchProjectRulesQuery({
-    variables: { id: projectId || '' },
-    skip: !projectId,
+  const { data, loading, error } = useGetCeMatchUnitGroupRulesQuery({
+    variables: { id: unitGroupId || '' },
+    skip: !unitGroupId,
+    fetchPolicy: 'cache-first',
   });
 
-  const project = data?.project;
+  const unitGroup = data?.unitGroup;
 
   const returnToRulesOverview = useCallback(() => {
-    if (!projectId) return;
+    if (!unitGroupId) return;
 
     navigate(
-      generatePath(AdminDashboardRoutes.CE_RULE_PROJECT, {
-        projectId,
+      generatePath(AdminDashboardRoutes.CE_RULE_UNIT_GROUP, {
+        unitGroupId,
       })
     );
-  }, [navigate, projectId]);
+  }, [navigate, unitGroupId]);
 
   useEffect(() => {
-    if (!project) return;
+    if (!unitGroup) return;
 
     overrideBreadcrumbTitles({
-      [AdminDashboardRoutes.CE_RULE_PROJECT]: project.projectName,
+      [AdminDashboardRoutes.CE_RULE_UNIT_GROUP]: unitGroup.name,
     });
-  }, [project, overrideBreadcrumbTitles]);
+  }, [unitGroup, overrideBreadcrumbTitles]);
 
-  if (!projectId) return <NotFound />;
+  if (!unitGroupId) return <NotFound />;
   if (error) return <ApolloErrorAlert error={error} />;
-  if (loading && !project) return <Loading />;
-  if (!project) return <NotFound />;
+  if (loading && !unitGroup) return <Loading />;
+  if (!unitGroup) return <NotFound />;
 
   return (
     <>
       <PageTitle
         overlineText='Coordinated Entry Rules'
-        title='Add Project Rule'
+        title='Add Unit Group Rule'
       />
       <CeMatchRuleForm
-        ownerType={CeMatchRuleOwnerType.Project}
-        ownerId={projectId}
-        ownerName={project.projectName}
+        ownerType={CeMatchRuleOwnerType.UnitGroup}
+        ownerId={unitGroupId}
+        ownerName={unitGroup.name}
         onCancel={returnToRulesOverview}
       />
     </>
   );
 };
 
-export default CeMatchRuleProjectEditorPage;
+export default CeMatchRuleUnitGroupEditorPage;

@@ -11,8 +11,11 @@ export interface CeMatchRuleCountSummary {
 
 interface Props {
   ownerName: string;
+  ownerTo?: To;
   effectiveRulesCount: number;
   ruleCountSummaries: CeMatchRuleCountSummary[];
+  /** When false, hides the per-owner rule count summary row. Defaults to true. */
+  showSummary?: boolean;
   children: ReactNode;
 }
 
@@ -23,23 +26,35 @@ interface Props {
  */
 const CeMatchEffectiveRulesCard: React.FC<Props> = ({
   ownerName,
+  ownerTo,
   effectiveRulesCount,
   ruleCountSummaries,
+  showSummary = true,
   children,
 }) => (
   <Paper>
     <Stack gap={1} sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
       <Typography variant='cardTitle' component='h2' fontWeight='600'>
-        Effective Rules for {ownerName} ({effectiveRulesCount})
+        Effective Rules for{' '}
+        {ownerTo ? (
+          <RouterLink to={ownerTo} openInNew>
+            {ownerName}
+          </RouterLink>
+        ) : (
+          ownerName
+        )}{' '}
+        ({effectiveRulesCount})
       </Typography>
-      <Stack direction='row' gap={4} flexWrap='wrap'>
-        {ruleCountSummaries.map(({ label, count, to }) => (
-          <Typography key={label} variant='body2'>
-            {to ? <RouterLink to={to}>{label}</RouterLink> : label}: {count}{' '}
-            rules
-          </Typography>
-        ))}
-      </Stack>
+      {showSummary && (
+        <Stack direction='row' gap={4} flexWrap='wrap'>
+          {ruleCountSummaries.map(({ label, count, to }) => (
+            <Typography key={label} variant='body2'>
+              {to ? <RouterLink to={to}>{label}</RouterLink> : label}: {count}{' '}
+              rules
+            </Typography>
+          ))}
+        </Stack>
+      )}
     </Stack>
     <Stack>{children}</Stack>
   </Paper>

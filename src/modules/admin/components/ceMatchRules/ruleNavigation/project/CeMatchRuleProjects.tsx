@@ -1,17 +1,19 @@
 import { Paper, Stack, Typography } from '@mui/material';
+import { generatePath } from 'react-router-dom';
 
-import { ceMatchRuleOwnerLevelConfigs } from '../../ceMatchRuleOwnerLevelConfig';
 import RuleCountSummary from '../RuleCountSummary';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
+import { AdminDashboardRoutes, ProjectDashboardRoutes } from '@/routes/routes';
 import {
   CeMatchRuleProjectFieldsFragment,
   GetCeMatchRuleProjectsDocument,
   GetCeMatchRuleProjectsQuery,
   GetCeMatchRuleProjectsQueryVariables,
 } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const PROJECT_COLUMNS: DataColumnDef<
   CeMatchRuleProjectFieldsFragment,
@@ -25,18 +27,12 @@ const PROJECT_COLUMNS: DataColumnDef<
   {
     header: 'Effective Rules',
     key: 'effectiveCeMatchRuleCount',
-    render: (project) => {
-      const inheritedCount =
-        project.effectiveCeMatchRuleCount - project.localCeMatchRuleCount;
-
-      return (
-        <RuleCountSummary
-          total={project.effectiveCeMatchRuleCount}
-          localCount={project.localCeMatchRuleCount}
-          inheritedCount={inheritedCount}
-        />
-      );
-    },
+    render: (project) => (
+      <RuleCountSummary
+        total={project.effectiveCeMatchRuleCount}
+        localCount={project.localCeMatchRuleCount}
+      />
+    ),
   },
   {
     header: 'Organization',
@@ -83,13 +79,27 @@ const CeMatchRuleProjects: React.FC = () => {
           queryDocument={GetCeMatchRuleProjectsDocument}
           columns={PROJECT_COLUMNS}
           rowLinkTo={(project) =>
-            ceMatchRuleOwnerLevelConfigs.project.getRulesPath({
-              ownerId: project.id,
+            generatePath(AdminDashboardRoutes.CE_RULE_PROJECT, {
+              projectId: project.id,
             })
           }
           rowName={(project) => project.projectName}
           rowActionTitle='View Project Rules'
-          noData='No projects with waitlist referrals enabled'
+          rowSecondaryActionConfigs={(project) => [
+            {
+              title: 'View Project',
+              key: 'viewProject',
+              ariaLabel: `View Project, ${project.projectName}`,
+              to: generateSafePath(ProjectDashboardRoutes.UNITS, {
+                projectId: project.id,
+              }),
+            },
+          ]}
+          noData={
+            debouncedSearch
+              ? 'No projects found'
+              : 'No projects with waitlist referrals enabled'
+          }
           pagePath='projects'
           recordType='Project'
           queryVariables={{
