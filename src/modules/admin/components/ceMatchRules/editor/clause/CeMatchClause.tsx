@@ -10,12 +10,10 @@ import CeMatchClauseComparatorSelect, {
 import CeMatchClauseFieldSelect from './CeMatchClauseFieldSelect';
 import CeMatchClauseFieldSourceSelect from './CeMatchClauseFieldSourceSelect';
 import CeMatchClauseValueInput from './CeMatchClauseValueInput';
-import { HmisEnums } from '@/types/gqlEnums';
 import {
   CeMatchCustomAssessmentFormFieldsFragment,
   CeMatchFieldDetailsFragment,
   CeMatchRuleComparator,
-  CeMatchRuleFieldSource,
   useGetCeMatchCustomAssessmentFieldsQuery,
 } from '@/types/gqlTypes';
 
@@ -67,18 +65,15 @@ const CeMatchClause: React.FC<Props> = ({
     variables: {
       formDefinitionIdentifier: selectedCustomAssessmentFormIdentifier,
     },
-    skip:
-      source !== CeMatchRuleFieldSource.CustomDataElement ||
-      !selectedCustomAssessmentFormIdentifier,
+    skip: source !== 'custom' || !selectedCustomAssessmentFormIdentifier,
   });
   const customAssessmentFields =
     customAssessmentFieldsData?.ceMatchCustomAssessmentFields ||
     emptyCustomAssessmentFields;
 
   const fields = useMemo(() => {
-    if (source === CeMatchRuleFieldSource.Client) return clientItems;
-    if (source === CeMatchRuleFieldSource.CustomDataElement)
-      return customAssessmentFields;
+    if (source === 'client') return clientItems;
+    if (source === 'custom') return customAssessmentFields;
     return [];
   }, [clientItems, source, customAssessmentFields]);
 
@@ -107,17 +102,13 @@ const CeMatchClause: React.FC<Props> = ({
   const fieldSelectDisabled = useMemo(() => {
     return (
       !source ||
-      (source === CeMatchRuleFieldSource.CustomDataElement &&
-        !selectedCustomAssessmentFormIdentifier)
+      (source === 'custom' && !selectedCustomAssessmentFormIdentifier)
     );
   }, [source, selectedCustomAssessmentFormIdentifier]);
 
   const fieldSelectHelperText = useMemo(() => {
     if (!source) return 'Choose field type first.';
-    if (
-      source === CeMatchRuleFieldSource.CustomDataElement &&
-      fieldSelectDisabled
-    )
+    if (source === 'custom' && fieldSelectDisabled)
       return 'Choose an assessment first.';
   }, [source, fieldSelectDisabled]);
 
@@ -132,7 +123,7 @@ const CeMatchClause: React.FC<Props> = ({
             onSourceChange={resetCustomAssessmentSelection}
           />
         </Grid>
-        {source === CeMatchRuleFieldSource.CustomDataElement && (
+        {source === 'custom' && (
           <Grid item xs={12} md={6}>
             <CeMatchClauseAssessmentSelect
               clausePath={clausePath}
@@ -149,11 +140,7 @@ const CeMatchClause: React.FC<Props> = ({
             clausePath={clausePath}
             control={control}
             fields={fields}
-            fieldLabel={
-              source
-                ? `${HmisEnums.CeMatchRuleFieldSource[source]} Field`
-                : 'Field'
-            }
+            fieldLabel={source === 'client' ? 'Client Field' : 'Custom Field'}
             disabled={fieldSelectDisabled}
             helperText={fieldSelectHelperText}
             customAssessmentFieldsLoading={customAssessmentFieldsLoading}

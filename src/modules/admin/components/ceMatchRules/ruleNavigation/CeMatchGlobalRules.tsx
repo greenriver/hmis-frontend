@@ -22,7 +22,6 @@ const CeMatchGlobalRules: React.FC = () => {
       ownerName={label}
       effectiveRulesCount={count}
       ruleCountSummaries={[{ label, count }]}
-      showSummary={false} // Hide the per-owner rule count summary, since it's redundant
     >
       <CeMatchRuleGroup ownerLevel='global' rules={rules} count={count} />
     </CeMatchEffectiveRulesCard>

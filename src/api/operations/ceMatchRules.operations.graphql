@@ -8,29 +8,3 @@ mutation CreateCeMatchRule($input: CeMatchRuleInput!, $confirmed: Boolean) {
     }
   }
 }
-
-mutation UpdateCeMatchRule(
-  $id: ID!
-  $input: CeMatchRuleInput!
-  $confirmed: Boolean
-) {
-  updateCeMatchRule(id: $id, input: $input, confirmed: $confirmed) {
-    rule {
-      ...CeMatchRuleDetails
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation DeleteCeMatchRule($id: ID!) {
-  deleteCeMatchRule(id: $id) {
-    rule {
-      ...CeMatchRuleDetails
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}

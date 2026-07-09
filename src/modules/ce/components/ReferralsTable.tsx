@@ -3,7 +3,6 @@ import React, { useCallback } from 'react';
 
 import useDebouncedState from '@/hooks/useDebouncedState';
 import useTableFilters from '@/hooks/useTableFilters';
-import useTablePagination from '@/hooks/useTablePagination';
 import {
   REFERRAL_COLUMNS,
   REFERRAL_WITH_PROJECT_COLUMNS,
@@ -105,7 +104,6 @@ const ReferralsTable: React.FC<Props> = ({
     type: 'CeReferralFilterOptions',
     omit: ['projectGroupId'], // only exposed via Workspaces
   });
-  const pagination = useTablePagination();
 
   const rowSecondaryActions = useCallback(
     (row: CeReferralTableFieldsFragment) => {
@@ -182,7 +180,6 @@ const ReferralsTable: React.FC<Props> = ({
           filters={filters}
           filterValues={filterValues}
           onFilterChange={setFilterValues}
-          pagination={pagination}
           rowLinkTo={(row) =>
             generateSafePath(ReferralRoutes.REFERRAL, {
               referralId: row.id,

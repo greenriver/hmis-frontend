@@ -57,18 +57,12 @@ const CeMatchRuleGroupTable: React.FC<CeMatchRuleGroupTableProps> = ({
         }
         rowName={(rule) => rule.name}
         renderRow={(rule) => {
-          const rulePath = ceMatchRuleOwnerLevelConfigs[ownerLevel].getRulePath(
-            {
-              ownerId: rule.ownerId,
-              ruleId: rule.id,
-            }
-          );
           const actionConfigs: CommonMenuItem[] = [
             {
-              key: 'edit',
-              title: 'Edit Rule',
-              ariaLabel: `Edit Rule, ${rule.name}`,
-              to: rulePath,
+              key: 'primary',
+              title: 'View Rule',
+              ariaLabel: `View Rule, ${rule.name}`,
+              // TODO(#7544) existing rules don't link anywhere yet, implementing in a later phase
             },
           ];
 

@@ -1,16 +1,14 @@
 import { Divider, Paper, Stack, Typography } from '@mui/material';
-import { generatePath } from 'react-router-dom';
 
+import { ceMatchRuleOwnerLevelConfigs } from '../../ceMatchRuleOwnerLevelConfig';
 import RuleCountSummary from '../RuleCountSummary';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
-import { AdminDashboardRoutes, ProjectDashboardRoutes } from '@/routes/routes';
 import {
   GetCeMatchOrganizationProjectsDocument,
   GetCeMatchOrganizationProjectsQuery,
   GetCeMatchOrganizationProjectsQueryVariables,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 type OrganizationProjectRow = NonNullable<
   GetCeMatchOrganizationProjectsQuery['organization']
@@ -28,12 +26,18 @@ const COLUMNS: DataColumnDef<
   {
     header: 'Effective Rules',
     key: 'effectiveRules',
-    render: (project: OrganizationProjectRow) => (
-      <RuleCountSummary
-        total={project.effectiveCeMatchRuleCount}
-        localCount={project.localCeMatchRuleCount}
-      />
-    ),
+    render: (project: OrganizationProjectRow) => {
+      const inheritedCount =
+        project.effectiveCeMatchRuleCount - project.localCeMatchRuleCount;
+
+      return (
+        <RuleCountSummary
+          total={project.effectiveCeMatchRuleCount}
+          localCount={project.localCeMatchRuleCount}
+          inheritedCount={inheritedCount}
+        />
+      );
+    },
   },
   {
     header: 'Unit Groups',
@@ -68,22 +72,12 @@ const CeMatchOrganizationProjectsTable: React.FC<{
         queryDocument={GetCeMatchOrganizationProjectsDocument}
         columns={COLUMNS}
         rowLinkTo={(project) =>
-          generatePath(AdminDashboardRoutes.CE_RULE_PROJECT, {
-            projectId: project.id,
+          ceMatchRuleOwnerLevelConfigs.project.getRulesPath({
+            ownerId: project.id,
           })
         }
         rowName={(project) => project.projectName}
         rowActionTitle='View Project Rules'
-        rowSecondaryActionConfigs={(project) => [
-          {
-            title: 'View Project',
-            key: 'viewProject',
-            ariaLabel: `View Project, ${project.projectName}`,
-            to: generateSafePath(ProjectDashboardRoutes.UNITS, {
-              projectId: project.id,
-            }),
-          },
-        ]}
         noData='No projects'
         pagePath='organization.projects'
         recordType='Project'

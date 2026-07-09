@@ -1,7 +1,6 @@
 import { Paper } from '@mui/material';
 import React from 'react';
 import useTableFilters from '@/hooks/useTableFilters';
-import useTablePagination from '@/hooks/useTablePagination';
 import { OPPORTUNITY_COLUMNS } from '@/modules/ce/components/project/ProjectOpportunitiesTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
@@ -67,7 +66,6 @@ const AdminOpportunitiesTable: React.FC<Props> = ({ projectGroupId }) => {
       'projectGroupId', // only exposed via Workspaces
     ],
   });
-  const pagination = useTablePagination();
 
   return (
     <Paper>
@@ -92,7 +90,6 @@ const AdminOpportunitiesTable: React.FC<Props> = ({ projectGroupId }) => {
         filters={filters}
         filterValues={filterValues}
         onFilterChange={setFilterValues}
-        pagination={pagination}
         rowLinkTo={(row) =>
           // Link to Unit Page. If the project doesn't support waitlists, this will redirect to the All Units page.
           generateSafePath(ProjectDashboardRoutes.UNIT, {

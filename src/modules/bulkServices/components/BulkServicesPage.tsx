@@ -340,7 +340,7 @@ const BulkServicesPage: React.FC<Props> = ({
                     action={addNewClientMenuButton}
                   />
                 }
-                onNetworkDataReady={handleSearchCompleted}
+                onCompleted={handleSearchCompleted}
               />
             </Paper>
           ) : (

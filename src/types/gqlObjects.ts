@@ -985,22 +985,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
           ofType: { kind: 'SCALAR', name: 'String', ofType: null },
         },
       },
-      {
-        name: 'fieldSource',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: {
-            kind: 'ENUM',
-            name: 'CeMatchRuleFieldSource',
-            ofType: null,
-          },
-        },
-      },
-      {
-        name: 'formDefinitionIdentifier',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
       { name: 'value', type: { kind: 'SCALAR', name: 'JSON', ofType: null } },
     ],
   },
@@ -7557,38 +7541,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'organizationId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'organizationName',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
-      {
-        name: 'projectId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'projectName',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
-      {
         name: 'workflowTemplateIdentifier',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
@@ -10333,47 +10285,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             ofType: { kind: 'SCALAR', name: 'String', ofType: null },
           },
         },
-      },
-    ],
-  },
-  {
-    name: 'UnitCeReferralFilterOptions',
-    args: [
-      {
-        name: 'assignedToYou',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-      },
-      {
-        name: 'onCurrentTaskSince',
-        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
-      },
-      {
-        name: 'origin',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'ENUM', name: 'CeReferralOrigin', ofType: null },
-          },
-        },
-      },
-      {
-        name: 'referralStatus',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-          },
-        },
-      },
-      {
-        name: 'searchTerm',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
     ],
   },
