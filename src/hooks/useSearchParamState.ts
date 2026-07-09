@@ -123,6 +123,7 @@ type ValueType = Record<string, any>; // Future improvement: constrain value typ
 
 type Args = {
   paramsDefinition: SearchParamsStateType; // shape of params/state
+  // Seeds missing URL params on mount. Existing URL params always take precedence.
   initial?: ValueType;
 };
 
@@ -179,9 +180,17 @@ const useSearchParamsState = ({
 
   const values = useMemo(() => {
     if (initial && !mounted) {
-      // If the above useEffect hasn't run yet, return the initial values right away
-      // to avoid flickering
-      return initial;
+      // On first render, explicit URL params must win over `initial`. Otherwise callers
+      // can observe the seeded values first and overwrite direct-link state such as
+      // `?page=3&pageSize=10` before the URL-backed values ever render.
+      const searchParamValues = getValues(paramsDefinition, searchParams);
+      const valuesWithInitialFallback = { ...searchParamValues };
+      Object.keys(paramsDefinition).forEach((key) => {
+        if (!searchParams.has(key) && Object.hasOwn(initial, key)) {
+          valuesWithInitialFallback[key] = initial[key];
+        }
+      });
+      return valuesWithInitialFallback;
     }
     return getValues(paramsDefinition, searchParams);
   }, [initial, mounted, paramsDefinition, searchParams]);

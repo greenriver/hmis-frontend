@@ -38,6 +38,7 @@ import type {
   ServicesForEnrollmentFilterOptions,
   ServicesForProjectFilterOptions,
   ServiceTypeFilterOptions,
+  UnitCeReferralFilterOptions,
   UnitFilterOptions,
   UnitGroupFilterOptions,
   UserAuditEventFilterOptions,
@@ -81,6 +82,7 @@ export type FilterOptionsByName = {
   ServicesForEnrollmentFilterOptions: ServicesForEnrollmentFilterOptions;
   ServicesForProjectFilterOptions: ServicesForProjectFilterOptions;
   ServiceTypeFilterOptions: ServiceTypeFilterOptions;
+  UnitCeReferralFilterOptions: UnitCeReferralFilterOptions;
   UnitFilterOptions: UnitFilterOptions;
   UnitGroupFilterOptions: UnitGroupFilterOptions;
   UserAuditEventFilterOptions: UserAuditEventFilterOptions;
@@ -126,6 +128,7 @@ export const FILTER_OPTIONS_GRAPHQL_TYPE_NAMES = [
   'ServicesForEnrollmentFilterOptions',
   'ServicesForProjectFilterOptions',
   'ServiceTypeFilterOptions',
+  'UnitCeReferralFilterOptions',
   'UnitFilterOptions',
   'UnitGroupFilterOptions',
   'UserAuditEventFilterOptions',

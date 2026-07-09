@@ -50,6 +50,20 @@ query GetUnit(
   }
 }
 
+query GetUnitCeReferrals($id: ID!, $limit: Int = 25, $offset: Int = 0) {
+  unit(id: $id) {
+    id
+    ceReferrals(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...CeReferralBaseTableFields
+      }
+    }
+  }
+}
+
 query GetProjectUnitTypes($id: ID!) {
   project(id: $id) {
     id
