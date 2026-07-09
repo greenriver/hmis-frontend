@@ -1,5 +1,5 @@
 import { LoadingButton } from '@mui/lab';
-import { Box, Button, Divider, Stack, Typography } from '@mui/material';
+import { Alert, Box, Button, Divider, Stack, Typography } from '@mui/material';
 import { isNil, omitBy, startCase } from 'lodash-es';
 import React, {
   Dispatch,
@@ -11,6 +11,7 @@ import React, {
 import { DeepPartial, useForm } from 'react-hook-form';
 import { v4 } from 'uuid';
 import FormEditorItemPreview from '../FormEditorItemPreview';
+import SystemFieldChip from '../SystemFieldChip';
 import AutofillProperties from './conditionals/AutofillProperties';
 import InitialValue from './conditionals/InitialValue';
 import ManageEnableWhen from './conditionals/ManageEnableWhen';
@@ -45,6 +46,7 @@ import {
   validComponentsForType,
 } from '@/modules/formBuilder/formBuilderUtil';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   AssessmentRole,
@@ -158,6 +160,15 @@ const FormItemEditor: React.FC<Props> = ({
     () => (Object.values(AssessmentRole) as [string]).includes(definition.role),
     [definition.role]
   );
+
+  // If the item maps to a fieldName (as opposed to customFieldKey),
+  // it is a "system" field. Many of these are HUD fields, but not all.
+  // Lock down editing for users who are not super-admins.
+  const isSystemField = !!initialItem.mapping?.fieldName;
+  const [canAdministrateConfig] = useHasRootPermissions([
+    'canAdministrateConfig',
+  ]);
+  const lockSystemFieldControls = isSystemField && !canAdministrateConfig;
 
   const componentOverridePicklist = useMemo(() => {
     if (!itemTypeValue) return [];
@@ -303,15 +314,32 @@ const FormItemEditor: React.FC<Props> = ({
                 <ErrorAlert key='errors' errors={errorState.errors} />
               </Stack>
             )}
-            {itemTypeValue === ItemType.Date && isAssessment && (
-              <ControlledCheckbox
-                name='assessmentDate'
-                control={control}
-                label='Assessment Date'
-                helperText='If checked, this date will be recorded as the Assessment Date on the assessment'
-              />
+            {isSystemField && (
+              <Alert severity='info' sx={{ mb: 2 }}>
+                This question collects a system field.{' '}
+                {!canAdministrateConfig && (
+                  <>Only display text and layout controls are editable.</>
+                )}
+                {canAdministrateConfig && (
+                  <>
+                    As a super-admin, you can edit all properties, but be
+                    cautious about changing properties that may affect data
+                    collection, such as choices or visibility.
+                  </>
+                )}
+              </Alert>
             )}
-            {isQuestionItem && (
+            {!lockSystemFieldControls &&
+              itemTypeValue === ItemType.Date &&
+              isAssessment && (
+                <ControlledCheckbox
+                  name='assessmentDate'
+                  control={control}
+                  label='Assessment Date'
+                  helperText='If checked, this date will be recorded as the Assessment Date on the assessment'
+                />
+              )}
+            {isQuestionItem && !lockSystemFieldControls && (
               <RequiredOptionalRadio control={control} setValue={setValue} />
             )}
             <ControlledTextInput
@@ -367,78 +395,94 @@ const FormItemEditor: React.FC<Props> = ({
                 options={inputSizePickList}
               />
             )}
-            {([
-              ItemType.Choice,
-              ItemType.OpenChoice,
-              ItemType.File,
-              ItemType.Image,
-            ].includes(itemTypeValue) ||
-              (itemTypeValue === ItemType.Object &&
-                itemComponentValue === Component.Address)) && (
-              <ControlledCheckbox
-                name='repeats'
-                label='Allow multiple responses'
-                control={control}
-                disabled={disableRepeats}
-                helperText={repeatsHelperText}
-              />
-            )}
-          </Section>
-          {[ItemType.Choice, ItemType.OpenChoice].includes(itemTypeValue) && (
-            <Section title='Choices'>
-              <ManagePickListOptions control={control} setValue={setValue} />
-            </Section>
-          )}
-          <Section title='Visibility'>
-            {isAssessment && (
-              <ControlledSelect
-                name='dataCollectedAbout'
-                control={control}
-                label='Client Applicability'
-                placeholder='Select client applicability'
-                options={dataCollectedAboutPickList}
-                helperText='Select the client(s) to which this item applies. If left blank, the item will be shown for all clients.'
-              />
-            )}
-            <ControlledCheckbox
-              name='hidden'
-              control={control}
-              label='Always hide this item'
-              sx={{ width: 'fit-content' }}
-            />
-            {!hiddenValue && (
-              <>
-                <ManageEnableWhen
+            {!lockSystemFieldControls &&
+              ([
+                ItemType.Choice,
+                ItemType.OpenChoice,
+                ItemType.File,
+                ItemType.Image,
+              ].includes(itemTypeValue) ||
+                (itemTypeValue === ItemType.Object &&
+                  itemComponentValue === Component.Address)) && (
+                <ControlledCheckbox
+                  name='repeats'
+                  label='Allow multiple responses'
                   control={control}
-                  itemMap={itemMap}
-                  setValue={setValue}
+                  disabled={disableRepeats}
+                  helperText={repeatsHelperText}
                 />
-                {hasEnableWhen && !(itemTypeValue === ItemType.Group) && (
-                  <ControlledSelect
-                    name='disabledDisplay'
+              )}
+          </Section>
+          {
+            // Disable changing choices for system fields
+            !lockSystemFieldControls &&
+              [ItemType.Choice, ItemType.OpenChoice].includes(
+                itemTypeValue
+              ) && (
+                <Section title='Choices'>
+                  <ManagePickListOptions
                     control={control}
-                    label='Disabled Display'
-                    placeholder='Select disabled display'
-                    options={disabledDisplayPickList}
-                    helperText={
-                      <>
-                        <b>Hidden</b>: When this item is disabled, it will be
-                        completely hidden from view.
-                        <br />
-                        {/* TODO: Protected is only used in a few instances (Disability and some others). Should we hide it from the UI (or hide DIsabledDisplay altogether) since it's an advanced feature? */}
-                        <b>Protected</b>: When this item is disabled, it will
-                        still appear but not be interactable.
-                        <br />
-                        <b>Protected with Value</b>: When this item is disabled,
-                        it will still appear and its value will be visible but
-                        not interactible. Its value will be submitted.
-                      </>
-                    }
+                    setValue={setValue}
+                  />
+                </Section>
+              )
+          }
+          {
+            // Disable changing visibility for system fields
+            !lockSystemFieldControls && (
+              <Section title='Visibility'>
+                {isAssessment && (
+                  <ControlledSelect
+                    name='dataCollectedAbout'
+                    control={control}
+                    label='Client Applicability'
+                    placeholder='Select client applicability'
+                    options={dataCollectedAboutPickList}
+                    helperText='Select the client(s) to which this item applies. If left blank, the item will be shown for all clients.'
                   />
                 )}
-              </>
-            )}
-          </Section>
+                <ControlledCheckbox
+                  name='hidden'
+                  control={control}
+                  label='Always hide this item'
+                  sx={{ width: 'fit-content' }}
+                />
+                {!hiddenValue && (
+                  <>
+                    <ManageEnableWhen
+                      control={control}
+                      itemMap={itemMap}
+                      setValue={setValue}
+                    />
+                    {hasEnableWhen && !(itemTypeValue === ItemType.Group) && (
+                      <ControlledSelect
+                        name='disabledDisplay'
+                        control={control}
+                        label='Disabled Display'
+                        placeholder='Select disabled display'
+                        options={disabledDisplayPickList}
+                        helperText={
+                          <>
+                            <b>Hidden</b>: When this item is disabled, it will
+                            be completely hidden from view.
+                            <br />
+                            {/* TODO: Protected is only used in a few instances (Disability and some others). Should we hide it from the UI (or hide DIsabledDisplay altogether) since it's an advanced feature? */}
+                            <b>Protected</b>: When this item is disabled, it
+                            will still appear but not be interactable.
+                            <br />
+                            <b>Protected with Value</b>: When this item is
+                            disabled, it will still appear and its value will be
+                            visible but not interactible. Its value will be
+                            submitted.
+                          </>
+                        }
+                      />
+                    )}
+                  </>
+                )}
+              </Section>
+            )
+          }
           <RootPermissionsFilter permissions='canAdministrateConfig'>
             <Section
               title='Initial Value'
@@ -503,7 +547,14 @@ const FormItemEditor: React.FC<Props> = ({
             {!isNewItem &&
               (initialItem.mapping?.customFieldKey ||
                 initialItem.mapping?.fieldName) && (
-                <CommonLabeledTextBlock title='Field Key'>
+                <CommonLabeledTextBlock
+                  title={
+                    <Stack direction='row' gap={1} alignItems='center'>
+                      Field Key
+                      {initialItem.mapping?.fieldName && <SystemFieldChip />}
+                    </Stack>
+                  }
+                >
                   {initialItem.mapping?.customFieldKey ||
                     initialItem.mapping?.fieldName}
                 </CommonLabeledTextBlock>

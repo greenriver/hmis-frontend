@@ -1,10 +1,13 @@
-import CeMatchRuleForm from '../editor/CeMatchRuleForm';
+import { type CeMatchRuleOwnerLevel } from '../ceMatchRuleOwnerLevelConfig';
+import CeMatchRulesTabs from '../ruleNavigation/CeMatchRulesTabs';
 import PageTitle from '@/components/layout/PageTitle';
 
-const CeMatchRulesPage = () => (
+const CeMatchRulesPage: React.FC<{ ownerLevel: CeMatchRuleOwnerLevel }> = ({
+  ownerLevel,
+}) => (
   <>
-    <PageTitle title='Global Rule' />
-    <CeMatchRuleForm />
+    <PageTitle overlineText='Coordinated Entry' title='Rules' />
+    <CeMatchRulesTabs selectedOwnerLevel={ownerLevel} />
   </>
 );
 

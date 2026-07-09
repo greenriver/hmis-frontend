@@ -64,7 +64,7 @@ const OrganizationProjectsTable = ({
 
   const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'ProjectsForEnrollmentFilterOptions',
-    omit: ['searchTerm'],
+    omit: ['searchTerm', 'ceWaitlistsEnabled'],
     initialFilterValues: { status: [ProjectFilterOptionStatus.Open] },
   });
 

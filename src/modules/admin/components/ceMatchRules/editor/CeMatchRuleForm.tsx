@@ -1,5 +1,5 @@
-import { Alert, Button, Stack } from '@mui/material';
-import { useState } from 'react';
+import { Button, Stack, Typography } from '@mui/material';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import CeMatchExpressionModeSwitch from './CeMatchExpressionModeSwitch';
@@ -20,11 +20,23 @@ import {
 } from '@/modules/errors/util';
 import { getRequiredLabel } from '@/modules/form/components/RequiredLabel';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   CeMatchRuleBooleanOperator,
+  CeMatchRuleDetailsFragment,
   CeMatchRuleInput,
+  CeMatchRuleOwnerType,
+  CeMatchRuleType,
   useCreateCeMatchRuleMutation,
 } from '@/types/gqlTypes';
+
+interface Props {
+  ownerType: CeMatchRuleOwnerType;
+  ownerId?: string;
+  ownerName?: string;
+  onSaved: (rule: CeMatchRuleDetailsFragment) => void;
+  onCancel: VoidFunction;
+}
 
 const defaultCeMatchRuleFormValues = (): CeMatchRuleFormValues => ({
   name: '',
@@ -36,15 +48,21 @@ const defaultCeMatchRuleFormValues = (): CeMatchRuleFormValues => ({
   freeTextExpression: '',
 });
 
-const buildCeMatchRuleInput = ({
-  name,
-  mode,
-  structuredExpression,
-  freeTextExpression,
-}: CeMatchRuleFormValues): CeMatchRuleInput => {
+const buildCeMatchRuleInput = (
+  {
+    name,
+    mode,
+    structuredExpression,
+    freeTextExpression,
+  }: CeMatchRuleFormValues,
+  ownerType?: CeMatchRuleOwnerType,
+  ownerId?: string
+): CeMatchRuleInput => {
   const base = {
     name: name.trim(),
-    ruleType: 'eligibility_requirement',
+    ownerId,
+    ownerType,
+    ruleType: CeMatchRuleType.EligibilityRequirement,
   };
 
   if (mode === 'freeText') {
@@ -75,29 +93,28 @@ const buildCeMatchRuleInput = ({
  * Owns the RHF state to collect rule details and structured clauses,
  * and the mutation call to submit to the backend.
  */
-const CeMatchRuleForm = () => {
+const CeMatchRuleForm: React.FC<Props> = ({
+  ownerType,
+  ownerId,
+  ownerName,
+  onSaved,
+  onCancel,
+}) => {
   const { control, handleSubmit, reset, setValue, watch } =
     useForm<CeMatchRuleFormValues>({
       defaultValues: defaultCeMatchRuleFormValues(),
     });
 
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
-  const [saved, setSaved] = useState(false);
   const mode = watch('mode');
-
-  const resetForm = () => {
-    setErrorState(emptyErrorState);
-    setSaved(false);
-    reset(defaultCeMatchRuleFormValues());
-  };
 
   const [createCeMatchRule, { loading }] = useCreateCeMatchRuleMutation({
     onCompleted: (data) => {
       const payload = data.createCeMatchRule;
       if (payload?.rule) {
         setErrorState(emptyErrorState);
-        setSaved(true);
         reset(defaultCeMatchRuleFormValues());
+        onSaved?.(payload.rule);
       } else if (payload?.errors?.length) {
         setErrorState(partitionValidations(payload.errors));
       }
@@ -110,11 +127,9 @@ const CeMatchRuleForm = () => {
     values: CeMatchRuleFormValues,
     confirmed = false
   ) => {
-    setSaved(false);
-
     createCeMatchRule({
       variables: {
-        input: buildCeMatchRuleInput(values),
+        input: buildCeMatchRuleInput(values, ownerType, ownerId),
         confirmed,
       },
     });
@@ -122,11 +137,19 @@ const CeMatchRuleForm = () => {
 
   const showWarningDialog = hasOnlyWarnings(errorState);
 
+  const ownerContext = useMemo(() => {
+    let substring = '';
+    if (ownerType !== CeMatchRuleOwnerType.DataSource) {
+      substring = ` in the ${ownerName} ${HmisEnums.CeMatchRuleOwnerType[ownerType]}`;
+    }
+    return `This eligibility rule will apply to all units${substring}.`;
+  }, [ownerName, ownerType]);
+
   return (
     <Stack gap={2}>
+      {ownerContext && <Typography variant='body2'>{ownerContext}</Typography>}
       <TitleCard title='Rule Details' headerComponent='h2' padded>
         <Stack gap={2}>
-          {saved && <Alert severity='success'>Eligibility rule saved.</Alert>}
           {hasErrors(errorState) && (
             <Stack gap={1}>
               <ApolloErrorAlert error={errorState.apolloError} />
@@ -173,8 +196,8 @@ const CeMatchRuleForm = () => {
         >
           Save Rule
         </LoadingButton>
-        <Button variant='outlined' onClick={resetForm}>
-          Discard
+        <Button variant='outlined' onClick={onCancel}>
+          Cancel
         </Button>
       </Stack>
       {showWarningDialog && (

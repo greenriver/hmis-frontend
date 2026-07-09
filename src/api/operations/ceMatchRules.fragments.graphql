@@ -26,8 +26,16 @@ fragment CeMatchRuleFields on CeMatchRule {
   funders
 }
 
-fragment CeMatchRuleDetails on CeMatchRule {
+fragment CeMatchRuleAdminSummaryFields on CeMatchRule {
   ...CeMatchRuleFields
+  ownerId
+  ownerName
+  ruleType
+  priorityRank
+}
+
+fragment CeMatchRuleDetails on CeMatchRule {
+  ...CeMatchRuleAdminSummaryFields
   structuredExpression {
     operator
     clauses {
@@ -35,5 +43,51 @@ fragment CeMatchRuleDetails on CeMatchRule {
       comparator
       value
     }
+  }
+}
+
+fragment CeMatchRuleGroupFields on CeMatchRuleGroup {
+  ownerType
+  ownerId
+  ownerName
+  local
+  rules {
+    ...CeMatchRuleAdminSummaryFields
+  }
+}
+
+fragment CeMatchRuleOrganizationFields on Organization {
+  id
+  organizationName
+  ceWaitlistUnitGroupCount
+  effectiveCeMatchRuleCount
+  localCeMatchRuleCount
+}
+
+fragment CeMatchRuleOrganizationDetails on Organization {
+  ...CeMatchRuleOrganizationFields
+  effectiveCeMatchRuleGroups {
+    ...CeMatchRuleGroupFields
+  }
+}
+
+fragment CeMatchRuleProjectFields on Project {
+  id
+  projectName
+  effectiveCeMatchRuleCount
+  localCeMatchRuleCount
+  organization {
+    id
+    organizationName
+  }
+  unitGroups(limit: 1) {
+    nodesCount
+  }
+}
+
+fragment CeMatchRuleProjectDetails on Project {
+  ...CeMatchRuleProjectFields
+  effectiveCeMatchRuleGroups {
+    ...CeMatchRuleGroupFields
   }
 }

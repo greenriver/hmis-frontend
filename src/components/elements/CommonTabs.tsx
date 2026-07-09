@@ -1,5 +1,5 @@
-import { Box, SxProps, Tab, Tabs } from '@mui/material';
-import React, { ReactNode, useMemo } from 'react';
+import { Box, SvgIconProps, SxProps, Tab, Tabs } from '@mui/material';
+import React, { ComponentType, ReactNode, useMemo } from 'react';
 import NotFound from '@/components/pages/NotFound';
 import useHashState from '@/hooks/useHashState.ts';
 
@@ -7,6 +7,7 @@ export type TabDefinition = {
   title: string;
   key: string;
   contents: ReactNode;
+  Icon?: ComponentType<SvgIconProps>;
 };
 
 interface CommonTabsProps {
@@ -70,11 +71,19 @@ const CommonTabs: React.FC<CommonTabsProps> = ({
           value={currentIndex}
           onChange={handleChange}
           aria-label={ariaLabel}
+          sx={{
+            '& .MuiTab-labelIcon': {
+              // override MUI default so tabs with icons aren't abnormally tall
+              minHeight: 48,
+            },
+          }}
         >
           {tabDefinitions.map((t) => (
             <Tab
               key={t.title}
               label={<strong>{t.title}</strong>}
+              icon={t.Icon && <t.Icon fontSize='small' />}
+              iconPosition={t.Icon ? 'start' : undefined}
               id={`tab-${t.key}`}
               aria-controls={`tabpanel-${t.key}`}
               {...(onChangeTab
