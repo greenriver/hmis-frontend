@@ -1,8 +1,10 @@
+import { QueryHookOptions } from '@apollo/client';
 import React from 'react';
 
-import { PickListFetchOptions } from '@/modules/form/hooks/usePickList';
 import { PickListArgs } from '@/modules/form/types';
 import {
+  GetPickListQuery,
+  GetPickListQueryVariables,
   PickListOption,
   PickListType,
   useGetPickListQuery,
@@ -11,7 +13,7 @@ import {
 export type PickListWrapperProps = {
   pickListType: PickListType;
   pickListArgs?: PickListArgs;
-  fetchOptions?: PickListFetchOptions;
+  fetchOptions?: QueryHookOptions<GetPickListQuery, GetPickListQueryVariables>;
   children: (options: PickListOption[], loading: boolean) => JSX.Element;
 };
 

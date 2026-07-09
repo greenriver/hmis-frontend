@@ -10,7 +10,6 @@ import useSafeParams from '@/hooks/useSafeParams';
 import PrioritizedClientsTable from '@/modules/ce/components/unit/PrioritizedClientsTable';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import UnitOverview from '@/modules/units/components/UnitOverview';
-import UnitReferralHistoryTable from '@/modules/units/components/UnitReferralHistoryTable';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { CeOpportunityStatus, useGetUnitQuery } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -54,6 +53,7 @@ const UnitPage: React.FC<Props> = ({}) => {
       key: 'overview',
       contents: <UnitOverview unit={unit} />,
     });
+
     const opportunity = unit.latestOpportunity;
     if (
       opportunity &&
@@ -80,18 +80,17 @@ const UnitPage: React.FC<Props> = ({}) => {
       });
     }
 
-    if (project.access.canViewReferrals || project.access.canViewOwnReferrals) {
-      defs.push({
-        title: 'Referral History',
-        key: 'referral-history',
-        contents: (
-          <UnitReferralHistoryTable projectId={project.id} unitId={unitId} />
-        ),
-      });
-    }
+    // TODO(#7430) - add a tab that displays referral history for this opportunity
+    // if (opportunity && project.access.canViewPrioritizedClientLists) {
+    //   defs.push({
+    //     title: 'Closed Referrals',
+    //     key: 'closed-referrals',
+    //     contents: <Paper>Referral History for this Opportunity</Paper>,
+    //   });
+    // }
 
     return defs;
-  }, [project, unit, unitId]);
+  }, [project, unit]);
 
   if (loading && !unit) return <Loading />;
   if (error) throw error;

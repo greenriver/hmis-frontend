@@ -1,16 +1,13 @@
 import { Divider, Paper, Stack, Typography } from '@mui/material';
-import { generatePath } from 'react-router-dom';
 
 import RuleCountSummary from '../RuleCountSummary';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { DataColumnDef } from '@/modules/dataFetching/types';
-import { AdminDashboardRoutes, ProjectDashboardRoutes } from '@/routes/routes';
 import {
   GetCeMatchProjectUnitGroupsDocument,
   GetCeMatchProjectUnitGroupsQuery,
   GetCeMatchProjectUnitGroupsQueryVariables,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 type ProjectUnitGroupRow = NonNullable<
   GetCeMatchProjectUnitGroupsQuery['project']
@@ -28,10 +25,11 @@ const COLUMNS: DataColumnDef<
   {
     header: 'Effective Rules',
     key: 'effectiveRules',
-    render: (unitGroup: ProjectUnitGroupRow) => (
+    render: () => (
       <RuleCountSummary
-        total={unitGroup.effectiveCeMatchRuleCount}
-        localCount={unitGroup.localCeMatchRuleCount}
+        // TODO(#7544): Add correct counts when available
+        total={0}
+        inheritedCount={0}
       />
     ),
   },
@@ -62,24 +60,7 @@ const CeMatchProjectUnitGroupsTable: React.FC<{
       >
         queryDocument={GetCeMatchProjectUnitGroupsDocument}
         columns={COLUMNS}
-        rowLinkTo={(unitGroup) =>
-          generatePath(AdminDashboardRoutes.CE_RULE_UNIT_GROUP, {
-            unitGroupId: unitGroup.id,
-          })
-        }
         rowName={(unitGroup) => unitGroup.name}
-        rowActionTitle='View Unit Group Rules'
-        rowSecondaryActionConfigs={(unitGroup) => [
-          {
-            title: 'View Unit Group',
-            key: 'viewUnitGroup',
-            ariaLabel: `View Unit Group, ${unitGroup.name}`,
-            to: generateSafePath(ProjectDashboardRoutes.UNIT_GROUP, {
-              projectId: unitGroup.projectId,
-              unitGroupId: unitGroup.id,
-            }),
-          },
-        ]}
         noData='No unit groups'
         pagePath='project.unitGroups'
         recordType='Unit Group'

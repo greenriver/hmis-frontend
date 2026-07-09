@@ -15,9 +15,8 @@ import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useAdminDashboardContext } from '@/modules/admin/components/AdminDashboard';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
-import { AdminDashboardRoutes, Routes } from '@/routes/routes';
+import { AdminDashboardRoutes } from '@/routes/routes';
 import { useGetCeMatchOrganizationRulesQuery } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 /**
  * Displays effective CE rules for a selected organization and its descendants.
@@ -55,9 +54,6 @@ const CeMatchOrganizationRulesPage: React.FC = () => {
       <Stack gap={3}>
         <CeMatchEffectiveRulesCard
           ownerName={organization.organizationName}
-          ownerTo={generateSafePath(Routes.ORGANIZATION, {
-            organizationId: organization.id,
-          })}
           effectiveRulesCount={organization.effectiveCeMatchRuleCount}
           ruleCountSummaries={organization.effectiveCeMatchRuleGroups.map(
             (group) => ({

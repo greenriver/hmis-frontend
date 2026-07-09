@@ -10,6 +10,7 @@ interface Props {
 }
 
 // This component displays the eligibility requirements for a unit group
+// TODO(#7544): add the ability to edit eligibility requirements
 
 const UnitGroupEligibilityCard: React.FC<Props> = ({
   unitGroup,

@@ -40,8 +40,6 @@ fragment CeMatchRuleDetails on CeMatchRule {
     operator
     clauses {
       field
-      fieldSource
-      formDefinitionIdentifier
       comparator
       value
     }
@@ -89,28 +87,6 @@ fragment CeMatchRuleProjectFields on Project {
 
 fragment CeMatchRuleProjectDetails on Project {
   ...CeMatchRuleProjectFields
-  effectiveCeMatchRuleGroups {
-    ...CeMatchRuleGroupFields
-  }
-}
-
-fragment CeMatchRuleProjectUnitGroupFields on UnitGroup {
-  id
-  name
-  effectiveCeMatchRuleCount
-  localCeMatchRuleCount
-  projectId
-  projectName
-}
-
-fragment CeMatchRuleUnitGroupFields on UnitGroup {
-  ...CeMatchRuleProjectUnitGroupFields
-  organizationId
-  organizationName
-}
-
-fragment CeMatchRuleUnitGroupDetails on UnitGroup {
-  ...CeMatchRuleUnitGroupFields
   effectiveCeMatchRuleGroups {
     ...CeMatchRuleGroupFields
   }

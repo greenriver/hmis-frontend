@@ -4,7 +4,6 @@ import { ColumnDef } from '@/components/elements/table/types';
 import ReferralStatusChip from '@/modules/ce/components/referral/ReferralStatusChip';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
-import { HmisEnums } from '@/types/gqlEnums';
 import {
   CeReferralBaseTableFieldsFragment,
   CeReferralWithProjectFieldsFragment,
@@ -90,12 +89,6 @@ export const REFERRAL_COLUMNS: Record<
     key: 'referredBy',
     render: (referral: CeReferralBaseTableFieldsFragment) =>
       referral.referredBy?.name,
-  },
-  origin: {
-    header: 'Origin',
-    key: 'origin',
-    render: (referral: CeReferralBaseTableFieldsFragment) =>
-      HmisEnums.CeReferralOrigin[referral.origin],
   },
   // TODO(#7321) - add column for sending project
 };

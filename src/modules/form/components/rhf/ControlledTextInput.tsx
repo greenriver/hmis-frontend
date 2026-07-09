@@ -12,7 +12,7 @@ import TextInput, {
 } from '@/components/elements/input/TextInput';
 import { RhfRules } from '@/modules/form/types';
 
-export interface ControlledTextInputProps<
+interface ControlledTextInputProps<
   T extends FieldValues = FieldValues,
 > extends Omit<TextInputProps, 'value' | 'onChange'> {
   // Path<T> gives callers type checking for nested RHF paths.

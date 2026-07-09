@@ -21,10 +21,7 @@ import TableControls, {
 } from '@/components/elements/tableFilters/TableControls';
 import useHasRefetched from '@/hooks/useHasRefetched';
 import usePrevious from '@/hooks/usePrevious';
-import type { TablePaginationState } from '@/hooks/useTablePagination';
-import { useNetworkDataReady } from '@/modules/dataFetching/hooks/useNetworkDataReady';
 import { useOptionalColumns } from '@/modules/dataFetching/hooks/useOptionalColumns';
-import { DEFAULT_TABLE_PAGE_SIZE } from '@/modules/dataFetching/util';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
@@ -35,6 +32,8 @@ import {
   getSortOptionForType,
   getDefaultSortOptionForType,
 } from '@/utils/tableSortUtil';
+
+const DEFAULT_ROWS_PER_PAGE = 25;
 
 export interface Props<
   Query,
@@ -76,8 +75,6 @@ export interface Props<
   noData?: ReactNode | ((filters: Partial<FilterOptionsType>) => ReactNode);
   defaultPageSize?: number;
   rowsPerPageOptions?: number[];
-  /** Controlled Pagination: current page/page size and setters. Use when pagination state should live outside the table, e.g. URL-backed via useTablePagination. */
-  pagination?: TablePaginationState;
   recordType?: string; // record type for inferring columns if not provided
   nonTablePagination?: boolean; // use external pagination variant instead of MUI table pagination
   clientSidePagination?: boolean; // whether to use client-side pagination
@@ -91,8 +88,8 @@ export interface Props<
   >['tableDisplayOptionButtons'];
   /** Fires when data is available (network or cache). Use to gate actions until results are shown, e.g. to reduce duplicate client record creation. */
   onDataReady?: (data: Query) => void;
-  /** Fires when data is available after a network fetch completes. */
-  onNetworkDataReady?: (data: Query) => void;
+  /** Fires when data is fetched from network */
+  onCompleted?: (data: Query) => void;
   filterRows?: (rows: RowDataType) => boolean; // Client-side row filtering
   loading?: boolean;
 }
@@ -127,7 +124,7 @@ const GenericTableWithData = <
   queryVariables,
   queryDocument,
   pagePath,
-  defaultPageSize = DEFAULT_TABLE_PAGE_SIZE,
+  defaultPageSize = DEFAULT_ROWS_PER_PAGE,
   columns: columnsProp,
   getColumnDefs,
   recordType,
@@ -139,10 +136,9 @@ const GenericTableWithData = <
   toolbars = [],
   noData,
   rowsPerPageOptions,
-  pagination,
   tableDisplayOptionButtons,
   onDataReady,
-  onNetworkDataReady,
+  onCompleted,
   paginationItemName,
   filterRows,
   vertical,
@@ -155,15 +151,8 @@ const GenericTableWithData = <
   FilterOptionsType,
   SortOptionsType
 >) => {
-  const [internalPage, setInternalPage] = useState(0);
-  const [internalRowsPerPage, setInternalRowsPerPage] =
-    useState(defaultPageSize);
-  const page = pagination?.page ?? internalPage;
-  const rowsPerPage = pagination?.rowsPerPage ?? internalRowsPerPage;
-  const setPage = pagination?.setPage ?? setInternalPage;
-  const setRowsPerPage = pagination?.setRowsPerPage ?? setInternalRowsPerPage;
-  const hasControlledPagination = !!pagination;
-
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(defaultPageSize);
   const previousQueryVariables = usePrevious(queryVariables);
   const [internalFilterValues, setInternalFilterValues] =
     useState(defaultFilterValues);
@@ -191,13 +180,10 @@ const GenericTableWithData = <
   // If filters change (by value), return to the first page. Use deep comparison so URL-backed
   // filter objects that get a new reference each render do not reset pagination.
   useEffect(() => {
-    if (
-      previousFilterValues !== undefined &&
-      !isEqual(previousFilterValues, filterValues)
-    ) {
+    if (!isEqual(previousFilterValues, filterValues)) {
       setPage(0);
     }
-  }, [previousFilterValues, filterValues, setPage]);
+  }, [previousFilterValues, filterValues]);
 
   const filterProps = useMemo(() => {
     if (!filters || Object.keys(filters).length === 0) return;
@@ -237,28 +223,23 @@ const GenericTableWithData = <
     },
     notifyOnNetworkStatusChange: true,
     fetchPolicy,
+    onCompleted,
   });
 
   const hasRefetched = useHasRefetched(networkStatus);
 
-  // Fire onNetworkDataReady after the query moves from an in-flight networkStatus to ready.
-  // Only runs the callback when the table has data to show from a network call, not a cache hit.
-  useNetworkDataReady({ data, networkStatus, callback: onNetworkDataReady });
-
-  // Fire onDataReady when data is available from either cache or network.
-  // Runs the callback whenever the table has data to show.
+  // Fire onDataReady when data is available (from network or cache). Apollo's onCompleted
+  // only runs for network completions, so we use this effect to run the callback whenever
+  // the table has data to show.
   useEffect(() => {
     if (onDataReady && data) onDataReady(data);
   }, [onDataReady, data]);
 
   useEffect(() => {
-    if (
-      previousQueryVariables !== undefined &&
-      !isEqual(previousQueryVariables, queryVariables)
-    ) {
+    if (!isEqual(previousQueryVariables, queryVariables)) {
       setPage(0);
     }
-  }, [previousQueryVariables, queryVariables, setPage]);
+  }, [previousQueryVariables, queryVariables]);
 
   if (error) throw error;
 
@@ -283,14 +264,7 @@ const GenericTableWithData = <
       setOffset: (value: number) => setPage(value / rowsPerPage),
       itemName: paginationItemName,
     };
-  }, [
-    nonTablePagination,
-    nodesCount,
-    rowsPerPage,
-    page,
-    setPage,
-    paginationItemName,
-  ]);
+  }, [nonTablePagination, nodesCount, rowsPerPage, page, paginationItemName]);
 
   const tablePaginationProps = useMemo(() => {
     if (nonTablePagination) return undefined;
@@ -306,9 +280,7 @@ const GenericTableWithData = <
       ) => {
         const newRowsPerPage = parseInt(event.target.value) || defaultPageSize;
         setRowsPerPage(newRowsPerPage);
-        // Uncontrolled pagination is managed here, so reset to the first page when rows per page changes.
-        // Controlled pagination owns that behavior externally, such as useTablePagination resetting the URL page param.
-        if (!hasControlledPagination) setPage(0);
+        setPage(0);
       },
       count: nodesCount,
       labelRowsPerPage: `${pluralize(startCase(paginationItemName || recordType || 'Row'))} per page:`,
@@ -322,9 +294,6 @@ const GenericTableWithData = <
     recordType,
     paginationItemName,
     defaultPageSize,
-    setPage,
-    setRowsPerPage,
-    hasControlledPagination,
   ]);
 
   const columnDefs = useMemo(() => {
@@ -368,9 +337,8 @@ const GenericTableWithData = <
   const noResults = data && nodesCount === 0;
   const noResultsOnFirstLoad = noResults && !hasRefetched;
 
-  // Hide pagination when possible. Compare against the active rowsPerPage, not the default,
-  // so an initial URL load with a smaller pageSize still shows controls when more pages exist.
-  const hidePagination = !hasRefetched && nodesCount <= rowsPerPage;
+  // Hide pagination when possible
+  const hidePagination = !hasRefetched && nodesCount <= defaultPageSize;
 
   const containerSx = fullHeight ? { height: '100%' } : undefined;
 

@@ -15,9 +15,8 @@ import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useAdminDashboardContext } from '@/modules/admin/components/AdminDashboard';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
-import { AdminDashboardRoutes, ProjectDashboardRoutes } from '@/routes/routes';
+import { AdminDashboardRoutes } from '@/routes/routes';
 import { useGetCeMatchProjectRulesQuery } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 /**
  * Displays effective CE rules for a selected project, and lists its unit groups.
@@ -51,9 +50,6 @@ const CeMatchProjectRulesPage: React.FC = () => {
       <Stack gap={3}>
         <CeMatchEffectiveRulesCard
           ownerName={project.projectName}
-          ownerTo={generateSafePath(ProjectDashboardRoutes.UNITS, {
-            projectId: project.id,
-          })}
           effectiveRulesCount={project.effectiveCeMatchRuleCount}
           ruleCountSummaries={project.effectiveCeMatchRuleGroups.map(
             (group) => ({

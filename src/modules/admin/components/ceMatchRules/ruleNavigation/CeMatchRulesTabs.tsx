@@ -8,7 +8,6 @@ import {
 import CeMatchGlobalRules from './CeMatchGlobalRules';
 import CeMatchRuleOrganizations from './organization/CeMatchRuleOrganizations';
 import CeMatchRuleProjects from './project/CeMatchRuleProjects';
-import CeMatchRuleUnitGroups from './unitGroup/CeMatchRuleUnitGroups';
 import CommonTabs from '@/components/elements/CommonTabs';
 
 /**
@@ -26,7 +25,6 @@ const CeMatchRulesTabs: React.FC<{
       global: <CeMatchGlobalRules />,
       organization: <CeMatchRuleOrganizations />,
       project: <CeMatchRuleProjects />,
-      'unit-group': <CeMatchRuleUnitGroups />,
     };
 
     return ceMatchRuleOwnerLevels.map((ownerLevel) => {

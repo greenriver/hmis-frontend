@@ -28,7 +28,6 @@ docker-dev
 storybook-static
 *.log
 chromatic-diagnostics.json
-.cursor/
 
 npm-debug.log*
 yarn-debug.log*

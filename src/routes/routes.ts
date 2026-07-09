@@ -49,20 +49,13 @@ const adminDashboardRoutes = {
   CE_RULES_ROOT: 'rules',
   CE_RULES: 'rules/global',
   CE_RULE_GLOBAL_NEW: 'rules/global/new',
-  CE_RULE_GLOBAL_DETAIL: 'rules/global/:ruleId',
   CE_RULE_ORGANIZATIONS: 'rules/organizations',
   CE_RULE_ORGANIZATION: 'rules/organizations/:organizationId',
   CE_RULE_ORGANIZATION_NEW: 'rules/organizations/:organizationId/new',
-  CE_RULE_ORGANIZATION_DETAIL:
-    'rules/organizations/:organizationId/rule/:ruleId',
   CE_RULE_PROJECTS: 'rules/projects',
   CE_RULE_PROJECT: 'rules/projects/:projectId',
   CE_RULE_PROJECT_NEW: 'rules/projects/:projectId/new',
-  CE_RULE_PROJECT_DETAIL: 'rules/projects/:projectId/rule/:ruleId',
   CE_RULE_UNIT_GROUPS: 'rules/unit-groups',
-  CE_RULE_UNIT_GROUP: 'rules/unit-groups/:unitGroupId',
-  CE_RULE_UNIT_GROUP_NEW: 'rules/unit-groups/:unitGroupId/new',
-  CE_RULE_UNIT_GROUP_DETAIL: 'rules/unit-groups/:unitGroupId/rule/:ruleId',
 };
 
 // Routes within the client dashboard

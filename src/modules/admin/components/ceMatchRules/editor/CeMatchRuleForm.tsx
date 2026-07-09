@@ -1,50 +1,95 @@
-import UnlockIcon from '@mui/icons-material/Lock';
-import { Button, Stack } from '@mui/material';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Button, Stack, Typography } from '@mui/material';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 
-import {
-  ceMatchRuleOwnerLevelConfigs,
-  getCeMatchRuleOwnerLevelByOwnerType,
-} from '../ceMatchRuleOwnerLevelConfig';
 import CeMatchExpressionModeSwitch from './CeMatchExpressionModeSwitch';
-import {
-  CeMatchRuleFormValues,
-  defaultCeMatchRuleFormValues,
-} from './ceMatchRuleFormUtil';
-import CeMatchRuleOwnerText from './CeMatchRuleOwnerText';
+import { CeMatchRuleFormValues, newDraftClause } from './ceMatchRuleFormUtil';
 import CeMatchStructuredExpressionBuilder from './CeMatchStructuredExpressionBuilder';
 import FreeTextExpressionEditor from './FreeTextExpressionEditor';
 import CeMatchRuleConfirmationDialog from './impactWarnings/CeMatchRuleConfirmationDialog';
-import useCeMatchRuleFormSubmission from './useCeMatchRuleFormSubmission';
-import CodeTextBlock from '@/components/elements/CodeTextBlock';
-import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import LoadingButton from '@/components/elements/LoadingButton';
 import TitleCard from '@/components/elements/TitleCard';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
-import { hasErrors, hasOnlyWarnings } from '@/modules/errors/util';
+import {
+  emptyErrorState,
+  ErrorState,
+  hasErrors,
+  hasOnlyWarnings,
+  partitionValidations,
+} from '@/modules/errors/util';
 import { getRequiredLabel } from '@/modules/form/components/RequiredLabel';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
+  CeMatchRuleBooleanOperator,
   CeMatchRuleDetailsFragment,
+  CeMatchRuleInput,
   CeMatchRuleOwnerType,
+  CeMatchRuleType,
+  useCreateCeMatchRuleMutation,
 } from '@/types/gqlTypes';
 
 interface Props {
   ownerType: CeMatchRuleOwnerType;
   ownerId?: string;
   ownerName?: string;
-  ruleId?: string;
-  initialValues?: CeMatchRuleFormValues;
-  onCancel?: VoidFunction;
-  onDelete?: VoidFunction;
+  onSaved: (rule: CeMatchRuleDetailsFragment) => void;
+  onCancel: VoidFunction;
 }
+
+const defaultCeMatchRuleFormValues = (): CeMatchRuleFormValues => ({
+  name: '',
+  mode: 'structured',
+  structuredExpression: {
+    operator: CeMatchRuleBooleanOperator.And,
+    clauses: [newDraftClause()],
+  },
+  freeTextExpression: '',
+});
+
+const buildCeMatchRuleInput = (
+  {
+    name,
+    mode,
+    structuredExpression,
+    freeTextExpression,
+  }: CeMatchRuleFormValues,
+  ownerType?: CeMatchRuleOwnerType,
+  ownerId?: string
+): CeMatchRuleInput => {
+  const base = {
+    name: name.trim(),
+    ownerId,
+    ownerType,
+    ruleType: CeMatchRuleType.EligibilityRequirement,
+  };
+
+  if (mode === 'freeText') {
+    return {
+      ...base,
+      expression: freeTextExpression.trim(),
+    };
+  }
+
+  return {
+    ...base,
+    structuredExpression: {
+      operator: structuredExpression.operator,
+      clauses: structuredExpression.clauses.map(
+        // Strip out unneeded fields from the draft clause
+        ({ field, comparator, value }) => ({
+          field,
+          comparator,
+          value,
+        })
+      ),
+    },
+  };
+};
 
 /**
  * The top-level CE match rule form component.
- * Renders the rule details in either editable or readonly mode.
  * Owns the RHF state to collect rule details and structured clauses,
  * and the mutation call to submit to the backend.
  */
@@ -52,117 +97,72 @@ const CeMatchRuleForm: React.FC<Props> = ({
   ownerType,
   ownerId,
   ownerName,
-  ruleId,
-  initialValues,
+  onSaved,
   onCancel,
-  onDelete,
 }) => {
-  const navigate = useNavigate();
-
-  // Initially, set the form to editable if this is a new rule
-  const [editing, setEditing] = useState(!ruleId);
-
-  const defaultValues = useMemo(
-    () => initialValues || defaultCeMatchRuleFormValues(),
-    [initialValues]
-  );
-
-  const {
-    control,
-    formState: { dirtyFields },
-    getValues,
-    handleSubmit,
-    reset,
-    setValue,
-    watch,
-  } = useForm<CeMatchRuleFormValues>({
-    defaultValues,
-  });
-
-  // If the component remounts with different default values, reset the form
-  useEffect(() => reset(defaultValues), [defaultValues, reset]);
-
-  const handleSaved = useCallback(
-    (rule: CeMatchRuleDetailsFragment) => {
-      // After saving, lock the form
-      setEditing(false);
-
-      // If this was a new rule, navigate to the rule detail page (the locked form)
-      if (!ruleId) {
-        const ownerLevel = getCeMatchRuleOwnerLevelByOwnerType(rule.ownerType);
-        const rulePath = ceMatchRuleOwnerLevelConfigs[ownerLevel].getRulePath({
-          ownerId: rule.ownerId,
-          ruleId: rule.id,
-        });
-
-        if (rulePath) navigate(rulePath);
-      }
-    },
-    [navigate, ruleId]
-  );
-
-  const { errorState, loading, submit, clearErrors } =
-    useCeMatchRuleFormSubmission({
-      ownerType,
-      ownerId,
-      ruleId,
-      onSaved: handleSaved,
+  const { control, handleSubmit, reset, setValue, watch } =
+    useForm<CeMatchRuleFormValues>({
+      defaultValues: defaultCeMatchRuleFormValues(),
     });
 
+  const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
   const mode = watch('mode');
-  const displayValues = editing ? getValues() : defaultValues;
+
+  const [createCeMatchRule, { loading }] = useCreateCeMatchRuleMutation({
+    onCompleted: (data) => {
+      const payload = data.createCeMatchRule;
+      if (payload?.rule) {
+        setErrorState(emptyErrorState);
+        reset(defaultCeMatchRuleFormValues());
+        onSaved?.(payload.rule);
+      } else if (payload?.errors?.length) {
+        setErrorState(partitionValidations(payload.errors));
+      }
+    },
+    onError: (apolloError) =>
+      setErrorState({ ...emptyErrorState, apolloError }),
+  });
+
+  const handleValidSubmit = (
+    values: CeMatchRuleFormValues,
+    confirmed = false
+  ) => {
+    createCeMatchRule({
+      variables: {
+        input: buildCeMatchRuleInput(values, ownerType, ownerId),
+        confirmed,
+      },
+    });
+  };
+
   const showWarningDialog = hasOnlyWarnings(errorState);
-  const expressionDirty =
-    !!dirtyFields.freeTextExpression || !!dirtyFields.structuredExpression;
 
-  const handleCancel = useCallback(() => {
-    // If this was a new rule, call the onCancel callback
-    if (!ruleId) {
-      onCancel?.();
-      return;
+  const ownerContext = useMemo(() => {
+    let substring = '';
+    if (ownerType !== CeMatchRuleOwnerType.DataSource) {
+      substring = ` in the ${ownerName} ${HmisEnums.CeMatchRuleOwnerType[ownerType]}`;
     }
-
-    // If this is an existing rule, just exit edit mode
-    setEditing(false);
-  }, [onCancel, ruleId]);
-
-  const handleUnlock = useCallback(() => {
-    clearErrors();
-    // Editable fields unregister when they unmount on cancel, so rehydrate
-    // RHF state from the saved values before mounting them again.
-    reset(defaultValues);
-    setEditing(true);
-  }, [clearErrors, defaultValues, reset]);
+    return `This eligibility rule will apply to all units${substring}.`;
+  }, [ownerName, ownerType]);
 
   return (
     <Stack gap={2}>
-      <CeMatchRuleOwnerText
-        ownerType={ownerType}
-        ownerName={ownerName}
-        ruleId={ruleId}
-      />
+      {ownerContext && <Typography variant='body2'>{ownerContext}</Typography>}
       <TitleCard title='Rule Details' headerComponent='h2' padded>
         <Stack gap={2}>
-          {editing && hasErrors(errorState) && (
+          {hasErrors(errorState) && (
             <Stack gap={1}>
               <ApolloErrorAlert error={errorState.apolloError} />
               <ErrorAlert errors={errorState.errors} />
             </Stack>
           )}
-          {editing && (
-            <ControlledTextInput
-              name='name'
-              control={control}
-              label={getRequiredLabel('Rule Name', true)}
-              maxWidth={620}
-              required
-            />
-          )}
-          {!editing && (
-            <CommonLabeledTextBlock title='Rule Name'>
-              {displayValues.name}
-            </CommonLabeledTextBlock>
-          )}
+          <ControlledTextInput
+            name='name'
+            control={control}
+            label={getRequiredLabel('Rule Name', true)}
+            maxWidth={620}
+            required
+          />
         </Stack>
       </TitleCard>
       <TitleCard
@@ -170,81 +170,43 @@ const CeMatchRuleForm: React.FC<Props> = ({
         headerComponent='h2'
         padded
         actions={
-          editing && (
-            <CeMatchExpressionModeSwitch
-              mode={mode}
-              control={control}
-              defaultValues={defaultValues}
-              getValues={getValues}
-              isNewRule={!ruleId}
-              reset={reset}
-              setValue={setValue}
-            />
-          )
+          <CeMatchExpressionModeSwitch
+            mode={mode}
+            control={control}
+            setValue={setValue}
+          />
         }
       >
         <Stack gap={2}>
-          {editing && mode === 'structured' && (
+          {mode === 'structured' ? (
             <CeMatchStructuredExpressionBuilder
               control={control}
               setValue={setValue}
             />
-          )}
-          {editing && mode === 'freeText' && (
+          ) : (
             <FreeTextExpressionEditor control={control} />
-          )}
-          {!editing && (
-            <CommonLabeledTextBlock title='Expression'>
-              <CodeTextBlock sx={{ mt: 1 }}>
-                {displayValues.freeTextExpression}
-              </CodeTextBlock>
-            </CommonLabeledTextBlock>
           )}
         </Stack>
       </TitleCard>
       <Stack direction='row' gap={2}>
-        {editing && (
-          <>
-            <LoadingButton
-              loading={loading}
-              variant='contained'
-              onClick={handleSubmit((values) =>
-                submit(values, { expressionDirty })
-              )}
-            >
-              Save Rule
-            </LoadingButton>
-            <Button variant='outlined' onClick={handleCancel}>
-              Cancel
-            </Button>
-          </>
-        )}
-        {!editing && (
-          <Button
-            startIcon={<UnlockIcon />}
-            variant='contained'
-            color='grayscale'
-            onClick={handleUnlock}
-            sx={{ fontWeight: 600, width: 'fit-content' }}
-          >
-            Unlock Rule
-          </Button>
-        )}
-        {onDelete && (
-          <Button variant='outlined' color='error' onClick={onDelete}>
-            Delete Rule
-          </Button>
-        )}
+        <LoadingButton
+          loading={loading}
+          variant='contained'
+          onClick={handleSubmit((values) => handleValidSubmit(values, false))}
+        >
+          Save Rule
+        </LoadingButton>
+        <Button variant='outlined' onClick={onCancel}>
+          Cancel
+        </Button>
       </Stack>
-      {editing && showWarningDialog && (
+      {showWarningDialog && (
         <CeMatchRuleConfirmationDialog
           errorState={errorState}
           loading={loading}
-          onCancel={clearErrors}
+          onCancel={() => setErrorState(emptyErrorState)}
           onConfirm={() =>
-            handleSubmit((values) =>
-              submit(values, { confirmed: true, expressionDirty })
-            )()
+            handleSubmit((values) => handleValidSubmit(values, true))()
           }
         />
       )}

@@ -58,6 +58,7 @@ const CeMatchRuleProjectEditorPage: React.FC = () => {
         ownerType={CeMatchRuleOwnerType.Project}
         ownerId={projectId}
         ownerName={project.projectName}
+        onSaved={returnToRulesOverview}
         onCancel={returnToRulesOverview}
       />
     </>
