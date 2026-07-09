@@ -55688,6 +55688,31 @@
         "isOneOf": null,
         "fields": [
           {
+            "name": "ceClientsConfig",
+            "description": null,
+            "args": [
+              {
+                "name": "projectGroupId",
+                "description": "Optional project group ID to use for detecting the best config. Falls back\nto global config if not provided, or if no project group config exists.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "TableConfig",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "ceClientsGlobalConfig",
             "description": null,
             "args": [],
