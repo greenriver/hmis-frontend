@@ -23,7 +23,7 @@ import {
   GetCeClientsQueryVariables,
   TableColumnConfigFieldsFragment,
   TableColumnConfigType,
-  useGetCeClientsGlobalTableConfigQuery,
+  useGetCeClientsTableConfigQuery,
 } from '@/types/gqlTypes';
 import { ensureArray } from '@/utils/arrays';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -65,12 +65,14 @@ interface Props {
 const AdminCeClientsTable: React.FC<Props> = ({ projectGroupId }) => {
   // Feature flags to check whether to show MCI ID column
   const { globalFeatureFlags: { mciIdEnabled } = {} } = useGlobalFeatureFlags();
-  // Fetch column configuration for global ce client list
+  // Fetch column configuration
   const {
     data: { tableConfigLookup } = {},
     loading,
     error,
-  } = useGetCeClientsGlobalTableConfigQuery();
+  } = useGetCeClientsTableConfigQuery({
+    variables: { projectGroupId: projectGroupId || null },
+  });
 
   // Internal state for search and dialog
   const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
@@ -78,7 +80,7 @@ const AdminCeClientsTable: React.FC<Props> = ({ projectGroupId }) => {
     React.useState<CeClientFieldsFragment | null>(null);
 
   const tableColumnConfig = useMemo(
-    () => tableConfigLookup?.ceClientsGlobalConfig?.columns,
+    () => tableConfigLookup?.ceClientsConfig?.columns,
     [tableConfigLookup]
   );
 
@@ -104,7 +106,7 @@ const AdminCeClientsTable: React.FC<Props> = ({ projectGroupId }) => {
 
   const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'CeClientFilterOptions',
-    dynamicFilters: tableConfigLookup?.ceClientsGlobalConfig?.filters,
+    dynamicFilters: tableConfigLookup?.ceClientsConfig?.filters,
     omit: ['projectGroupId'], // only exposed via Workspaces
   });
   const pagination = useTablePagination();
