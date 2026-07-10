@@ -5154,6 +5154,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'GlobalFeatureFlags',
     fields: [
       {
+        name: 'bulkVoidEnabled',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'coordinatedEntryEnabled',
         type: {
           kind: 'NON_NULL',
@@ -6679,14 +6687,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'QueryAccess',
     fields: [
       {
-        name: 'canAdministerHmis',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'canAdministrateConfig',
         type: {
           kind: 'NON_NULL',
@@ -6695,7 +6695,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canAdministrateCoordinatedEntry',
+        name: 'canAuditUsers',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6703,7 +6703,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canAuditUsers',
+        name: 'canBulkVoidCeClients',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6856,14 +6856,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canMergeClients',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canTransferEnrollments',
         type: {
           kind: 'NON_NULL',
           name: null,
