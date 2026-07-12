@@ -4,8 +4,6 @@ import { HmisUser } from '@/modules/auth/api/sessions';
 import { useSessionTracking } from '@/modules/auth/hooks/useSessionTracking';
 import { currentTimeInSeconds } from '@/utils/time';
 
-const POLL_INTERVAL_SECS = 30;
-
 export type HmisSessionProps = {
   status: 'invalid' | 'expired' | 'valid';
   promptToExtend: boolean;
@@ -47,11 +45,6 @@ const useSessionStatus = ({
     };
 
     updateTimeRemaining();
-    const pollInterval = setInterval(
-      updateTimeRemaining,
-      POLL_INTERVAL_SECS * 1000
-    );
-
     const now = currentTimeInSeconds();
     const timeouts: Array<NodeJS.Timeout> = [];
 
@@ -81,7 +74,6 @@ const useSessionStatus = ({
 
     // cleanup events
     return () => {
-      clearInterval(pollInterval);
       for (const timeout of timeouts) clearTimeout(timeout);
     };
   }, [
