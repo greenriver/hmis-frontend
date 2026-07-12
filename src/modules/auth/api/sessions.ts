@@ -183,24 +183,15 @@ export function resetLocalSession() {
 }
 
 export async function logout() {
-  // In JWT/SSO mode the Devise CSRF token isn't valid (there's no Devise session),
-  // so a CSRF'd DELETE is rejected the same way the keepalive POST is - see
-  // sendSessionKeepalive. Use a plain credentialed request instead; the backend
-  // responds with JSON containing a redirect_url to the IdP end-session endpoint,
-  // which logoutUser follows. Preserve the original CSRF DELETE for Devise/Okta so
-  // the current logout flow is unchanged.
-  const response =
-    getAuthMethod() === 'jwt'
-      ? await fetch('/hmis/logout', {
-          method: 'DELETE',
-          credentials: 'include',
-          headers: {
-            Accept: 'application/json',
-          },
-        })
-      : await fetchWithCsrf('/hmis/logout', {
-          method: 'DELETE',
-        });
+  // Under JWT/SSO, Hmis::Idp::SessionsController#destroy explicitly skips CSRF
+  // verification (and Hmis::BaseController#valid_request_origin? always passes
+  // for JWT), so the same CSRF'd DELETE used for Devise/Okta works here too. The
+  // backend responds with JSON containing a redirect_url to the IdP end-session
+  // endpoint under JWT, which logoutUser follows; under Devise/Okta it responds
+  // with a plain success body, also handled there.
+  const response = await fetchWithCsrf('/hmis/logout', {
+    method: 'DELETE',
+  });
   trackSessionFromResponse(response);
   resetLocalSession();
   return response;

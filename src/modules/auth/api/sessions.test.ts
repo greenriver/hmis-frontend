@@ -71,25 +71,14 @@ describe('session transport by auth method', () => {
   });
 
   describe('logout', () => {
-    it('Devise/Okta: DELETEs with the CSRF token (unchanged behavior)', async () => {
-      getAppSettings.mockReturnValue({ authMethod: 'devise' });
-      await logout();
-
-      const [url, opts] = fetchMock.mock.calls[0];
-      expect(url).toBe('/hmis/logout');
-      expect(opts.method).toBe('DELETE');
-      expect(opts.headers['X-CSRF-Token']).toBe('test-csrf-token');
-    });
-
-    it('JWT/SSO: DELETEs without a CSRF token so oauth2-proxy accepts it', async () => {
+    it('DELETEs with the CSRF token regardless of auth method (backend skips CSRF verification under JWT)', async () => {
       getAppSettings.mockReturnValue({ authMethod: 'jwt' });
       await logout();
 
       const [url, opts] = fetchMock.mock.calls[0];
       expect(url).toBe('/hmis/logout');
       expect(opts.method).toBe('DELETE');
-      expect(opts.credentials).toBe('include');
-      expect(opts.headers['X-CSRF-Token']).toBeUndefined();
+      expect(opts.headers['X-CSRF-Token']).toBe('test-csrf-token');
     });
 
     it('clears local session state regardless of auth method', async () => {
