@@ -10,4 +10,7 @@ export interface HmisAppSettings {
   casUrl?: string;
   appName?: string;
   theme?: ThemeOptions;
+  // Served by GET /hmis/app_settings. Optional because older backends don't send
+  // it - see useAuthMethod() for the fallback behavior.
+  authMethod?: 'devise' | 'jwt';
 }

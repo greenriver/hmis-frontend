@@ -17,6 +17,7 @@ import { useSessionTrackingObserver } from '@/modules/auth/hooks/useSessionTrack
 import { fetchHmisAppSettings } from '@/modules/hmisAppSettings/api';
 import { HmisAppSettingsContext } from '@/modules/hmisAppSettings/Context';
 import { HmisAppSettings } from '@/modules/hmisAppSettings/types';
+import { resolveAuthMethod } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { HttpError } from '@/utils/HttpError';
 import { reloadWindow } from '@/utils/location';
 import { getCurrentSessionId } from '@/utils/sessionId';
@@ -62,15 +63,42 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
 
   const logoutUser = useCallback(() => {
     setLoading(true);
-    const fn = user?.impersonating ? stopImpersonating : logout;
-    return fn()
-      .then(() => {
-        reloadWindow();
-      })
-      .catch((e) => {
-        setLoading(false);
-        setError(e);
-      });
+    if (user?.impersonating) {
+      return stopImpersonating()
+        .then(() => {
+          reloadWindow();
+        })
+        .catch((e) => {
+          setLoading(false);
+          setError(e);
+        });
+    } else {
+      // Explicit sign-out is the reset point for the remembered IdP connector:
+      // forget it so the next sign-in shows the picker. Session *expiry* does not
+      // clear it, so routine re-logins stay streamlined. No-op under Devise/Okta.
+      storage.clearLastConnectorId();
+      // JWT/SSO logout returns JSON with a redirect_url to the IdP end-session
+      // endpoint. The Devise/Okta logout may return an empty body, so only parse
+      // JSON when the server actually sent it; otherwise just reload as before.
+      return logout()
+        .then(async (response) => {
+          if (response.ok) {
+            const contentType = response.headers.get('content-type') || '';
+            if (contentType.includes('application/json')) {
+              const data: { redirect_url?: string } = await response.json();
+              if (data.redirect_url) {
+                window.location.href = data.redirect_url;
+                return;
+              }
+            }
+          }
+          reloadWindow();
+        })
+        .catch((e) => {
+          setLoading(false);
+          setError(e);
+        });
+    }
   }, [user?.impersonating]);
 
   const impersonateUser = useCallback((userId: string) => {
@@ -102,7 +130,6 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
   // fetch data from remote
   useEffect(() => {
     const cachedUser = getValidCachedUser();
-    const promises: Array<Promise<any>> = [];
 
     // Pre-warm the backend cache with the logo image
     const prefetchLogo = (logoPath?: string) => {
@@ -116,33 +143,56 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
       });
     };
 
-    const saveSettings = (value: HmisAppSettings): Promise<void> => {
-      setAppSettings(value);
-      storage.setAppSettings(value);
-      return prefetchLogo(value.logoPath);
+    // app_settings is a public endpoint: it returns `authMethod` even for an
+    // unauthenticated request. That fetched value is the single runtime source of
+    // truth for the auth method - a build-time env var can't vary per installation
+    // across shared compiled assets. Load it (unless we already trust cached
+    // settings) and let it decide how to treat an unauthenticated currentUser
+    // response below.
+    const loadSettings = async (): Promise<HmisAppSettings> => {
+      const cached = cachedUser ? storage.getAppSettings() : undefined;
+      const settings = cached ?? (await fetchHmisAppSettings());
+      setAppSettings(settings);
+      if (!cached) storage.setAppSettings(settings);
+      await prefetchLogo(settings.logoPath);
+      return settings;
     };
 
-    if (cachedUser) {
-      setUser(cachedUser);
-      const cachedAppSettings = storage.getAppSettings();
-      if (cachedAppSettings) {
-        setAppSettings(cachedAppSettings);
-        promises.push(prefetchLogo(cachedAppSettings.logoPath));
-      } else {
-        promises.push(fetchHmisAppSettings().then(saveSettings));
-      }
-    } else {
-      promises.push(fetchCurrentUser().then(setUser));
-      promises.push(fetchHmisAppSettings().then(saveSettings));
-    }
+    (async () => {
+      try {
+        // Kick the currentUser fetch off alongside settings so we don't add a
+        // round-trip, but capture any rejection instead of failing fast: we can
+        // only interpret a 401 once app_settings tells us the auth method.
+        let userError: Error | undefined;
+        const userPromise: Promise<HmisUser | undefined> = cachedUser
+          ? Promise.resolve(cachedUser)
+          : fetchCurrentUser().catch((err: Error) => {
+              userError = err;
+              return undefined;
+            });
 
-    if (promises.length) {
-      Promise.all(promises)
-        .catch(setError)
-        .finally(() => setLoading(false));
-    } else {
-      setLoading(false);
-    }
+        const settings = await loadSettings();
+        const isJwtAuth = resolveAuthMethod(settings.authMethod) === 'jwt';
+
+        const fetchedUser = await userPromise;
+        if (userError) {
+          // JWT/SSO: an unauthenticated 401 is expected - leave the user unset so
+          // PublicLanding renders. Any other error (and any error under
+          // Devise/Okta) propagates to the reload-once-on-401 recovery below.
+          if (
+            !(isJwtAuth && (userError as HttpError | undefined)?.status === 401)
+          ) {
+            throw userError;
+          }
+        } else if (fetchedUser) {
+          setUser(fetchedUser);
+        }
+      } catch (err) {
+        setError(err as Error);
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, []);
 
   // handle side-effects
@@ -183,6 +233,8 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
     );
   }
 
+  // app_settings is public and has loaded by now in both auth modes (an
+  // unauthenticated JWT/SSO user still gets settings), so it's always present here.
   if (!appSettings) throw new Error(); // shouldn't get here
   return (
     <HmisAppSettingsContext.Provider value={appSettings}>

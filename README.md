@@ -61,6 +61,35 @@
 
 For instructions on running multiple HMISes against the same warehouse locally, see the [HMIS README](https://github.com/greenriver/hmis-warehouse/blob/stable/drivers/hmis/README.md) in the Warehouse repo.
 
+### Run behind the warehouse's local SSO stack (JWT/IdP)
+
+By default `yarn dev` serves this app at `https://hmis.dev.test:5173` against the
+warehouse's Devise session. To instead run against the warehouse's local SSO stack
+(Keycloak + Dex + oauth2-proxy, via its `docker/docker-compose.auth.yml` override), the
+Vite dev server runs *behind* `oauth2-proxy-hmis`:
+
+```
+browser -> https://hmis.dev.test -> Traefik -> oauth2-proxy-hmis -> Vite (host.docker.internal:5173)
+```
+
+1. Bring the warehouse up with its auth override; `oauth2-proxy-hmis` upstreams to the
+   host's Vite server by default (`https://host.docker.internal:5173`).
+
+2. Add to `.env.development.local`:
+
+   ```sh
+   HMIS_BEHIND_OAUTH_PROXY=true
+   ```
+
+   This makes Vite bind all interfaces, route HMR over port 443, and proxy `/hmis` to
+   `https://hmis-backend.dev.test` (the front door that validates the bearer token
+   oauth2-proxy injects). Override the API target with `HMIS_SERVER_URL` if needed.
+
+3. Run `yarn dev` and open **https://hmis.dev.test** (not `:5173`, which bypasses SSO).
+
+The login UI (Devise form vs. SSO landing page) follows the `authMethod` field from
+`GET /hmis/app_settings`.
+
 ### Test, lint, format, and type check
 
 ```sh

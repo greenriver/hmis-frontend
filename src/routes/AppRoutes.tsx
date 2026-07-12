@@ -11,11 +11,13 @@ import { protectedRoutes } from './protected';
 
 import { STATE_FROM_LOGIN_REDIRECT } from './routeUtil';
 import PathHandler from '@/components/elements/PathHandler';
+import PublicLanding from '@/components/pages/PublicLanding';
 import { HmisUser } from '@/modules/auth/api/sessions';
 import Login from '@/modules/auth/components/Login';
 import SessionStatusManager from '@/modules/auth/components/SessionStatusManager';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import useSessionStatus from '@/modules/auth/hooks/useSessionStatus';
+import { useAuthMethod } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import SystemStatus from '@/modules/systemStatus/components/SystemStatus';
 
 const REQUESTED_PATH_KEY = 'hmis_requested_path';
@@ -28,6 +30,7 @@ function pathForRedirect(arg: string): string | undefined {
 
 const PublicRoutes: React.FC = () => {
   const { pathname } = useLocation();
+  const authMethod = useAuthMethod();
   useEffect(() => {
     const normalizedPath = pathForRedirect(pathname);
     if (normalizedPath) {
@@ -47,7 +50,9 @@ const PublicRoutes: React.FC = () => {
       },
       {
         path: '/',
-        element: <Login />,
+        // 'devise' covers the existing Devise/Okta login form (<Login /> renders the
+        // Okta button internally via oktaPath); only the JWT/SSO path uses PublicLanding.
+        element: authMethod === 'devise' ? <Login /> : <PublicLanding />,
       },
       {
         path: '*',
@@ -58,7 +63,7 @@ const PublicRoutes: React.FC = () => {
         ),
       },
     ];
-  }, []);
+  }, [authMethod]);
   return useRoutes(publicRoutes);
 };
 
