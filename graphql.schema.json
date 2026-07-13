@@ -36681,6 +36681,22 @@
                 "defaultValue": null,
                 "isDeprecated": false,
                 "deprecationReason": null
+              },
+              {
+                "name": "projectId",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
               }
             ],
             "type": {
@@ -40530,6 +40546,12 @@
           {
             "name": "AVAILABLE_UNIT_TYPES",
             "description": "Unit types that have unoccupied units in the specified project",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "BULK_VOID_CE_PROJECTS",
+            "description": "Projects where the Bulk Void operation can take place",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -55760,6 +55782,31 @@
         "description": null,
         "isOneOf": null,
         "fields": [
+          {
+            "name": "ceClientsConfig",
+            "description": null,
+            "args": [
+              {
+                "name": "projectGroupId",
+                "description": "Optional project group ID to use for detecting the best config. Falls back\nto global config if not provided, or if no project group config exists.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "TableConfig",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "ceClientsGlobalConfig",
             "description": null,

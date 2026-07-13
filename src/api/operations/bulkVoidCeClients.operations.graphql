@@ -1,5 +1,8 @@
-mutation BulkVoidCeClients($destinationClientIds: [ID!]!) {
-  bulkVoidCeClients(destinationClientIds: $destinationClientIds) {
+mutation BulkVoidCeClients($destinationClientIds: [ID!]!, $projectId: ID!) {
+  bulkVoidCeClients(
+    destinationClientIds: $destinationClientIds
+    projectId: $projectId
+  ) {
     success
   }
 }

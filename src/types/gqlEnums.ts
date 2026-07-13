@@ -994,6 +994,8 @@ export const HmisEnums = {
       'Units available for the given Enrollment at the given project. List is limited to units with the same unit type currently occupied by the household, if any.',
     AVAILABLE_UNIT_TYPES:
       'Unit types that have unoccupied units in the specified project',
+    BULK_VOID_CE_PROJECTS:
+      'Projects where the Bulk Void operation can take place',
     CE_ACCESS_POINT_PROJECT_NAMES:
       'Projects with an active CE Participation record with Access Point = Yes',
     CE_EVENTS: 'Grouped HUD CE Event types',

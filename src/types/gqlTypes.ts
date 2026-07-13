@@ -5154,6 +5154,7 @@ export type MutationBulkReviewExternalSubmissionsArgs = {
 
 export type MutationBulkVoidCeClientsArgs = {
   destinationClientIds: Array<Scalars['ID']['input']>;
+  projectId: Scalars['ID']['input'];
 };
 
 export type MutationCalculateAltAhaScoreArgs = {
@@ -5718,6 +5719,8 @@ export enum PickListType {
   AvailableUnitsForEnrollment = 'AVAILABLE_UNITS_FOR_ENROLLMENT',
   /** Unit types that have unoccupied units in the specified project */
   AvailableUnitTypes = 'AVAILABLE_UNIT_TYPES',
+  /** Projects where the Bulk Void operation can take place */
+  BulkVoidCeProjects = 'BULK_VOID_CE_PROJECTS',
   /** Projects with an active CE Participation record with Access Point = Yes */
   CeAccessPointProjectNames = 'CE_ACCESS_POINT_PROJECT_NAMES',
   /** Grouped HUD CE Event types */
@@ -8570,8 +8573,13 @@ export type TableConfig = {
 
 export type TableConfigLookup = {
   __typename?: 'TableConfigLookup';
+  ceClientsConfig?: Maybe<TableConfig>;
   ceClientsGlobalConfig?: Maybe<TableConfig>;
   ceClientsUnitGroupConfig?: Maybe<TableConfig>;
+};
+
+export type TableConfigLookupCeClientsConfigArgs = {
+  projectGroupId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type TableConfigLookupCeClientsUnitGroupConfigArgs = {
@@ -17785,6 +17793,7 @@ export type BulkRemoveServiceMutation = {
 
 export type BulkVoidCeClientsMutationVariables = Exact<{
   destinationClientIds: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
+  projectId: Scalars['ID']['input'];
 }>;
 
 export type BulkVoidCeClientsMutation = {
@@ -57003,8 +57012,11 @@ export type BulkRemoveServiceMutationOptions = Apollo.BaseMutationOptions<
   BulkRemoveServiceMutationVariables
 >;
 export const BulkVoidCeClientsDocument = gql`
-  mutation BulkVoidCeClients($destinationClientIds: [ID!]!) {
-    bulkVoidCeClients(destinationClientIds: $destinationClientIds) {
+  mutation BulkVoidCeClients($destinationClientIds: [ID!]!, $projectId: ID!) {
+    bulkVoidCeClients(
+      destinationClientIds: $destinationClientIds
+      projectId: $projectId
+    ) {
       success
     }
   }
@@ -57028,6 +57040,7 @@ export type BulkVoidCeClientsMutationFn = Apollo.MutationFunction<
  * const [bulkVoidCeClientsMutation, { data, loading, error }] = useBulkVoidCeClientsMutation({
  *   variables: {
  *      destinationClientIds: // value for 'destinationClientIds'
+ *      projectId: // value for 'projectId'
  *   },
  * });
  */
