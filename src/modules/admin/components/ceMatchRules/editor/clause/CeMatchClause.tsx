@@ -10,6 +10,7 @@ import CeMatchClauseComparatorSelect, {
 import CeMatchClauseFieldSelect from './CeMatchClauseFieldSelect';
 import CeMatchClauseFieldSourceSelect from './CeMatchClauseFieldSourceSelect';
 import CeMatchClauseValueInput from './CeMatchClauseValueInput';
+import { isNullCheckClause } from './nullCheckUtil';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   CeMatchCustomAssessmentFormFieldsFragment,
@@ -56,6 +57,15 @@ const CeMatchClause: React.FC<Props> = ({
     control,
     name: `${clausePath}.field`,
   });
+  const comparator = useWatch({
+    control,
+    name: `${clausePath}.comparator`,
+  });
+  const clauseValue = useWatch({
+    control,
+    name: `${clausePath}.value`,
+  });
+  const isNullCheck = isNullCheckClause(comparator, clauseValue);
 
   // Query for custom assessment field at this level, rather than in the child CeMatchClauseFieldSelect,
   // because the selected field metadata also impacts the other child controls (comparator and value dropdowns).
@@ -171,7 +181,7 @@ const CeMatchClause: React.FC<Props> = ({
             clausePath={clausePath}
             control={control}
             selectedField={selectedField}
-            onComparatorChange={resetValueSelection}
+            setValue={setValue}
           />
         </Grid>
         <Grid item xs={12} md={4}>
@@ -179,6 +189,7 @@ const CeMatchClause: React.FC<Props> = ({
             clausePath={clausePath}
             control={control}
             selectedField={selectedField}
+            isNullCheck={isNullCheck}
           />
         </Grid>
       </Grid>

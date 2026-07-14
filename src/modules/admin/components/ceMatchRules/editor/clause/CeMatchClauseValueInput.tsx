@@ -19,6 +19,10 @@ interface Props {
   control: Control<CeMatchRuleFormValues>;
   clausePath: ClausePath;
   selectedField?: CeMatchFieldDetailsFragment;
+  // True when the clause's comparator/value represent a null check (e.g. "Has a value"),
+  // rather than an ordinary comparison. Disables the value input instead of unmounting it,
+  // so the clause's `value: null` isn't clobbered by react-hook-form unregistering the field.
+  isNullCheck?: boolean;
 }
 
 const pickListOptionsForField = (
@@ -63,20 +67,23 @@ const CeMatchClauseValueInput: React.FC<Props> = ({
   control,
   clausePath,
   selectedField,
+  isNullCheck = false,
 }) => {
   const valueOptions = pickListOptionsForField(selectedField);
   const valueType = valueInputType(selectedField, valueOptions);
+  const disabled = !selectedField || isNullCheck;
+  const label = getRequiredLabel('Value', !isNullCheck);
 
   if (valueType === 'choice') {
     return (
       <ControlledSelect
         name={`${clausePath}.value`}
         control={control}
-        label={getRequiredLabel('Value', true)}
+        label={label}
         placeholder='Select value'
-        required
+        required={!isNullCheck}
         options={valueOptions}
-        disabled={!selectedField}
+        disabled={disabled}
       />
     );
   }
@@ -86,20 +93,20 @@ const CeMatchClauseValueInput: React.FC<Props> = ({
       <ControlledSelect
         name={`${clausePath}.value`}
         control={control}
-        label={getRequiredLabel('Value', true)}
+        label={label}
         placeholder='Select value'
         options={[
           { code: 'true', label: 'True' },
           { code: 'false', label: 'False' },
         ]}
-        disabled={!selectedField}
+        disabled={disabled}
         // Represent empty/unselected as '', otherwise clearing the select would become
         // `false`, which is a valid submitted JSON value.
         setValueAs={(option) => (option ? option.code === 'true' : '')}
         // Validate that the value is not empty string, which represents an empty/unselected select,
         // but would otherwise be treated as a submittable value by RHF
         rules={{
-          validate: (value) => value !== '' || requiredMessage,
+          validate: (value) => isNullCheck || value !== '' || requiredMessage,
         }}
       />
     );
@@ -109,10 +116,10 @@ const CeMatchClauseValueInput: React.FC<Props> = ({
     <ControlledTextInput
       name={`${clausePath}.value`}
       control={control}
-      label={getRequiredLabel('Value', true)}
+      label={label}
       type={valueType}
-      required
-      disabled={!selectedField}
+      required={!isNullCheck}
+      disabled={disabled}
     />
   );
 };
