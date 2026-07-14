@@ -56,6 +56,14 @@ const CeMatchClause: React.FC<Props> = ({
     control,
     name: `${clausePath}.field`,
   });
+  const comparator = useWatch({
+    control,
+    name: `${clausePath}.comparator`,
+  });
+  const isNullCheck = [
+    CeMatchRuleComparator.IsNull,
+    CeMatchRuleComparator.IsNotNull,
+  ].includes(comparator);
 
   // Query for custom assessment field at this level, rather than in the child CeMatchClauseFieldSelect,
   // because the selected field metadata also impacts the other child controls (comparator and value dropdowns).
@@ -174,13 +182,16 @@ const CeMatchClause: React.FC<Props> = ({
             onComparatorChange={resetValueSelection}
           />
         </Grid>
-        <Grid item xs={12} md={4}>
-          <CeMatchClauseValueInput
-            clausePath={clausePath}
-            control={control}
-            selectedField={selectedField}
-          />
-        </Grid>
+        {/* Hide and unmount the Value input if the comparator indicates we're checking for null/not null. */}
+        {!isNullCheck && (
+          <Grid item xs={12} md={4}>
+            <CeMatchClauseValueInput
+              clausePath={clausePath}
+              control={control}
+              selectedField={selectedField}
+            />
+          </Grid>
+        )}
       </Grid>
     </Stack>
   );

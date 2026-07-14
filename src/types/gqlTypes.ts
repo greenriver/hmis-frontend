@@ -830,6 +830,8 @@ export enum CeMatchRuleComparator {
   Gt = 'GT',
   Gte = 'GTE',
   Includes = 'INCLUDES',
+  IsNotNull = 'IS_NOT_NULL',
+  IsNull = 'IS_NULL',
   Lt = 'LT',
   Lte = 'LTE',
   NotEq = 'NOT_EQ',
