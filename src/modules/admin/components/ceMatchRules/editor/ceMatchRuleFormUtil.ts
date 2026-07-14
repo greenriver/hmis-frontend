@@ -59,7 +59,7 @@ export const ceMatchRuleToFormValues = (
       mode: 'freeText',
       structuredExpression: defaultCeMatchRuleFormValues().structuredExpression,
       freeTextExpression: rule.expression,
-      projectTypes: rule.projectTypes,
+      projectTypes: rule.projectTypes || [],
       funders: rule.funders || [],
     };
   }
@@ -90,7 +90,7 @@ export const ceMatchRuleToFormValues = (
       ),
     },
     freeTextExpression: rule.expression,
-    projectTypes: rule.projectTypes,
+    projectTypes: rule.projectTypes || [],
     funders: rule.funders || [],
   };
 };
