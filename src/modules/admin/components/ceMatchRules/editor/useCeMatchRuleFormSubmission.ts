@@ -7,6 +7,7 @@ import {
   partitionValidations,
 } from '@/modules/errors/util';
 import {
+  CeMatchRuleComparator,
   CeMatchRuleDetailsFragment,
   CeMatchRuleInput,
   CeMatchRuleOwnerType,
@@ -15,6 +16,11 @@ import {
   useCreateCeMatchRuleMutation,
   useUpdateCeMatchRuleMutation,
 } from '@/types/gqlTypes';
+
+const NULL_COMPARATORS = new Set<CeMatchRuleComparator>([
+  CeMatchRuleComparator.IsNull,
+  CeMatchRuleComparator.IsNotNull,
+]);
 
 const buildStructuredExpressionInput = ({
   operator,
@@ -26,7 +32,7 @@ const buildStructuredExpressionInput = ({
     ({ field, comparator, value }) => ({
       field,
       comparator,
-      value,
+      value: NULL_COMPARATORS.has(comparator) ? null : value,
     })
   ),
 });

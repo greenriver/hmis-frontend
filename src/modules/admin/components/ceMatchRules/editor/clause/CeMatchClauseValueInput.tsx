@@ -19,6 +19,8 @@ interface Props {
   control: Control<CeMatchRuleFormValues>;
   clausePath: ClausePath;
   selectedField?: CeMatchFieldDetailsFragment;
+  disabled?: boolean;
+  required?: boolean;
 }
 
 const pickListOptionsForField = (
@@ -63,20 +65,24 @@ const CeMatchClauseValueInput: React.FC<Props> = ({
   control,
   clausePath,
   selectedField,
+  disabled,
+  required,
 }) => {
   const valueOptions = pickListOptionsForField(selectedField);
   const valueType = valueInputType(selectedField, valueOptions);
+  const label = getRequiredLabel('Value', required);
+  const isDisabled = disabled || !selectedField;
 
   if (valueType === 'choice') {
     return (
       <ControlledSelect
         name={`${clausePath}.value`}
         control={control}
-        label={getRequiredLabel('Value', true)}
+        label={label}
         placeholder='Select value'
-        required
+        required={required}
         options={valueOptions}
-        disabled={!selectedField}
+        disabled={isDisabled}
       />
     );
   }
@@ -86,13 +92,13 @@ const CeMatchClauseValueInput: React.FC<Props> = ({
       <ControlledSelect
         name={`${clausePath}.value`}
         control={control}
-        label={getRequiredLabel('Value', true)}
+        label={label}
         placeholder='Select value'
         options={[
           { code: 'true', label: 'True' },
           { code: 'false', label: 'False' },
         ]}
-        disabled={!selectedField}
+        disabled={isDisabled}
         // Represent empty/unselected as '', otherwise clearing the select would become
         // `false`, which is a valid submitted JSON value.
         setValueAs={(option) => (option ? option.code === 'true' : '')}
@@ -109,10 +115,10 @@ const CeMatchClauseValueInput: React.FC<Props> = ({
     <ControlledTextInput
       name={`${clausePath}.value`}
       control={control}
-      label={getRequiredLabel('Value', true)}
+      label={label}
       type={valueType}
-      required
-      disabled={!selectedField}
+      required={required}
+      disabled={isDisabled}
     />
   );
 };

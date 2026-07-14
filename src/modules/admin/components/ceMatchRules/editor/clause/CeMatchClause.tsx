@@ -182,16 +182,15 @@ const CeMatchClause: React.FC<Props> = ({
             onComparatorChange={resetValueSelection}
           />
         </Grid>
-        {/* Hide and unmount the Value input if the comparator indicates we're checking for null/not null. */}
-        {!isNullCheck && (
-          <Grid item xs={12} md={4}>
-            <CeMatchClauseValueInput
-              clausePath={clausePath}
-              control={control}
-              selectedField={selectedField}
-            />
-          </Grid>
-        )}
+        <Grid item xs={12} md={4}>
+          <CeMatchClauseValueInput
+            clausePath={clausePath}
+            control={control}
+            selectedField={selectedField}
+            disabled={isNullCheck}
+            required={!isNullCheck}
+          />
+        </Grid>
       </Grid>
     </Stack>
   );
