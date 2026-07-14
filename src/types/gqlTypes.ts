@@ -17801,6 +17801,20 @@ export type BulkVoidCeClientsMutation = {
   bulkVoidCeClients?: {
     __typename?: 'BulkVoidCeClientsPayload';
     success: boolean;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
   } | null;
 };
 
@@ -57018,8 +57032,12 @@ export const BulkVoidCeClientsDocument = gql`
       projectId: $projectId
     ) {
       success
+      errors {
+        ...ValidationErrorFields
+      }
     }
   }
+  ${ValidationErrorFieldsFragmentDoc}
 `;
 export type BulkVoidCeClientsMutationFn = Apollo.MutationFunction<
   BulkVoidCeClientsMutation,

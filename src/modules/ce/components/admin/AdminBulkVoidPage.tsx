@@ -77,7 +77,6 @@ const AdminBulkVoidPage: FC = () => {
       }
     },
   });
-  const displayError = bulkVoidError || projectOptionsError;
 
   if (!globalFeatureFlags?.bulkVoidEnabled) return <NotFound />;
 
@@ -90,7 +89,9 @@ const AdminBulkVoidPage: FC = () => {
             Bulk void job started. Clients will be voided shortly.
           </Alert>
         )}
-        {displayError && <ApolloErrorAlert error={displayError} inline />}
+        {projectOptionsError && (
+          <ApolloErrorAlert error={projectOptionsError} inline />
+        )}
         <Paper sx={{ p: 3, maxWidth: FIXED_WIDTH_X_LARGE }}>
           <Stack gap={2} alignItems='flex-start'>
             <Typography>
@@ -153,10 +154,15 @@ const AdminBulkVoidPage: FC = () => {
       >
         <DialogTitle>Confirm Bulk Void</DialogTitle>
         <DialogContent sx={{ mt: 2 }}>
-          <Typography>
-            This will start a background job to void{' '}
-            {destinationClientIds.length} clients from {selectedProject?.label}.
-          </Typography>
+          <Stack gap={2}>
+            <Typography>
+              This will start a background job to void{' '}
+              {destinationClientIds.length} client
+              {destinationClientIds.length === 1 ? '' : 's'} from{' '}
+              {selectedProject?.label}.
+            </Typography>
+            {bulkVoidError && <ApolloErrorAlert error={bulkVoidError} inline />}
+          </Stack>
         </DialogContent>
         <DialogActions>
           <FormDialogActionContent
