@@ -76,6 +76,7 @@ const AdminBulkVoidPage: FC = () => {
         setSuccess(true);
       }
     },
+    onError: () => {}, // no-op to suppress the promise rejection (error is handled in bulkVoidError above)
   });
 
   if (!globalFeatureFlags?.bulkVoidEnabled) return <NotFound />;
