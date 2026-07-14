@@ -4,6 +4,8 @@ mutation BulkVoidCeClients($destinationClientIds: [ID!]!, $projectId: ID!) {
     projectId: $projectId
   ) {
     success
-    errors { ...ValidationErrorFields }
+    errors {
+      ...ValidationErrorFields
+    }
   }
 }
