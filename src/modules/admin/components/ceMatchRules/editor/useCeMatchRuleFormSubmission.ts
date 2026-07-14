@@ -37,6 +37,8 @@ const buildCreateCeMatchRuleInput = (
     mode,
     structuredExpression,
     freeTextExpression,
+    projectTypes,
+    funders,
   }: CeMatchRuleFormValues,
   ownerType?: CeMatchRuleOwnerType,
   ownerId?: string
@@ -46,6 +48,8 @@ const buildCreateCeMatchRuleInput = (
     ownerId,
     ownerType,
     ruleType: CeMatchRuleType.EligibilityRequirement,
+    projectTypes,
+    funders,
   };
 
   if (mode === 'freeText') {
@@ -63,6 +67,7 @@ const buildCreateCeMatchRuleInput = (
 
 interface BuildUpdateCeMatchRuleInputArgs {
   expressionDirty?: boolean;
+  applicabilityDirty?: boolean;
 }
 
 const buildUpdateCeMatchRuleInput = (
@@ -71,8 +76,13 @@ const buildUpdateCeMatchRuleInput = (
     mode,
     structuredExpression,
     freeTextExpression,
+    projectTypes,
+    funders,
   }: CeMatchRuleFormValues,
-  { expressionDirty = false }: BuildUpdateCeMatchRuleInputArgs = {}
+  {
+    expressionDirty = false,
+    applicabilityDirty = false,
+  }: BuildUpdateCeMatchRuleInputArgs = {}
 ): CeMatchRuleInput => {
   // Updates intentionally avoid create-only immutable fields (owner/type/ruleType).
   // Only send expression when the editor value changed, so switching modes or updating name
@@ -80,6 +90,11 @@ const buildUpdateCeMatchRuleInput = (
   const input: CeMatchRuleInput = {
     name: name.trim(),
   };
+
+  if (applicabilityDirty) {
+    input.projectTypes = projectTypes;
+    input.funders = funders;
+  }
 
   if (!expressionDirty) return input;
 
@@ -106,6 +121,7 @@ interface UseCeMatchRuleFormSubmissionArgs {
 interface SubmitCeMatchRuleArgs {
   confirmed?: boolean;
   expressionDirty?: boolean;
+  applicabilityDirty?: boolean;
 }
 
 const useCeMatchRuleFormSubmission = ({
@@ -154,13 +170,20 @@ const useCeMatchRuleFormSubmission = ({
   const submit = useCallback(
     (
       values: CeMatchRuleFormValues,
-      { confirmed = false, expressionDirty = false }: SubmitCeMatchRuleArgs = {}
+      {
+        confirmed = false,
+        expressionDirty = false,
+        applicabilityDirty = false,
+      }: SubmitCeMatchRuleArgs = {}
     ) => {
       if (ruleId) {
         updateCeMatchRule({
           variables: {
             id: ruleId,
-            input: buildUpdateCeMatchRuleInput(values, { expressionDirty }),
+            input: buildUpdateCeMatchRuleInput(values, {
+              expressionDirty,
+              applicabilityDirty,
+            }),
             confirmed,
           },
         });

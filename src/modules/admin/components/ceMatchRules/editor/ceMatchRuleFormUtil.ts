@@ -4,6 +4,8 @@ import {
   CeMatchRuleComparator,
   CeMatchRuleDetailsFragment,
   CeMatchRuleFieldSource,
+  FundingSource,
+  ProjectType,
 } from '@/types/gqlTypes';
 
 export type CeMatchExpressionMode = 'structured' | 'freeText';
@@ -23,6 +25,8 @@ export interface CeMatchRuleFormValues {
     clauses: CeMatchDraftClause[];
   };
   freeTextExpression: string;
+  projectTypes: ProjectType[];
+  funders: FundingSource[];
 }
 
 export const newDraftClause = (): CeMatchDraftClause => ({
@@ -41,6 +45,8 @@ export const defaultCeMatchRuleFormValues = (): CeMatchRuleFormValues => ({
     clauses: [newDraftClause()],
   },
   freeTextExpression: '',
+  projectTypes: [],
+  funders: [],
 });
 
 export const ceMatchRuleToFormValues = (
@@ -53,6 +59,8 @@ export const ceMatchRuleToFormValues = (
       mode: 'freeText',
       structuredExpression: defaultCeMatchRuleFormValues().structuredExpression,
       freeTextExpression: rule.expression,
+      projectTypes: rule.projectTypes,
+      funders: rule.funders || [],
     };
   }
 
@@ -82,5 +90,7 @@ export const ceMatchRuleToFormValues = (
       ),
     },
     freeTextExpression: rule.expression,
+    projectTypes: rule.projectTypes,
+    funders: rule.funders || [],
   };
 };

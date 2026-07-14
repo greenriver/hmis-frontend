@@ -8310,6 +8310,18 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         name: 'expression',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
+      {
+        name: 'funders',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'FundingSource', ofType: null },
+          },
+        },
+      },
       { name: 'name', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       { name: 'ownerId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       {
@@ -8319,6 +8331,18 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'priorityRank',
         type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
+        name: 'projectTypes',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+          },
+        },
       },
       {
         name: 'ruleType',

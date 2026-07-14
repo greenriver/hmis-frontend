@@ -1,5 +1,5 @@
 import UnlockIcon from '@mui/icons-material/Lock';
-import { Button, Stack } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -26,7 +26,10 @@ import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { hasErrors, hasOnlyWarnings } from '@/modules/errors/util';
 import { getRequiredLabel } from '@/modules/form/components/RequiredLabel';
+import ControlledMultiSelect from '@/modules/form/components/rhf/ControlledMultiSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
+import { localResolvePickList } from '@/modules/form/util/formUtil';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   CeMatchRuleDetailsFragment,
   CeMatchRuleOwnerType,
@@ -41,6 +44,19 @@ interface Props {
   onCancel?: VoidFunction;
   onDelete?: VoidFunction;
 }
+
+const projectTypeOptions = localResolvePickList('ProjectType') || [];
+const funderOptions = localResolvePickList('FundingSource') || [];
+
+const formatApplicabilityValues = (
+  values: readonly string[],
+  labels: Record<string, string>,
+  emptyLabel: string
+) => {
+  if (!values.length) return emptyLabel;
+
+  return values.map((value) => labels[value] || value).join(', ');
+};
 
 /**
  * The top-level CE match rule form component.
@@ -114,6 +130,9 @@ const CeMatchRuleForm: React.FC<Props> = ({
   const showWarningDialog = hasOnlyWarnings(errorState);
   const expressionDirty =
     !!dirtyFields.freeTextExpression || !!dirtyFields.structuredExpression;
+  const applicabilityDirty =
+    !!dirtyFields.projectTypes || !!dirtyFields.funders;
+  const showApplicabilityCard = ownerType === CeMatchRuleOwnerType.DataSource;
 
   const handleCancel = useCallback(() => {
     // If this was a new rule, call the onCancel callback
@@ -165,6 +184,52 @@ const CeMatchRuleForm: React.FC<Props> = ({
           )}
         </Stack>
       </TitleCard>
+      {showApplicabilityCard && (
+        <TitleCard title='Applies To' headerComponent='h2' padded>
+          <Typography variant='body2' mt={-2} mb={1}>
+            This rule will only be evaluated for projects matching the selected
+            funders and project types.
+          </Typography>
+          <Stack gap={2}>
+            {editing && (
+              <>
+                <ControlledMultiSelect
+                  name='funders'
+                  control={control}
+                  label='Funders'
+                  options={funderOptions}
+                  placeholder='All funders'
+                />
+                <ControlledMultiSelect
+                  name='projectTypes'
+                  control={control}
+                  label='Project Types'
+                  options={projectTypeOptions}
+                  placeholder='All project types'
+                />
+              </>
+            )}
+            {!editing && (
+              <>
+                <CommonLabeledTextBlock title='Funders'>
+                  {formatApplicabilityValues(
+                    displayValues.funders,
+                    HmisEnums.FundingSource,
+                    'All funders'
+                  )}
+                </CommonLabeledTextBlock>
+                <CommonLabeledTextBlock title='Project Types'>
+                  {formatApplicabilityValues(
+                    displayValues.projectTypes,
+                    HmisEnums.ProjectType,
+                    'All project types'
+                  )}
+                </CommonLabeledTextBlock>
+              </>
+            )}
+          </Stack>
+        </TitleCard>
+      )}
       <TitleCard
         title='Eligibility Requirements'
         headerComponent='h2'
@@ -209,7 +274,7 @@ const CeMatchRuleForm: React.FC<Props> = ({
               loading={loading}
               variant='contained'
               onClick={handleSubmit((values) =>
-                submit(values, { expressionDirty })
+                submit(values, { expressionDirty, applicabilityDirty })
               )}
             >
               Save Rule
@@ -243,7 +308,11 @@ const CeMatchRuleForm: React.FC<Props> = ({
           onCancel={clearErrors}
           onConfirm={() =>
             handleSubmit((values) =>
-              submit(values, { confirmed: true, expressionDirty })
+              submit(values, {
+                confirmed: true,
+                expressionDirty,
+                applicabilityDirty,
+              })
             )()
           }
         />
