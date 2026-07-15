@@ -8562,8 +8562,13 @@ export type TableConfig = {
 
 export type TableConfigLookup = {
   __typename?: 'TableConfigLookup';
+  ceClientsConfig?: Maybe<TableConfig>;
   ceClientsGlobalConfig?: Maybe<TableConfig>;
   ceClientsUnitGroupConfig?: Maybe<TableConfig>;
+};
+
+export type TableConfigLookupCeClientsConfigArgs = {
+  projectGroupId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type TableConfigLookupCeClientsUnitGroupConfigArgs = {
@@ -49998,15 +50003,15 @@ export type TableColumnConfigFieldsFragment = {
   label: string;
 };
 
-export type GetCeClientsGlobalTableConfigQueryVariables = Exact<{
-  [key: string]: never;
+export type GetCeClientsTableConfigQueryVariables = Exact<{
+  projectGroupId?: InputMaybe<Scalars['ID']['input']>;
 }>;
 
-export type GetCeClientsGlobalTableConfigQuery = {
+export type GetCeClientsTableConfigQuery = {
   __typename?: 'Query';
   tableConfigLookup: {
     __typename?: 'TableConfigLookup';
-    ceClientsGlobalConfig?: {
+    ceClientsConfig?: {
       __typename?: 'TableConfig';
       columns: Array<{
         __typename?: 'TableColumnConfig';
@@ -73524,10 +73529,10 @@ export type GetHouseholdStaffAssignmentHistoryQueryResult = Apollo.QueryResult<
   GetHouseholdStaffAssignmentHistoryQuery,
   GetHouseholdStaffAssignmentHistoryQueryVariables
 >;
-export const GetCeClientsGlobalTableConfigDocument = gql`
-  query GetCeClientsGlobalTableConfig {
+export const GetCeClientsTableConfigDocument = gql`
+  query GetCeClientsTableConfig($projectGroupId: ID) {
     tableConfigLookup {
-      ceClientsGlobalConfig {
+      ceClientsConfig(projectGroupId: $projectGroupId) {
         columns {
           ...TableColumnConfigFields
         }
@@ -73542,71 +73547,72 @@ export const GetCeClientsGlobalTableConfigDocument = gql`
 `;
 
 /**
- * __useGetCeClientsGlobalTableConfigQuery__
+ * __useGetCeClientsTableConfigQuery__
  *
- * To run a query within a React component, call `useGetCeClientsGlobalTableConfigQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCeClientsGlobalTableConfigQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetCeClientsTableConfigQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCeClientsTableConfigQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetCeClientsGlobalTableConfigQuery({
+ * const { data, loading, error } = useGetCeClientsTableConfigQuery({
  *   variables: {
+ *      projectGroupId: // value for 'projectGroupId'
  *   },
  * });
  */
-export function useGetCeClientsGlobalTableConfigQuery(
+export function useGetCeClientsTableConfigQuery(
   baseOptions?: Apollo.QueryHookOptions<
-    GetCeClientsGlobalTableConfigQuery,
-    GetCeClientsGlobalTableConfigQueryVariables
+    GetCeClientsTableConfigQuery,
+    GetCeClientsTableConfigQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
-    GetCeClientsGlobalTableConfigQuery,
-    GetCeClientsGlobalTableConfigQueryVariables
-  >(GetCeClientsGlobalTableConfigDocument, options);
+    GetCeClientsTableConfigQuery,
+    GetCeClientsTableConfigQueryVariables
+  >(GetCeClientsTableConfigDocument, options);
 }
-export function useGetCeClientsGlobalTableConfigLazyQuery(
+export function useGetCeClientsTableConfigLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetCeClientsGlobalTableConfigQuery,
-    GetCeClientsGlobalTableConfigQueryVariables
+    GetCeClientsTableConfigQuery,
+    GetCeClientsTableConfigQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
-    GetCeClientsGlobalTableConfigQuery,
-    GetCeClientsGlobalTableConfigQueryVariables
-  >(GetCeClientsGlobalTableConfigDocument, options);
+    GetCeClientsTableConfigQuery,
+    GetCeClientsTableConfigQueryVariables
+  >(GetCeClientsTableConfigDocument, options);
 }
 // @ts-ignore
-export function useGetCeClientsGlobalTableConfigSuspenseQuery(
+export function useGetCeClientsTableConfigSuspenseQuery(
   baseOptions?: Apollo.SuspenseQueryHookOptions<
-    GetCeClientsGlobalTableConfigQuery,
-    GetCeClientsGlobalTableConfigQueryVariables
+    GetCeClientsTableConfigQuery,
+    GetCeClientsTableConfigQueryVariables
   >
 ): Apollo.UseSuspenseQueryResult<
-  GetCeClientsGlobalTableConfigQuery,
-  GetCeClientsGlobalTableConfigQueryVariables
+  GetCeClientsTableConfigQuery,
+  GetCeClientsTableConfigQueryVariables
 >;
-export function useGetCeClientsGlobalTableConfigSuspenseQuery(
+export function useGetCeClientsTableConfigSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
     | Apollo.SuspenseQueryHookOptions<
-        GetCeClientsGlobalTableConfigQuery,
-        GetCeClientsGlobalTableConfigQueryVariables
+        GetCeClientsTableConfigQuery,
+        GetCeClientsTableConfigQueryVariables
       >
 ): Apollo.UseSuspenseQueryResult<
-  GetCeClientsGlobalTableConfigQuery | undefined,
-  GetCeClientsGlobalTableConfigQueryVariables
+  GetCeClientsTableConfigQuery | undefined,
+  GetCeClientsTableConfigQueryVariables
 >;
-export function useGetCeClientsGlobalTableConfigSuspenseQuery(
+export function useGetCeClientsTableConfigSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
     | Apollo.SuspenseQueryHookOptions<
-        GetCeClientsGlobalTableConfigQuery,
-        GetCeClientsGlobalTableConfigQueryVariables
+        GetCeClientsTableConfigQuery,
+        GetCeClientsTableConfigQueryVariables
       >
 ) {
   const options =
@@ -73614,22 +73620,22 @@ export function useGetCeClientsGlobalTableConfigSuspenseQuery(
       ? baseOptions
       : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<
-    GetCeClientsGlobalTableConfigQuery,
-    GetCeClientsGlobalTableConfigQueryVariables
-  >(GetCeClientsGlobalTableConfigDocument, options);
+    GetCeClientsTableConfigQuery,
+    GetCeClientsTableConfigQueryVariables
+  >(GetCeClientsTableConfigDocument, options);
 }
-export type GetCeClientsGlobalTableConfigQueryHookResult = ReturnType<
-  typeof useGetCeClientsGlobalTableConfigQuery
+export type GetCeClientsTableConfigQueryHookResult = ReturnType<
+  typeof useGetCeClientsTableConfigQuery
 >;
-export type GetCeClientsGlobalTableConfigLazyQueryHookResult = ReturnType<
-  typeof useGetCeClientsGlobalTableConfigLazyQuery
+export type GetCeClientsTableConfigLazyQueryHookResult = ReturnType<
+  typeof useGetCeClientsTableConfigLazyQuery
 >;
-export type GetCeClientsGlobalTableConfigSuspenseQueryHookResult = ReturnType<
-  typeof useGetCeClientsGlobalTableConfigSuspenseQuery
+export type GetCeClientsTableConfigSuspenseQueryHookResult = ReturnType<
+  typeof useGetCeClientsTableConfigSuspenseQuery
 >;
-export type GetCeClientsGlobalTableConfigQueryResult = Apollo.QueryResult<
-  GetCeClientsGlobalTableConfigQuery,
-  GetCeClientsGlobalTableConfigQueryVariables
+export type GetCeClientsTableConfigQueryResult = Apollo.QueryResult<
+  GetCeClientsTableConfigQuery,
+  GetCeClientsTableConfigQueryVariables
 >;
 export const GetCeClientsUnitGroupTableConfigDocument = gql`
   query GetCeClientsUnitGroupTableConfig($unitGroupId: ID!) {
