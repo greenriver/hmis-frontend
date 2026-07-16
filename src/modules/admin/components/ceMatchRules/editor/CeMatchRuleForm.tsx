@@ -29,6 +29,7 @@ import { getRequiredLabel } from '@/modules/form/components/RequiredLabel';
 import ControlledMultiSelect from '@/modules/form/components/rhf/ControlledMultiSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import { localResolvePickList } from '@/modules/form/util/formUtil';
+import { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   CeMatchRuleDetailsFragment,
@@ -47,16 +48,6 @@ interface Props {
 
 const projectTypeOptions = localResolvePickList('ProjectType') || [];
 const funderOptions = localResolvePickList('FundingSource') || [];
-
-const formatApplicabilityValues = (
-  values: readonly string[],
-  labels: Record<string, string>,
-  emptyLabel: string
-) => {
-  if (!values.length) return emptyLabel;
-
-  return values.map((value) => labels[value] || value).join(', ');
-};
 
 /**
  * The top-level CE match rule form component.
@@ -130,8 +121,6 @@ const CeMatchRuleForm: React.FC<Props> = ({
   const showWarningDialog = hasOnlyWarnings(errorState);
   const expressionDirty =
     !!dirtyFields.freeTextExpression || !!dirtyFields.structuredExpression;
-  const applicabilityDirty =
-    !!dirtyFields.projectTypes || !!dirtyFields.funders;
   const showApplicabilityCard = ownerType === CeMatchRuleOwnerType.DataSource;
 
   const handleCancel = useCallback(() => {
@@ -185,8 +174,16 @@ const CeMatchRuleForm: React.FC<Props> = ({
         </Stack>
       </TitleCard>
       {showApplicabilityCard && (
-        <TitleCard title='Applies To' headerComponent='h2' padded>
-          <Typography variant='body2' mt={-2} mb={1}>
+        <TitleCard
+          title='Applies To'
+          headerComponent='h2'
+          headerSx={{
+            pb: 0,
+            '& > .MuiTypography-root': { pb: 0 },
+          }}
+          padded
+        >
+          <Typography variant='body2' mb={2}>
             This rule will only be evaluated for projects matching the selected
             funders and project types.
           </Typography>
@@ -212,18 +209,18 @@ const CeMatchRuleForm: React.FC<Props> = ({
             {!editing && (
               <>
                 <CommonLabeledTextBlock title='Funders'>
-                  {formatApplicabilityValues(
-                    displayValues.funders,
-                    HmisEnums.FundingSource,
-                    'All funders'
-                  )}
+                  <MultiHmisEnum
+                    values={displayValues.funders}
+                    enumMap={HmisEnums.FundingSource}
+                    noData='All funders'
+                  />
                 </CommonLabeledTextBlock>
                 <CommonLabeledTextBlock title='Project Types'>
-                  {formatApplicabilityValues(
-                    displayValues.projectTypes,
-                    HmisEnums.ProjectType,
-                    'All project types'
-                  )}
+                  <MultiHmisEnum
+                    values={displayValues.projectTypes}
+                    enumMap={HmisEnums.ProjectType}
+                    noData='All project types'
+                  />
                 </CommonLabeledTextBlock>
               </>
             )}
@@ -274,7 +271,7 @@ const CeMatchRuleForm: React.FC<Props> = ({
               loading={loading}
               variant='contained'
               onClick={handleSubmit((values) =>
-                submit(values, { expressionDirty, applicabilityDirty })
+                submit(values, { expressionDirty })
               )}
             >
               Save Rule
@@ -311,7 +308,6 @@ const CeMatchRuleForm: React.FC<Props> = ({
               submit(values, {
                 confirmed: true,
                 expressionDirty,
-                applicabilityDirty,
               })
             )()
           }

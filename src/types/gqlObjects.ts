@@ -8313,12 +8313,16 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'funders',
         type: {
-          kind: 'LIST',
+          kind: 'NON_NULL',
           name: null,
           ofType: {
-            kind: 'NON_NULL',
+            kind: 'LIST',
             name: null,
-            ofType: { kind: 'ENUM', name: 'FundingSource', ofType: null },
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'ENUM', name: 'FundingSource', ofType: null },
+            },
           },
         },
       },
@@ -8335,12 +8339,16 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'projectTypes',
         type: {
-          kind: 'LIST',
+          kind: 'NON_NULL',
           name: null,
           ofType: {
-            kind: 'NON_NULL',
+            kind: 'LIST',
             name: null,
-            ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+            },
           },
         },
       },

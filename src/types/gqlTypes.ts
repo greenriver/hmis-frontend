@@ -859,12 +859,12 @@ export type CeMatchRuleGroup = {
 
 export type CeMatchRuleInput = {
   expression?: InputMaybe<Scalars['String']['input']>;
-  funders?: InputMaybe<Array<FundingSource>>;
+  funders: Array<FundingSource>;
   name?: InputMaybe<Scalars['String']['input']>;
   ownerId?: InputMaybe<Scalars['ID']['input']>;
   ownerType?: InputMaybe<CeMatchRuleOwnerType>;
   priorityRank?: InputMaybe<Scalars['Int']['input']>;
-  projectTypes?: InputMaybe<Array<ProjectType>>;
+  projectTypes: Array<ProjectType>;
   ruleType?: InputMaybe<CeMatchRuleType>;
   structuredExpression?: InputMaybe<CeMatchRuleStructuredExpressionInput>;
 };

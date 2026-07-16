@@ -67,7 +67,6 @@ const buildCreateCeMatchRuleInput = (
 
 interface BuildUpdateCeMatchRuleInputArgs {
   expressionDirty?: boolean;
-  applicabilityDirty?: boolean;
 }
 
 const buildUpdateCeMatchRuleInput = (
@@ -79,22 +78,16 @@ const buildUpdateCeMatchRuleInput = (
     projectTypes,
     funders,
   }: CeMatchRuleFormValues,
-  {
-    expressionDirty = false,
-    applicabilityDirty = false,
-  }: BuildUpdateCeMatchRuleInputArgs = {}
+  { expressionDirty = false }: BuildUpdateCeMatchRuleInputArgs = {}
 ): CeMatchRuleInput => {
   // Updates intentionally avoid create-only immutable fields (owner/type/ruleType).
   // Only send expression when the editor value changed, so switching modes or updating name
   // does not rewrite equivalent saved expressions or trigger impact preview.
   const input: CeMatchRuleInput = {
     name: name.trim(),
+    projectTypes,
+    funders,
   };
-
-  if (applicabilityDirty) {
-    input.projectTypes = projectTypes;
-    input.funders = funders;
-  }
 
   if (!expressionDirty) return input;
 
@@ -121,7 +114,6 @@ interface UseCeMatchRuleFormSubmissionArgs {
 interface SubmitCeMatchRuleArgs {
   confirmed?: boolean;
   expressionDirty?: boolean;
-  applicabilityDirty?: boolean;
 }
 
 const useCeMatchRuleFormSubmission = ({
@@ -170,11 +162,7 @@ const useCeMatchRuleFormSubmission = ({
   const submit = useCallback(
     (
       values: CeMatchRuleFormValues,
-      {
-        confirmed = false,
-        expressionDirty = false,
-        applicabilityDirty = false,
-      }: SubmitCeMatchRuleArgs = {}
+      { confirmed = false, expressionDirty = false }: SubmitCeMatchRuleArgs = {}
     ) => {
       if (ruleId) {
         updateCeMatchRule({
@@ -182,7 +170,6 @@ const useCeMatchRuleFormSubmission = ({
             id: ruleId,
             input: buildUpdateCeMatchRuleInput(values, {
               expressionDirty,
-              applicabilityDirty,
             }),
             confirmed,
           },
