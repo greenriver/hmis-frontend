@@ -1,4 +1,4 @@
-import { Paper, Stack } from '@mui/material';
+import { Alert, Paper, Stack } from '@mui/material';
 import React, { useCallback, useMemo } from 'react';
 
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
@@ -23,6 +23,7 @@ import {
   GetCeClientsQueryVariables,
   TableColumnConfigFieldsFragment,
   TableColumnConfigType,
+  useGetCeCandidatePoolSummaryQuery,
   useGetCeClientsTableConfigQuery,
 } from '@/types/gqlTypes';
 import { ensureArray } from '@/utils/arrays';
@@ -65,6 +66,14 @@ interface Props {
 const AdminCeClientsTable: React.FC<Props> = ({ projectGroupId }) => {
   // Feature flags to check whether to show MCI ID column
   const { globalFeatureFlags: { mciIdEnabled } = {} } = useGlobalFeatureFlags();
+
+  // Fetch summary in order to display warning if pools may be out-of-date
+  const { data: poolSummaryData } = useGetCeCandidatePoolSummaryQuery({
+    variables: { projectGroupId: projectGroupId || null },
+  });
+  const neverGeneratedCount =
+    poolSummaryData?.ceCandidatePoolSummary?.neverGeneratedCount ?? 0;
+
   // Fetch column configuration
   const {
     data: { tableConfigLookup } = {},
@@ -137,6 +146,13 @@ const AdminCeClientsTable: React.FC<Props> = ({ projectGroupId }) => {
 
   return (
     <Stack spacing={2}>
+      {neverGeneratedCount > 0 && (
+        // todo @martha - interesting, maybe this actually IS correct. when does candidatesGeneratedAt get set?
+        <Alert severity='info'>
+          Eligible client lists are still being processed; not all eligible
+          clients may be shown.
+        </Alert>
+      )}
       <CommonSearchInput
         label='Search clients'
         name='search clients'

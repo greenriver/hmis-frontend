@@ -51,7 +51,7 @@ const PrioritizedClientsTable: React.FC<Props> = ({
   unitGroupId,
 }) => {
   const { project } = useProjectDashboardContext();
-  const { status } = opportunity;
+  const { status, candidatesGeneratedAt, candidatesGenerating } = opportunity;
 
   // Fetch column configuration
   const {
@@ -115,33 +115,41 @@ const PrioritizedClientsTable: React.FC<Props> = ({
 
   const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
 
-  // If CandidatePool has not been generated yet (due to change in eligibility or prioritization requirements), show a message
-  if (!opportunity.candidatesGeneratedAt) {
+  if (!candidatesGeneratedAt) {
     return (
       <Alert severity='info'>
-        The eligible client list for this unit has not been generated yet.
-        Please check back later.
+        The eligible client list is still being set up, either because it is
+        new, or because rules recently changed. Please check back later.
       </Alert>
     );
   }
-  const candidatesGeneratedAt = parseHmisDateString(
-    opportunity.candidatesGeneratedAt
-  );
+
+  const candidatesGeneratedAtDate = parseHmisDateString(candidatesGeneratedAt);
 
   if (error) throw error;
   if (loading && !tableConfigLookup) return <Loading />;
 
   return (
     <Stack rowGap={2}>
+      {candidatesGenerating && (
+        // todo @martha- I wrote on the ticket,
+        //  If it's a brand-new candidate pool, and few clients are eligible (100s) relative to the total clients in the database (10000s), then for a long time the list will display no/few clients as eligible.
+        // is that true? AI doesn't seem to think so, but that was my observation
+        <Alert severity='warning'>
+          This list is currently being refreshed and may be temporarily
+          incomplete. Consider waiting until the refresh finishes before using
+          this list to select a client.
+        </Alert>
+      )}
       <CommonCard title='Eligible Clients'>
         This table lists clients who meet the eligibility requirements for this
         unit. Clients are sorted based on their priority score.
-        {candidatesGeneratedAt && (
+        {candidatesGeneratedAtDate && (
           <>
             {' '}
             The eligible client list was last updated{' '}
-            {formatRelativeDateTime(candidatesGeneratedAt)} (
-            {parseAndFormatDateTime(opportunity.candidatesGeneratedAt)}).
+            {formatRelativeDateTime(candidatesGeneratedAtDate)} (
+            {parseAndFormatDateTime(candidatesGeneratedAt)}).
           </>
         )}
         {/* May want to add additional explainer text about this list being deduplicated (i.e. it contains destination clients) */}
