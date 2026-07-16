@@ -247,7 +247,7 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
   }, []);
 
   // When search data is returned, update the URL params and the apollo cache.
-  // Passed to GenericTable as onCompleted, NOT onDataReady, so we only update the search params
+  // Passed to GenericTable as onNetworkDataReady, NOT onDataReady, so we only update the search params
   // if this is the completion of a network call, not a cache hit.
   // This avoids buggy behavior with the back-button.
   const handleSearchCompleted = useCallback(
@@ -338,7 +338,7 @@ const ClientSearch: React.FC<ClientSearchProps> = ({ searchType }) => {
             queryVariables={{ input: searchInput }}
             queryDocument={SearchClientsDocument}
             onDataReady={() => setHasSearched(true)}
-            onCompleted={handleSearchCompleted}
+            onNetworkDataReady={handleSearchCompleted}
             columns={columns}
             rowLinkTo={(client) => getViewClientMenuItem(client).to}
             rowName={(row) => clientBriefName(row)}
