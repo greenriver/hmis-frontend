@@ -1,0 +1,11 @@
+mutation BulkVoidCeClients($destinationClientIds: [ID!]!, $projectId: ID!) {
+  bulkVoidCeClients(
+    destinationClientIds: $destinationClientIds
+    projectId: $projectId
+  ) {
+    success
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
