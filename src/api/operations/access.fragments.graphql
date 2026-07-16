@@ -18,6 +18,7 @@ fragment RootPermissions on QueryAccess {
   canEditUsersInWarehouse
   canManageCeDefaultContacts
   canManageCeMatchRules
+  canBulkVoidCeClients
   canIndexOpportunities
   canIndexEligibleClients
 
