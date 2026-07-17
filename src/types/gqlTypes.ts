@@ -624,10 +624,8 @@ export type CeCandidateEnrollmentsArgs = {
 
 export type CeCandidatePoolSummary = {
   __typename?: 'CeCandidatePoolSummary';
-  /** Active pools that have never completed generation */
-  neverGeneratedCount: Scalars['Int']['output'];
-  /** Active pools whose pool-level change marker is dirty */
-  pendingRefreshCount: Scalars['Int']['output'];
+  /** Active pools that have never completed a full generation */
+  neverFullyGeneratedCount: Scalars['Int']['output'];
   /** Number of active CE candidate pools */
   totalCount: Scalars['Int']['output'];
 };
@@ -952,12 +950,13 @@ export type CeOpportunity = {
   active: Scalars['Boolean']['output'];
   candidateLookup?: Maybe<CeCandidate>;
   candidates: CeCandidatesPaginated;
-  candidatesGeneratedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   /**
-   * Whether the eligible client list for this unit is currently being
-   * (re)processed and may be temporarily incomplete or out of date
+   * When this unit's eligible client list last completed a full generation against
+   * all destination clients. Null means it has never finished first-time setup.
    */
-  candidatesGenerating: Scalars['Boolean']['output'];
+  candidatesFullyGeneratedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  /** When this unit's eligible client list was last updated by any processing (full refresh or individual client) */
+  candidatesGeneratedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   categories: Array<Scalars['String']['output']>;
   dateAvailable: Scalars['ISO8601Date']['output'];
   expiresAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -17864,7 +17863,7 @@ export type CeOpportunitySummaryFieldsFragment = {
 export type CeOpportunityFieldsFragment = {
   __typename?: 'CeOpportunity';
   candidatesGeneratedAt?: string | null;
-  candidatesGenerating: boolean;
+  candidatesFullyGeneratedAt?: string | null;
   id: string;
   name: string;
   status: CeOpportunityStatus;
@@ -17902,7 +17901,7 @@ export type CeOpportunityFieldsFragment = {
 
 export type CeCandidatePoolSummaryFieldsFragment = {
   __typename?: 'CeCandidatePoolSummary';
-  neverGeneratedCount: number;
+  neverFullyGeneratedCount: number;
 };
 
 export type CeOpportunityAdminFieldsFragment = {
@@ -20698,7 +20697,7 @@ export type SubmitCeReferralStepMutation = {
       opportunity?: {
         __typename?: 'CeOpportunity';
         candidatesGeneratedAt?: string | null;
-        candidatesGenerating: boolean;
+        candidatesFullyGeneratedAt?: string | null;
         id: string;
         name: string;
         status: CeOpportunityStatus;
@@ -22569,7 +22568,7 @@ export type GetCeCandidatePoolSummaryQuery = {
   __typename?: 'Query';
   ceCandidatePoolSummary: {
     __typename?: 'CeCandidatePoolSummary';
-    neverGeneratedCount: number;
+    neverFullyGeneratedCount: number;
   };
 };
 
@@ -50308,7 +50307,7 @@ export type UnitDetailFieldsFragment = {
   latestOpportunity?: {
     __typename?: 'CeOpportunity';
     candidatesGeneratedAt?: string | null;
-    candidatesGenerating: boolean;
+    candidatesFullyGeneratedAt?: string | null;
     id: string;
     name: string;
     status: CeOpportunityStatus;
@@ -50729,7 +50728,7 @@ export type GetUnitQuery = {
     latestOpportunity?: {
       __typename?: 'CeOpportunity';
       candidatesGeneratedAt?: string | null;
-      candidatesGenerating: boolean;
+      candidatesFullyGeneratedAt?: string | null;
       id: string;
       name: string;
       status: CeOpportunityStatus;
@@ -52378,7 +52377,7 @@ export const UserAuditEventFieldsFragmentDoc = gql`
 `;
 export const CeCandidatePoolSummaryFieldsFragmentDoc = gql`
   fragment CeCandidatePoolSummaryFields on CeCandidatePoolSummary {
-    neverGeneratedCount
+    neverFullyGeneratedCount
   }
 `;
 export const CeOpportunitySummaryFieldsFragmentDoc = gql`
@@ -54660,7 +54659,7 @@ export const CeOpportunityFieldsFragmentDoc = gql`
   fragment CeOpportunityFields on CeOpportunity {
     ...CeOpportunitySummaryFields
     candidatesGeneratedAt
-    candidatesGenerating
+    candidatesFullyGeneratedAt
     referral {
       ...CeReferralSummaryFields
     }

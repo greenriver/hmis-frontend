@@ -71,8 +71,8 @@ const AdminCeClientsTable: React.FC<Props> = ({ projectGroupId }) => {
   const { data: poolSummaryData } = useGetCeCandidatePoolSummaryQuery({
     variables: { projectGroupId: projectGroupId || null },
   });
-  const neverGeneratedCount =
-    poolSummaryData?.ceCandidatePoolSummary?.neverGeneratedCount ?? 0;
+  const neverFullyGeneratedCount =
+    poolSummaryData?.ceCandidatePoolSummary?.neverFullyGeneratedCount ?? 0;
 
   // Fetch column configuration
   const {
@@ -146,8 +146,7 @@ const AdminCeClientsTable: React.FC<Props> = ({ projectGroupId }) => {
 
   return (
     <Stack spacing={2}>
-      {neverGeneratedCount > 0 && (
-        // todo @martha - interesting, maybe this actually IS correct. when does candidatesGeneratedAt get set?
+      {neverFullyGeneratedCount > 0 && (
         <Alert severity='info'>
           Eligible client lists are still being processed; not all eligible
           clients may be shown.

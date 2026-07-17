@@ -23,15 +23,14 @@ fragment CeOpportunitySummaryFields on CeOpportunity {
 fragment CeOpportunityFields on CeOpportunity {
   ...CeOpportunitySummaryFields
   candidatesGeneratedAt
-  candidatesGenerating
+  candidatesFullyGeneratedAt
   referral {
     ...CeReferralSummaryFields
   }
 }
 
 fragment CeCandidatePoolSummaryFields on CeCandidatePoolSummary {
-  # Only query neverGeneratedCount for now, although other summary fields are available for future improvement
-  neverGeneratedCount
+  neverFullyGeneratedCount
 }
 
 fragment CeOpportunityAdminFields on CeOpportunity {

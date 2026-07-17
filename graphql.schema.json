@@ -4200,24 +4200,8 @@
         "isOneOf": null,
         "fields": [
           {
-            "name": "neverGeneratedCount",
-            "description": "Active pools that have never completed generation",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "pendingRefreshCount",
-            "description": "Active pools whose pool-level change marker is dirty",
+            "name": "neverFullyGeneratedCount",
+            "description": "Active pools that have never completed a full generation",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -6876,8 +6860,8 @@
             "deprecationReason": null
           },
           {
-            "name": "candidatesGeneratedAt",
-            "description": null,
+            "name": "candidatesFullyGeneratedAt",
+            "description": "When this unit's eligible client list last completed a full generation against\nall destination clients. Null means it has never finished first-time setup.",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -6888,17 +6872,13 @@
             "deprecationReason": null
           },
           {
-            "name": "candidatesGenerating",
-            "description": "Whether the eligible client list for this unit is currently being\n(re)processed and may be temporarily incomplete or out of date",
+            "name": "candidatesGeneratedAt",
+            "description": "When this unit's eligible client list was last updated by any processing (full refresh or individual client)",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "ISO8601DateTime",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null

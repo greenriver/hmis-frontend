@@ -602,15 +602,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'CeCandidatePoolSummary',
     fields: [
       {
-        name: 'neverGeneratedCount',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
-        },
-      },
-      {
-        name: 'pendingRefreshCount',
+        name: 'neverFullyGeneratedCount',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -1152,16 +1144,12 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'candidatesGeneratedAt',
+        name: 'candidatesFullyGeneratedAt',
         type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
-        name: 'candidatesGenerating',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
+        name: 'candidatesGeneratedAt',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'categories',

@@ -51,7 +51,8 @@ const PrioritizedClientsTable: React.FC<Props> = ({
   unitGroupId,
 }) => {
   const { project } = useProjectDashboardContext();
-  const { status, candidatesGeneratedAt, candidatesGenerating } = opportunity;
+  const { status, candidatesGeneratedAt, candidatesFullyGeneratedAt } =
+    opportunity;
 
   // Fetch column configuration
   const {
@@ -115,7 +116,7 @@ const PrioritizedClientsTable: React.FC<Props> = ({
 
   const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
 
-  if (!candidatesGeneratedAt) {
+  if (!candidatesFullyGeneratedAt) {
     return (
       <Alert severity='info'>
         The eligible client list is still being set up, either because it is
@@ -131,16 +132,6 @@ const PrioritizedClientsTable: React.FC<Props> = ({
 
   return (
     <Stack rowGap={2}>
-      {candidatesGenerating && (
-        // todo @martha- I wrote on the ticket,
-        //  If it's a brand-new candidate pool, and few clients are eligible (100s) relative to the total clients in the database (10000s), then for a long time the list will display no/few clients as eligible.
-        // is that true? AI doesn't seem to think so, but that was my observation
-        <Alert severity='warning'>
-          This list is currently being refreshed and may be temporarily
-          incomplete. Consider waiting until the refresh finishes before using
-          this list to select a client.
-        </Alert>
-      )}
       <CommonCard title='Eligible Clients'>
         This table lists clients who meet the eligibility requirements for this
         unit. Clients are sorted based on their priority score.
@@ -149,7 +140,7 @@ const PrioritizedClientsTable: React.FC<Props> = ({
             {' '}
             The eligible client list was last updated{' '}
             {formatRelativeDateTime(candidatesGeneratedAtDate)} (
-            {parseAndFormatDateTime(candidatesGeneratedAt)}).
+            {parseAndFormatDateTime(candidatesGeneratedAt || '')}).
           </>
         )}
         {/* May want to add additional explainer text about this list being deduplicated (i.e. it contains destination clients) */}
