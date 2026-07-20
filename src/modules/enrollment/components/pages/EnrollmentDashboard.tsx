@@ -46,7 +46,7 @@ const EnrollmentDashboard: React.FC = () => {
   const client = enrollment?.client;
 
   useEffect(() => {
-    console.warn('[EnrollmentDashboard] render', { enrollment, loading });
+    console.log('[EnrollmentDashboard] render', { enrollment, loading });
   });
 
   const enabledFeatures = useMemo(
@@ -88,7 +88,7 @@ const EnrollmentDashboard: React.FC = () => {
 
   if (loading && !enrollment) return <Loading />;
   if (!enrollment || !client || !outletContext) {
-    console.warn('[EnrollmentDashboard] NotFound', {
+    console.log('[EnrollmentDashboard] NotFound', {
       enrollment,
       loading,
       reason: 'missing enrollment, client, or outletContext',
@@ -96,7 +96,7 @@ const EnrollmentDashboard: React.FC = () => {
     return <NotFound />;
   }
   if (enrollment && enrollment.client.id !== params.clientId) {
-    console.warn('[EnrollmentDashboard] NotFound', {
+    console.log('[EnrollmentDashboard] NotFound', {
       enrollment,
       loading,
       reason: 'enrollment client id mismatch',
