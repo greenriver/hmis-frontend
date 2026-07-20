@@ -73,6 +73,11 @@ const HouseholdAssessments: React.FC<Props> = ({
   enrollment,
   formDefinition,
 }) => {
+  // prove remount
+  useEffect(() => {
+    console.log('[HouseholdAssessments] mounted', window.location.hash);
+  }, []);
+
   // track if there are any dirty assessment forms
   const [formStates, setFormStates] = useState<
     Record<string, HouseholdAssessmentFormState>
@@ -179,7 +184,36 @@ const HouseholdAssessments: React.FC<Props> = ({
   const { hash } = useLocation();
 
   useEffect(() => {
-    if (hasRefetched) return;
+    console.log('[HouseholdAssessments] state', {
+      currentTab,
+      hash,
+      windowHash: window.location.hash,
+      hasRefetched,
+      nextTab,
+      tabsLength: tabs.length,
+      networkStatus: fetchAssessmentsStatus.networkStatus,
+    });
+  }, [
+    currentTab,
+    hash,
+    hasRefetched,
+    nextTab,
+    tabs.length,
+    fetchAssessmentsStatus.networkStatus,
+  ]);
+
+  useEffect(() => {
+    console.log('[HouseholdAssessments] hash sync effect', {
+      hasRefetched,
+      hash,
+      windowHash: window.location.hash,
+      tabsLength: tabs.length,
+    });
+    // todo @martha
+    if (hasRefetched) {
+      console.log('[HouseholdAssessments] hasRefetched', window.location.hash);
+      return;
+    }
     const hashString = hash.replace('#', '');
     const hashNum = hashString ? parseInt(hashString) : -1;
     const isValid =
@@ -187,8 +221,13 @@ const HouseholdAssessments: React.FC<Props> = ({
       (isFinite(hashNum) && hashNum >= 0 && hashNum <= tabs.length);
 
     if (isValid) {
+      console.log(
+        '[HouseholdAssessments] setting current tab to hashString',
+        hashString
+      );
       setCurrentTab(hashString);
     } else {
+      console.log('[HouseholdAssessments] setting current tab to 1');
       setCurrentTab('1');
     }
   }, [hasRefetched, hash, tabs.length]);

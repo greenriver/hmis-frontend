@@ -1,6 +1,6 @@
 import { Container } from '@mui/material';
 import { isNil } from 'lodash-es';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import Loading from '@/components/elements/Loading';
@@ -45,6 +45,10 @@ const EnrollmentDashboard: React.FC = () => {
   const { enrollment, loading } = useDetailedEnrollment(params.enrollmentId);
   const client = enrollment?.client;
 
+  useEffect(() => {
+    console.log('[EnrollmentDashboard] render', { enrollment, loading });
+  });
+
   const enabledFeatures = useMemo(
     () => enrollment?.dataCollectionFeatures.map((f) => f.role) || [],
     [enrollment]
@@ -83,8 +87,20 @@ const EnrollmentDashboard: React.FC = () => {
   );
 
   if (loading && !enrollment) return <Loading />;
-  if (!enrollment || !client || !outletContext) return <NotFound />;
+  if (!enrollment || !client || !outletContext) {
+    console.log('[EnrollmentDashboard] NotFound', {
+      enrollment,
+      loading,
+      reason: 'missing enrollment, client, or outletContext',
+    });
+    return <NotFound />;
+  }
   if (enrollment && enrollment.client.id !== params.clientId) {
+    console.log('[EnrollmentDashboard] NotFound', {
+      enrollment,
+      loading,
+      reason: 'enrollment client id mismatch',
+    });
     return <NotFound />;
   }
 
