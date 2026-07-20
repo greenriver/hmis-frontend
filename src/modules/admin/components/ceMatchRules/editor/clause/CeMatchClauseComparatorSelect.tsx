@@ -53,7 +53,9 @@ const comparatorOptionsForField = (
   const comparators = new Set<CeMatchRuleComparator>();
 
   if (field?.multiple) {
-    // For a multiple value (array), only allow Includes/Excludes
+    // For a multiple value (array), only allow Includes/Excludes.
+    // Null/Not Null comparisons don't currently work for array CDEs,
+    // since the backend CdeFieldMap uses a default of [], not null, when no values are present
     comparators.add(CeMatchRuleComparator.Includes);
     comparators.add(CeMatchRuleComparator.Excludes);
   } else {
