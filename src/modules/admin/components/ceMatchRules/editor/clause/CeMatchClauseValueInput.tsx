@@ -19,8 +19,6 @@ interface Props {
   control: Control<CeMatchRuleFormValues>;
   clausePath: ClausePath;
   selectedField?: CeMatchFieldDetailsFragment;
-  disabled?: boolean;
-  required?: boolean;
 }
 
 const pickListOptionsForField = (
@@ -65,24 +63,20 @@ const CeMatchClauseValueInput: React.FC<Props> = ({
   control,
   clausePath,
   selectedField,
-  disabled,
-  required,
 }) => {
   const valueOptions = pickListOptionsForField(selectedField);
   const valueType = valueInputType(selectedField, valueOptions);
-  const label = getRequiredLabel('Value', required);
-  const isDisabled = disabled || !selectedField;
 
   if (valueType === 'choice') {
     return (
       <ControlledSelect
         name={`${clausePath}.value`}
         control={control}
-        label={label}
+        label={getRequiredLabel('Value', true)}
         placeholder='Select value'
-        required={required}
+        required
         options={valueOptions}
-        disabled={isDisabled}
+        disabled={!selectedField}
       />
     );
   }
@@ -92,13 +86,13 @@ const CeMatchClauseValueInput: React.FC<Props> = ({
       <ControlledSelect
         name={`${clausePath}.value`}
         control={control}
-        label={label}
+        label={getRequiredLabel('Value', true)}
         placeholder='Select value'
         options={[
           { code: 'true', label: 'True' },
           { code: 'false', label: 'False' },
         ]}
-        disabled={isDisabled}
+        disabled={!selectedField}
         // Represent empty/unselected as '', otherwise clearing the select would become
         // `false`, which is a valid submitted JSON value.
         setValueAs={(option) => (option ? option.code === 'true' : '')}
@@ -115,10 +109,10 @@ const CeMatchClauseValueInput: React.FC<Props> = ({
     <ControlledTextInput
       name={`${clausePath}.value`}
       control={control}
-      label={label}
+      label={getRequiredLabel('Value', true)}
       type={valueType}
-      required={required}
-      disabled={isDisabled}
+      required
+      disabled={!selectedField}
     />
   );
 };
