@@ -75,7 +75,7 @@ const HouseholdAssessments: React.FC<Props> = ({
 }) => {
   // prove remount
   useEffect(() => {
-    console.log('[HouseholdAssessments] mounted', window.location.hash);
+    console.warn('[HouseholdAssessments] mounted', window.location.hash);
   }, []);
 
   // track if there are any dirty assessment forms
@@ -184,7 +184,7 @@ const HouseholdAssessments: React.FC<Props> = ({
   const { hash } = useLocation();
 
   useEffect(() => {
-    console.log('[HouseholdAssessments] state', {
+    console.warn('[HouseholdAssessments] state', {
       currentTab,
       hash,
       windowHash: window.location.hash,
@@ -203,7 +203,7 @@ const HouseholdAssessments: React.FC<Props> = ({
   ]);
 
   useEffect(() => {
-    console.log('[HouseholdAssessments] hash sync effect', {
+    console.warn('[HouseholdAssessments] hash sync effect', {
       hasRefetched,
       hash,
       windowHash: window.location.hash,
@@ -211,7 +211,7 @@ const HouseholdAssessments: React.FC<Props> = ({
     });
     // todo @martha
     if (hasRefetched) {
-      console.log('[HouseholdAssessments] hasRefetched', window.location.hash);
+      console.warn('[HouseholdAssessments] hasRefetched', window.location.hash);
       return;
     }
     const hashString = hash.replace('#', '');
@@ -221,13 +221,13 @@ const HouseholdAssessments: React.FC<Props> = ({
       (isFinite(hashNum) && hashNum >= 0 && hashNum <= tabs.length);
 
     if (isValid) {
-      console.log(
+      console.warn(
         '[HouseholdAssessments] setting current tab to hashString',
         hashString
       );
       setCurrentTab(hashString);
     } else {
-      console.log('[HouseholdAssessments] setting current tab to 1');
+      console.warn('[HouseholdAssessments] setting current tab to 1');
       setCurrentTab('1');
     }
   }, [hasRefetched, hash, tabs.length]);
