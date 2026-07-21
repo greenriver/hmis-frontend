@@ -5919,6 +5919,18 @@
             "deprecationReason": null
           },
           {
+            "name": "IS_NOT_NULL",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "IS_NULL",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "LT",
             "description": null,
             "isDeprecated": false,

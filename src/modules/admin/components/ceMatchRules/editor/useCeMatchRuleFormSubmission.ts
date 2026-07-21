@@ -7,6 +7,7 @@ import {
   partitionValidations,
 } from '@/modules/errors/util';
 import {
+  CeMatchRuleComparator,
   CeMatchRuleDetailsFragment,
   CeMatchRuleInput,
   CeMatchRuleOwnerType,
@@ -16,19 +17,25 @@ import {
   useUpdateCeMatchRuleMutation,
 } from '@/types/gqlTypes';
 
+const NULL_COMPARATORS = new Set<CeMatchRuleComparator>([
+  CeMatchRuleComparator.IsNull,
+  CeMatchRuleComparator.IsNotNull,
+]);
+
 const buildStructuredExpressionInput = ({
   operator,
   clauses,
 }: CeMatchRuleFormValues['structuredExpression']) => ({
   operator,
-  clauses: clauses.map(
-    // Strip out unneeded fields from the draft clause.
-    ({ field, comparator, value }) => ({
-      field,
-      comparator,
-      value,
-    })
-  ),
+  clauses: clauses.map(({ field, comparator, value }) => ({
+    field,
+    comparator,
+    // CeMatchClauseValueInput is not rendered for IS_NULL/IS_NOT_NULL, but we
+    // still coerce here because clauses live inside a useFieldArray, and RHF does not
+    // reliably clear nested field values on unmount when shouldUnregister is true.
+    // (See RHF docs for useFieldArray).
+    value: NULL_COMPARATORS.has(comparator) ? null : value,
+  })),
 });
 
 const buildCreateCeMatchRuleInput = (
