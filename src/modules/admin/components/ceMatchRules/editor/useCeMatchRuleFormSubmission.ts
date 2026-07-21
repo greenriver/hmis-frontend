@@ -44,6 +44,8 @@ const buildCreateCeMatchRuleInput = (
     mode,
     structuredExpression,
     freeTextExpression,
+    projectTypes,
+    funders,
   }: CeMatchRuleFormValues,
   ownerType?: CeMatchRuleOwnerType,
   ownerId?: string
@@ -53,6 +55,8 @@ const buildCreateCeMatchRuleInput = (
     ownerId,
     ownerType,
     ruleType: CeMatchRuleType.EligibilityRequirement,
+    projectTypes,
+    funders,
   };
 
   if (mode === 'freeText') {
@@ -78,6 +82,8 @@ const buildUpdateCeMatchRuleInput = (
     mode,
     structuredExpression,
     freeTextExpression,
+    projectTypes,
+    funders,
   }: CeMatchRuleFormValues,
   { expressionDirty = false }: BuildUpdateCeMatchRuleInputArgs = {}
 ): CeMatchRuleInput => {
@@ -86,6 +92,8 @@ const buildUpdateCeMatchRuleInput = (
   // does not rewrite equivalent saved expressions or trigger impact preview.
   const input: CeMatchRuleInput = {
     name: name.trim(),
+    projectTypes,
+    funders,
   };
 
   if (!expressionDirty) return input;
@@ -167,7 +175,9 @@ const useCeMatchRuleFormSubmission = ({
         updateCeMatchRule({
           variables: {
             id: ruleId,
-            input: buildUpdateCeMatchRuleInput(values, { expressionDirty }),
+            input: buildUpdateCeMatchRuleInput(values, {
+              expressionDirty,
+            }),
             confirmed,
           },
         });
