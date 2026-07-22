@@ -46,8 +46,9 @@ const useAssessmentFormDefinition = ({
   const { formDefinition, itemMap } = useMemo(() => {
     // Find the definition from the fetched data OR from the previous data, if this query has already run.
     // This guards against totally remounting consumers when there's a refetch (e.g. assessmentDate updates after submit).
-    const formDefinition =
-      data?.assessmentFormDefinition ?? previousData?.assessmentFormDefinition;
+    const formDefinition = data
+      ? data.assessmentFormDefinition
+      : previousData?.assessmentFormDefinition;
     if (!formDefinition) return {};
 
     return {

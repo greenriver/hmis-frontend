@@ -184,6 +184,15 @@ const HouseholdAssessments: React.FC<Props> = ({
     });
   }, [householdMembers, assessmentByEnrollmentId, role, readOnlyView]);
 
+  // Once tabs are loaded, clamp an out-of-range tab (e.g. from a stale hash) back
+  // to the first tab.
+  useEffect(() => {
+    if (tabs.length === 0) return;
+    if (currentTab === SUMMARY_TAB_ID) return;
+    const isValidTab = tabs.some((tab) => tab.id === currentTab);
+    if (!isValidTab) setCurrentTab('1');
+  }, [tabs, currentTab]);
+
   const { pathname } = useLocation();
 
   const navigateToTab = useCallback((newValue: string) => {
