@@ -1,6 +1,12 @@
 import React, { ReactNode, useCallback, useMemo } from 'react';
 
-import { Control, useController } from 'react-hook-form';
+import {
+  Control,
+  FieldValues,
+  Path,
+  RegisterOptions,
+  useController,
+} from 'react-hook-form';
 import GenericSelect, {
   GenericSelectProps,
 } from '@/components/elements/input/GenericSelect';
@@ -9,22 +15,24 @@ import { RhfRules } from '@/modules/form/types';
 import { findOptionLabel } from '@/modules/form/util/formUtil';
 import { PickListOption } from '@/types/gqlTypes';
 
-export type ControlledMultiSelectProps = Omit<
-  GenericSelectProps<PickListOption, true, false>,
-  'value' | 'onChange' | 'onBlur' | 'multiple'
-> & {
-  name: string;
-  control?: Control; // Optional when using FormProvider
-  rules?: RhfRules;
-  required?: boolean;
-  helperText?: ReactNode;
-  placeholder?: string;
-  onChange?: (options: PickListOption[]) => void;
-};
+export type ControlledMultiSelectProps<T extends FieldValues = FieldValues> =
+  Omit<
+    GenericSelectProps<PickListOption, true, false>,
+    'value' | 'onChange' | 'onBlur' | 'multiple'
+  > & {
+    // Path<T> gives callers type checking for nested RHF paths.
+    name: Path<T>;
+    control?: Control<T>; // Optional when using FormProvider
+    rules?: RhfRules;
+    required?: boolean;
+    helperText?: ReactNode;
+    placeholder?: string;
+    onChange?: (options: PickListOption[]) => void;
+  };
 
 // React-Hook-Form wrapper around GenericSelect for multiple selection.
 // This component stores an array of strings as the field value, but passes a PickListOption[] to the GenericSelect.
-const ControlledMultiSelect: React.FC<ControlledMultiSelectProps> = ({
+const ControlledMultiSelect = <T extends FieldValues = FieldValues>({
   name,
   control,
   rules,
@@ -35,18 +43,18 @@ const ControlledMultiSelect: React.FC<ControlledMultiSelectProps> = ({
   helperText,
   onChange,
   ...props
-}) => {
+}: ControlledMultiSelectProps<T>) => {
   const {
     field,
     fieldState: { error },
-  } = useController({
+  } = useController<T>({
     name,
     control,
     shouldUnregister: true,
     rules: {
       required: required ? 'This field is required' : false,
       ...rules,
-    },
+    } as RegisterOptions<T, Path<T>>,
   });
 
   const isGrouped = !!options[0]?.groupLabel;
