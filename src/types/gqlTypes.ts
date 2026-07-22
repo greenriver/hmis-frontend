@@ -4298,6 +4298,8 @@ export type GlobalFeatureFlags = {
   bulkVoidEnabled: Scalars['Boolean']['output'];
   /** Whether Coordinated Entry is enabled */
   coordinatedEntryEnabled: Scalars['Boolean']['output'];
+  /** Whether the ESG Funding Report is enabled */
+  esgFundingReportEnabled: Scalars['Boolean']['output'];
   /** Whether an external referral integration is enabled */
   externalReferralsEnabled: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
@@ -42599,6 +42601,7 @@ export type GlobalFeatureFlagFieldsFragment = {
   bulkVoidEnabled: boolean;
   externalReferralsEnabled: boolean;
   mciIdEnabled: boolean;
+  esgFundingReportEnabled: boolean;
 };
 
 export type GetGlobalFeatureFlagsQueryVariables = Exact<{
@@ -42614,6 +42617,7 @@ export type GetGlobalFeatureFlagsQuery = {
     bulkVoidEnabled: boolean;
     externalReferralsEnabled: boolean;
     mciIdEnabled: boolean;
+    esgFundingReportEnabled: boolean;
   };
 };
 
@@ -53844,6 +53848,7 @@ export const GlobalFeatureFlagFieldsFragmentDoc = gql`
     bulkVoidEnabled
     externalReferralsEnabled
     mciIdEnabled
+    esgFundingReportEnabled
   }
 `;
 export const ProjectEnrollmentsHouseholdClientFieldsFragmentDoc = gql`
