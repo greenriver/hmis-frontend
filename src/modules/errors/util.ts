@@ -42,8 +42,22 @@ export type ErrorRenderFn = (
   args?: { attributeOnly?: boolean }
 ) => React.ReactNode;
 
-export type ErrorFilterFn = (error: ValidationError) => boolean;
+export type ErrorFilterFn = (
+  error: ValidationError,
+  index: number,
+  errors: ValidationError[]
+) => boolean;
 export type OnChangeErrorsFn = (errors: ErrorState) => void;
+
+// Opt-in summary filter for one logical validation attached to multiple fields.
+export const isFirstErrorWithFullMessage: ErrorFilterFn = (
+  error,
+  index,
+  errors
+) =>
+  errors.findIndex(
+    (candidate) => candidate.fullMessage === error.fullMessage
+  ) === index;
 
 export const hasAnyValue = (state: ErrorState): boolean =>
   !!state.apolloError || state.errors.length > 0 || state.warnings.length > 0;

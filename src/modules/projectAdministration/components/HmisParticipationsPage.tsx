@@ -6,6 +6,7 @@ import { useCallback, useMemo } from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { isFirstErrorWithFullMessage } from '@/modules/errors/util';
 import { useViewEditRecordDialogs } from '@/modules/form/hooks/useViewEditRecordDialogs';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { HudRecordMetadataHistoryColumn } from '@/modules/hmis/components/HudRecordMetadata';
@@ -76,6 +77,7 @@ const HmisParticipationsPage = () => {
       maxWidth: 'sm',
       localConstants,
       projectId: project.id,
+      errorFilter: isFirstErrorWithFullMessage,
     });
 
   return (
