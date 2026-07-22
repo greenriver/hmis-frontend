@@ -5170,6 +5170,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'esgFundingReportEnabled',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'externalReferralsEnabled',
         type: {
           kind: 'NON_NULL',
