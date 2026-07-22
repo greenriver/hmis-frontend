@@ -183,12 +183,8 @@ export function resetLocalSession() {
 }
 
 export async function logout() {
-  // Under JWT/SSO, Hmis::Idp::SessionsController#destroy explicitly skips CSRF
-  // verification (and Hmis::BaseController#valid_request_origin? always passes
-  // for JWT), so the same CSRF'd DELETE used for Devise/Okta works here too. The
-  // backend responds with JSON containing a redirect_url to the IdP end-session
-  // endpoint under JWT, which logoutUser follows; under Devise/Okta it responds
-  // with a plain success body, also handled there.
+  // Same CSRF'd DELETE for JWT/SSO and Devise/Okta; response shape differs (redirect_url vs
+  // plain success), handled in logoutUser.
   const response = await fetchWithCsrf('/hmis/logout', {
     method: 'DELETE',
   });

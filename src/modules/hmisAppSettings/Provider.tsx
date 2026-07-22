@@ -17,7 +17,6 @@ import { useSessionTrackingObserver } from '@/modules/auth/hooks/useSessionTrack
 import { fetchHmisAppSettings } from '@/modules/hmisAppSettings/api';
 import { HmisAppSettingsContext } from '@/modules/hmisAppSettings/Context';
 import { HmisAppSettings } from '@/modules/hmisAppSettings/types';
-import { resolveAuthMethod } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { HttpError } from '@/utils/HttpError';
 import { reloadWindow } from '@/utils/location';
 import { getCurrentSessionId } from '@/utils/sessionId';
@@ -143,12 +142,6 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
       });
     };
 
-    // app_settings is a public endpoint: it returns `authMethod` even for an
-    // unauthenticated request. That fetched value is the single runtime source of
-    // truth for the auth method - a build-time env var can't vary per installation
-    // across shared compiled assets. Load it (unless we already trust cached
-    // settings) and let it decide how to treat an unauthenticated currentUser
-    // response below.
     const loadSettings = async (): Promise<HmisAppSettings> => {
       const cached = cachedUser ? storage.getAppSettings() : undefined;
       const settings = cached ?? (await fetchHmisAppSettings());
@@ -160,33 +153,15 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
 
     (async () => {
       try {
-        // Kick the currentUser fetch off alongside settings so we don't add a
-        // round-trip, but capture any rejection instead of failing fast: we can
-        // only interpret a 401 once app_settings tells us the auth method.
-        let userError: Error | undefined;
+        // Kick the currentUser fetch off alongside settings so we don't add a round-trip.
         const userPromise: Promise<HmisUser | undefined> = cachedUser
           ? Promise.resolve(cachedUser)
-          : fetchCurrentUser().catch((err: Error) => {
-              userError = err;
-              return undefined;
-            });
+          : fetchCurrentUser();
 
-        const settings = await loadSettings();
-        const isJwtAuth = resolveAuthMethod(settings.authMethod) === 'jwt';
+        await loadSettings();
 
         const fetchedUser = await userPromise;
-        if (userError) {
-          // JWT/SSO: an unauthenticated 401 is expected - leave the user unset so
-          // PublicLanding renders. Any other error (and any error under
-          // Devise/Okta) propagates to the reload-once-on-401 recovery below.
-          if (
-            !(isJwtAuth && (userError as HttpError | undefined)?.status === 401)
-          ) {
-            throw userError;
-          }
-        } else if (fetchedUser) {
-          setUser(fetchedUser);
-        }
+        if (fetchedUser) setUser(fetchedUser);
       } catch (err) {
         setError(err as Error);
       } finally {
