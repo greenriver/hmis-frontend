@@ -4,5 +4,4 @@ fragment GlobalFeatureFlagFields on GlobalFeatureFlags {
   bulkVoidEnabled
   externalReferralsEnabled
   mciIdEnabled
-  esgFundingReportEnabled
 }

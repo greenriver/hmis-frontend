@@ -31429,22 +31429,6 @@
             "deprecationReason": null
           },
           {
-            "name": "esgFundingReportEnabled",
-            "description": "Whether the ESG Funding Report is enabled",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "externalReferralsEnabled",
             "description": "Whether an external referral integration is enabled",
             "args": [],
