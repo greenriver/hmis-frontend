@@ -31,7 +31,6 @@ import {
   HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
-import useHasRefetched from '@/hooks/useHasRefetched';
 import {
   HouseholdAssessmentFormAction,
   HouseholdAssessmentFormState,
@@ -108,12 +107,21 @@ const HouseholdAssessments: React.FC<Props> = ({
       role,
       householdId: enrollment.householdId,
     });
-  const [currentTab, setCurrentTab] = useState<string | undefined>('1');
+
+  // Initialize the tab from the URL hash. Read window.location.hash
+  // directly (rather than useLocation().hash) because tab navigation writes the
+  // hash via the separate data router (router.navigate), which does not notify
+  // the BrowserRouter's location context — leaving useLocation().hash stale.
+  const [currentTab, setCurrentTab] = useState<string | undefined>(() => {
+    const hashString = window.location.hash.replace('#', '');
+    const hashNum = hashString ? parseInt(hashString) : -1;
+    const isValid =
+      hashString === 'summary' || (isFinite(hashNum) && hashNum >= 0);
+    return isValid ? hashString : '1';
+  });
   const [nextTab, setNextTab] = useState<string>();
 
   const [tabs, setTabs] = useState<TabDefinition[]>([]);
-
-  const hasRefetched = useHasRefetched(fetchAssessmentsStatus.networkStatus);
 
   const readOnlyView = !enrollment.access.canEditEnrollments;
 
@@ -175,23 +183,6 @@ const HouseholdAssessments: React.FC<Props> = ({
       return newTabs;
     });
   }, [householdMembers, assessmentByEnrollmentId, role, readOnlyView]);
-
-  const { hash } = useLocation();
-
-  useEffect(() => {
-    if (hasRefetched) return;
-    const hashString = hash.replace('#', '');
-    const hashNum = hashString ? parseInt(hashString) : -1;
-    const isValid =
-      hashString === 'summary' ||
-      (isFinite(hashNum) && hashNum >= 0 && hashNum <= tabs.length);
-
-    if (isValid) {
-      setCurrentTab(hashString);
-    } else {
-      setCurrentTab('1');
-    }
-  }, [hasRefetched, hash, tabs.length]);
 
   const { pathname } = useLocation();
 
