@@ -622,6 +622,14 @@ export type CeCandidateEnrollmentsArgs = {
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type CeCandidatePoolSummary = {
+  __typename?: 'CeCandidatePoolSummary';
+  /** Active pools that have never completed a full generation */
+  neverFullyGeneratedCount: Scalars['Int']['output'];
+  /** Number of active CE candidate pools */
+  totalCount: Scalars['Int']['output'];
+};
+
 export type CeCandidatesPaginated = {
   __typename?: 'CeCandidatesPaginated';
   hasMoreAfter: Scalars['Boolean']['output'];
@@ -946,6 +954,12 @@ export type CeOpportunity = {
   active: Scalars['Boolean']['output'];
   candidateLookup?: Maybe<CeCandidate>;
   candidates: CeCandidatesPaginated;
+  /**
+   * When this unit's eligible client list last completed a full generation against
+   * all destination clients. Null means it has never finished first-time setup.
+   */
+  candidatesFullyGeneratedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  /** When this unit's eligible client list was last updated by any processing (full refresh or individual client) */
   candidatesGeneratedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   categories: Array<Scalars['String']['output']>;
   dateAvailable: Scalars['ISO8601Date']['output'];
@@ -6951,6 +6965,8 @@ export type Query = {
   assessment?: Maybe<Assessment>;
   /** Get the correct Form Definition to use for an assessment, by Role or FormDefinition ID */
   assessmentFormDefinition?: Maybe<FormDefinition>;
+  /** Generation and refresh status for active CE candidate pools */
+  ceCandidatePoolSummary: CeCandidatePoolSummary;
   ceClient?: Maybe<CeClient>;
   /** Clients who belong to at least one CE candidate pool */
   ceClients: CeClientsPaginated;
@@ -7054,6 +7070,10 @@ export type QueryAssessmentFormDefinitionArgs = {
   id?: InputMaybe<Scalars['ID']['input']>;
   projectId: Scalars['ID']['input'];
   role?: InputMaybe<AssessmentRole>;
+};
+
+export type QueryCeCandidatePoolSummaryArgs = {
+  projectGroupId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type QueryCeClientArgs = {
@@ -17847,6 +17867,7 @@ export type CeOpportunitySummaryFieldsFragment = {
 export type CeOpportunityFieldsFragment = {
   __typename?: 'CeOpportunity';
   candidatesGeneratedAt?: string | null;
+  candidatesFullyGeneratedAt?: string | null;
   id: string;
   name: string;
   status: CeOpportunityStatus;
@@ -17880,6 +17901,11 @@ export type CeOpportunityFieldsFragment = {
     } | null;
     unitGroup?: { __typename?: 'UnitGroup'; id: string; name: string } | null;
   } | null;
+};
+
+export type CeCandidatePoolSummaryFieldsFragment = {
+  __typename?: 'CeCandidatePoolSummary';
+  neverFullyGeneratedCount: number;
 };
 
 export type CeOpportunityAdminFieldsFragment = {
@@ -20675,6 +20701,7 @@ export type SubmitCeReferralStepMutation = {
       opportunity?: {
         __typename?: 'CeOpportunity';
         candidatesGeneratedAt?: string | null;
+        candidatesFullyGeneratedAt?: string | null;
         id: string;
         name: string;
         status: CeOpportunityStatus;
@@ -22535,6 +22562,18 @@ export type GetCeClientEligibleUnitGroupsQuery = {
       }>;
     };
   } | null;
+};
+
+export type GetCeCandidatePoolSummaryQueryVariables = Exact<{
+  projectGroupId?: InputMaybe<Scalars['ID']['input']>;
+}>;
+
+export type GetCeCandidatePoolSummaryQuery = {
+  __typename?: 'Query';
+  ceCandidatePoolSummary: {
+    __typename?: 'CeCandidatePoolSummary';
+    neverFullyGeneratedCount: number;
+  };
 };
 
 export type CeMatchFieldDetailsFragment = {
@@ -50272,6 +50311,7 @@ export type UnitDetailFieldsFragment = {
   latestOpportunity?: {
     __typename?: 'CeOpportunity';
     candidatesGeneratedAt?: string | null;
+    candidatesFullyGeneratedAt?: string | null;
     id: string;
     name: string;
     status: CeOpportunityStatus;
@@ -50692,6 +50732,7 @@ export type GetUnitQuery = {
     latestOpportunity?: {
       __typename?: 'CeOpportunity';
       candidatesGeneratedAt?: string | null;
+      candidatesFullyGeneratedAt?: string | null;
       id: string;
       name: string;
       status: CeOpportunityStatus;
@@ -52336,6 +52377,11 @@ export const UserAuditEventFieldsFragmentDoc = gql`
       id
       name
     }
+  }
+`;
+export const CeCandidatePoolSummaryFieldsFragmentDoc = gql`
+  fragment CeCandidatePoolSummaryFields on CeCandidatePoolSummary {
+    neverFullyGeneratedCount
   }
 `;
 export const CeOpportunitySummaryFieldsFragmentDoc = gql`
@@ -54617,6 +54663,7 @@ export const CeOpportunityFieldsFragmentDoc = gql`
   fragment CeOpportunityFields on CeOpportunity {
     ...CeOpportunitySummaryFields
     candidatesGeneratedAt
+    candidatesFullyGeneratedAt
     referral {
       ...CeReferralSummaryFields
     }
@@ -59008,6 +59055,106 @@ export type GetCeClientEligibleUnitGroupsSuspenseQueryHookResult = ReturnType<
 export type GetCeClientEligibleUnitGroupsQueryResult = Apollo.QueryResult<
   GetCeClientEligibleUnitGroupsQuery,
   GetCeClientEligibleUnitGroupsQueryVariables
+>;
+export const GetCeCandidatePoolSummaryDocument = gql`
+  query GetCeCandidatePoolSummary($projectGroupId: ID) {
+    ceCandidatePoolSummary(projectGroupId: $projectGroupId) {
+      ...CeCandidatePoolSummaryFields
+    }
+  }
+  ${CeCandidatePoolSummaryFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetCeCandidatePoolSummaryQuery__
+ *
+ * To run a query within a React component, call `useGetCeCandidatePoolSummaryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCeCandidatePoolSummaryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCeCandidatePoolSummaryQuery({
+ *   variables: {
+ *      projectGroupId: // value for 'projectGroupId'
+ *   },
+ * });
+ */
+export function useGetCeCandidatePoolSummaryQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetCeCandidatePoolSummaryQuery,
+    GetCeCandidatePoolSummaryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetCeCandidatePoolSummaryQuery,
+    GetCeCandidatePoolSummaryQueryVariables
+  >(GetCeCandidatePoolSummaryDocument, options);
+}
+export function useGetCeCandidatePoolSummaryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCeCandidatePoolSummaryQuery,
+    GetCeCandidatePoolSummaryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetCeCandidatePoolSummaryQuery,
+    GetCeCandidatePoolSummaryQueryVariables
+  >(GetCeCandidatePoolSummaryDocument, options);
+}
+// @ts-ignore
+export function useGetCeCandidatePoolSummarySuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetCeCandidatePoolSummaryQuery,
+    GetCeCandidatePoolSummaryQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  GetCeCandidatePoolSummaryQuery,
+  GetCeCandidatePoolSummaryQueryVariables
+>;
+export function useGetCeCandidatePoolSummarySuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeCandidatePoolSummaryQuery,
+        GetCeCandidatePoolSummaryQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetCeCandidatePoolSummaryQuery | undefined,
+  GetCeCandidatePoolSummaryQueryVariables
+>;
+export function useGetCeCandidatePoolSummarySuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeCandidatePoolSummaryQuery,
+        GetCeCandidatePoolSummaryQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetCeCandidatePoolSummaryQuery,
+    GetCeCandidatePoolSummaryQueryVariables
+  >(GetCeCandidatePoolSummaryDocument, options);
+}
+export type GetCeCandidatePoolSummaryQueryHookResult = ReturnType<
+  typeof useGetCeCandidatePoolSummaryQuery
+>;
+export type GetCeCandidatePoolSummaryLazyQueryHookResult = ReturnType<
+  typeof useGetCeCandidatePoolSummaryLazyQuery
+>;
+export type GetCeCandidatePoolSummarySuspenseQueryHookResult = ReturnType<
+  typeof useGetCeCandidatePoolSummarySuspenseQuery
+>;
+export type GetCeCandidatePoolSummaryQueryResult = Apollo.QueryResult<
+  GetCeCandidatePoolSummaryQuery,
+  GetCeCandidatePoolSummaryQueryVariables
 >;
 export const CreateCeMatchRuleDocument = gql`
   mutation CreateCeMatchRule($input: CeMatchRuleInput!, $confirmed: Boolean) {

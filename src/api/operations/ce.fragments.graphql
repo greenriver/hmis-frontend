@@ -23,9 +23,14 @@ fragment CeOpportunitySummaryFields on CeOpportunity {
 fragment CeOpportunityFields on CeOpportunity {
   ...CeOpportunitySummaryFields
   candidatesGeneratedAt
+  candidatesFullyGeneratedAt
   referral {
     ...CeReferralSummaryFields
   }
+}
+
+fragment CeCandidatePoolSummaryFields on CeCandidatePoolSummary {
+  neverFullyGeneratedCount
 }
 
 fragment CeOpportunityAdminFields on CeOpportunity {

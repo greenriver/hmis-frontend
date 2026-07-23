@@ -4195,6 +4195,50 @@
       },
       {
         "kind": "OBJECT",
+        "name": "CeCandidatePoolSummary",
+        "description": null,
+        "isOneOf": null,
+        "fields": [
+          {
+            "name": "neverFullyGeneratedCount",
+            "description": "Active pools that have never completed a full generation",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "totalCount",
+            "description": "Number of active CE candidate pools",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "CeCandidatesPaginated",
         "description": null,
         "isOneOf": null,
@@ -6876,8 +6920,20 @@
             "deprecationReason": null
           },
           {
+            "name": "candidatesFullyGeneratedAt",
+            "description": "When this unit's eligible client list last completed a full generation against\nall destination clients. Null means it has never finished first-time setup.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ISO8601DateTime",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "candidatesGeneratedAt",
-            "description": null,
+            "description": "When this unit's eligible client list was last updated by any processing (full refresh or individual client)",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -46821,6 +46877,35 @@
               "kind": "OBJECT",
               "name": "FormDefinition",
               "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ceCandidatePoolSummary",
+            "description": "Generation and refresh status for active CE candidate pools",
+            "args": [
+              {
+                "name": "projectGroupId",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "CeCandidatePoolSummary",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null

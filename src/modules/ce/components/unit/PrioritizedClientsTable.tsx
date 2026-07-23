@@ -51,7 +51,8 @@ const PrioritizedClientsTable: React.FC<Props> = ({
   unitGroupId,
 }) => {
   const { project } = useProjectDashboardContext();
-  const { status } = opportunity;
+  const { status, candidatesGeneratedAt, candidatesFullyGeneratedAt } =
+    opportunity;
 
   // Fetch column configuration
   const {
@@ -115,18 +116,16 @@ const PrioritizedClientsTable: React.FC<Props> = ({
 
   const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
 
-  // If CandidatePool has not been generated yet (due to change in eligibility or prioritization requirements), show a message
-  if (!opportunity.candidatesGeneratedAt) {
+  if (!candidatesFullyGeneratedAt) {
     return (
       <Alert severity='info'>
-        The eligible client list for this unit has not been generated yet.
-        Please check back later.
+        Eligible clients are still being calculated for this unit. Please check
+        back later.
       </Alert>
     );
   }
-  const candidatesGeneratedAt = parseHmisDateString(
-    opportunity.candidatesGeneratedAt
-  );
+
+  const candidatesGeneratedAtDate = parseHmisDateString(candidatesGeneratedAt);
 
   if (error) throw error;
   if (loading && !tableConfigLookup) return <Loading />;
@@ -136,12 +135,12 @@ const PrioritizedClientsTable: React.FC<Props> = ({
       <CommonCard title='Eligible Clients'>
         This table lists clients who meet the eligibility requirements for this
         unit. Clients are sorted based on their priority score.
-        {candidatesGeneratedAt && (
+        {candidatesGeneratedAtDate && (
           <>
             {' '}
             The eligible client list was last updated{' '}
-            {formatRelativeDateTime(candidatesGeneratedAt)} (
-            {parseAndFormatDateTime(opportunity.candidatesGeneratedAt)}).
+            {formatRelativeDateTime(candidatesGeneratedAtDate)} (
+            {parseAndFormatDateTime(candidatesGeneratedAt || '')}).
           </>
         )}
         {/* May want to add additional explainer text about this list being deduplicated (i.e. it contains destination clients) */}
