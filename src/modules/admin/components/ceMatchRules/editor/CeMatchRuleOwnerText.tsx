@@ -17,6 +17,9 @@ const CeMatchRuleOwnerText: React.FC<Props> = ({
   return (
     <Typography variant='body2'>
       This eligibility rule {ruleId ? 'applies' : 'will apply'} to all units
+      {ownerType === CeMatchRuleOwnerType.DataSource && (
+        <> unless constrained further by funder or project type</>
+      )}
       {ownerType !== CeMatchRuleOwnerType.DataSource && (
         <>
           {' '}
