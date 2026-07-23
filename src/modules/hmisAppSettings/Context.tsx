@@ -3,4 +3,5 @@ import { createContext } from 'react';
 import { HmisAppSettings } from './types';
 
 const initialState: HmisAppSettings = {};
-export const HmisAppSettingsContext = createContext(initialState);
+export const HmisAppSettingsContext =
+  createContext<HmisAppSettings>(initialState);

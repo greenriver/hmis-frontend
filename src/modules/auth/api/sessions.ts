@@ -5,9 +5,16 @@ import {
 } from '@/modules/auth/api/constants';
 import * as storage from '@/modules/auth/api/storage';
 
+import { resolveAuthMethod } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import apolloClient from '@/providers/apolloClient';
 import { getCsrfToken } from '@/utils/csrf';
 import { HttpError } from '@/utils/HttpError';
+
+// Non-hook auth-method lookup for use outside React. Reads the persisted app
+// settings (kept in sync by HmisAppSettingsProvider) and applies the same
+// fallback chain as useAuthMethod.
+const getAuthMethod = (): 'devise' | 'jwt' =>
+  resolveAuthMethod(storage.getAppSettings()?.authMethod);
 
 export interface HmisUser {
   id: string;
@@ -16,6 +23,7 @@ export interface HmisUser {
   phone?: string;
   sessionDuration: number;
   impersonating: boolean;
+  primaryIdp?: string;
 }
 interface HmisError {
   type: string;
@@ -85,6 +93,10 @@ export async function fetchCurrentUser(): Promise<HmisUser | undefined> {
     const user: HmisUser | undefined = await response.json();
     if (user?.id) {
       storage.setUser(user);
+      // Store primaryIdp for bypassing IDP picker on next sign-in
+      if (user.primaryIdp) {
+        storage.setLastConnectorId(user.primaryIdp);
+      }
       return user;
     }
     storage.clearUser();
@@ -115,9 +127,22 @@ export type LoginParams = {
 };
 
 export async function sendSessionKeepalive() {
-  const response = await fetchWithCsrf('/hmis/session_keepalive', {
-    method: 'POST',
-  });
+  // In JWT/SSO mode the request passes through oauth2-proxy, which rejects the
+  // Devise CSRF POST; a plain credentialed GET keeps the id_token cookie alive.
+  // Preserve the original POST+CSRF behavior for the Devise/Okta session so the
+  // current auth flow is unchanged.
+  const response =
+    getAuthMethod() === 'jwt'
+      ? await fetch('/hmis/session_keepalive', {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            Accept: 'application/json',
+          },
+        })
+      : await fetchWithCsrf('/hmis/session_keepalive', {
+          method: 'POST',
+        });
   trackSessionFromResponse(response);
   return response;
 }
@@ -158,6 +183,8 @@ export function resetLocalSession() {
 }
 
 export async function logout() {
+  // Same CSRF'd DELETE for JWT/SSO and Devise/Okta; response shape differs (redirect_url vs
+  // plain success), handled in logoutUser.
   const response = await fetchWithCsrf('/hmis/logout', {
     method: 'DELETE',
   });
