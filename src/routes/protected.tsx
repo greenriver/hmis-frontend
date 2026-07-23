@@ -63,6 +63,7 @@ import ClientCaseNotes from '@/modules/caseNotes/components/ClientCaseNotes';
 import ClientCaseNotesPrintPage from '@/modules/caseNotes/components/ClientCaseNotesPrintPage';
 import EnrollmentCaseNotes from '@/modules/caseNotes/components/EnrollmentCaseNotes';
 
+import AdminBulkVoidPage from '@/modules/ce/components/admin/AdminBulkVoidPage';
 import ClientReferralsPage from '@/modules/ce/components/client/ClientReferralsPage';
 import AdminDefaultContactsPage from '@/modules/ce/components/defaultContacts/AdminDefaultContactsPage';
 
@@ -933,6 +934,17 @@ export const protectedRoutes: RouteNode[] = [
                 otherwise={<NotFound />}
               >
                 <AdminDefaultContactsPage />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.BULK_VOID,
+            element: (
+              <RootPermissionsFilter
+                permissions='canBulkVoidCeClients'
+                otherwise={<NotFound />}
+              >
+                <AdminBulkVoidPage />
               </RootPermissionsFilter>
             ),
           },

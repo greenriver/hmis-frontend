@@ -1,6 +1,6 @@
-query GetCeClientsGlobalTableConfig {
+query GetCeClientsTableConfig($projectGroupId: ID) {
   tableConfigLookup {
-    ceClientsGlobalConfig {
+    ceClientsConfig(projectGroupId: $projectGroupId) {
       columns {
         ...TableColumnConfigFields
       }
