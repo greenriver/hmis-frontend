@@ -52,13 +52,11 @@ const useTablePagination = ({
     [defaultPageSize, pageParam, pageSizeParam]
   );
 
-  // Populate missing params on first load so refresh/share links include the active pagination state.
+  // Use URL values when present and fall back to table defaults without seeding
+  // missing params on mount. Avoiding a mount-time URL write prevents this hook
+  // from overwriting params initialized by other table state, such as optional columns.
   const [paginationParams, setPaginationParams] = useSearchParamsState({
     paramsDefinition,
-    initial: {
-      [pageParam]: 1,
-      [pageSizeParam]: defaultPageSize,
-    },
   });
 
   // Convert the human-readable 1-indexed URL page into the 0-indexed value used by table components.
