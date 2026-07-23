@@ -119,8 +119,8 @@ const PrioritizedClientsTable: React.FC<Props> = ({
   if (!candidatesFullyGeneratedAt) {
     return (
       <Alert severity='info'>
-        The eligible client list is still being set up, either because it is
-        new, or because rules recently changed. Please check back later.
+        Eligible clients are still being calculated for this unit. Please check
+        back later.
       </Alert>
     );
   }

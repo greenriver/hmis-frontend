@@ -148,8 +148,8 @@ const AdminCeClientsTable: React.FC<Props> = ({ projectGroupId }) => {
     <Stack spacing={2}>
       {neverFullyGeneratedCount > 0 && (
         <Alert severity='info'>
-          Eligible client lists are still being processed; not all eligible
-          clients may be shown.
+          Eligible clients are still being calculated for some projects. Client
+          list may be incomplete.
         </Alert>
       )}
       <CommonSearchInput
