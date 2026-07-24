@@ -33,18 +33,22 @@ const useAssessmentFormDefinition = ({
   // optimized but we may need to read/write directly from the cache based on the `cacheKey`
   // for the definition, which is a string formatted like: <id|projectId|date>
 
-  const { data, loading, error } = useGetAssessmentFormDefinitionQuery({
-    variables: {
-      projectId,
-      id: formDefinitionId,
-      role,
-      assessmentDate,
-    },
-  });
+  const { data, previousData, loading, error } =
+    useGetAssessmentFormDefinitionQuery({
+      variables: {
+        projectId,
+        id: formDefinitionId,
+        role,
+        assessmentDate,
+      },
+    });
 
   const { formDefinition, itemMap } = useMemo(() => {
-    // Find the definition that we actually have
-    const formDefinition = data?.assessmentFormDefinition;
+    // Find the definition from the fetched data OR from the previous data, if this query has already run.
+    // This guards against totally remounting consumers when there's a refetch (e.g. assessmentDate updates after submit).
+    const formDefinition = data
+      ? data.assessmentFormDefinition
+      : previousData?.assessmentFormDefinition;
     if (!formDefinition) return {};
 
     return {
@@ -52,7 +56,7 @@ const useAssessmentFormDefinition = ({
       // Generate ItemMap for convenience
       itemMap: getItemMap(formDefinition.definition, false),
     };
-  }, [data]);
+  }, [data, previousData]);
 
   if (error) throw error;
 
