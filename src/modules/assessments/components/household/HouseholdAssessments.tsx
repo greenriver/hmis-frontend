@@ -184,8 +184,8 @@ const HouseholdAssessments: React.FC<Props> = ({
     });
   }, [householdMembers, assessmentByEnrollmentId, role, readOnlyView]);
 
-  // Once tabs are loaded, clamp an out-of-range tab (e.g. from a stale hash) back
-  // to the first tab.
+  // When tabs or currentTab changes, clamp an out-of-range tab (e.g. from a stale hash)
+  // back to tab 1.
   useEffect(() => {
     if (tabs.length === 0) return;
     if (currentTab === SUMMARY_TAB_ID) return;
