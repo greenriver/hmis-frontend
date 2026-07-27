@@ -12,7 +12,6 @@ interface Props {
   control: Control<CeMatchRuleFormValues>;
   clausePath: ClausePath;
   fields: CeMatchFieldDetailsFragment[];
-  fieldLabel: string;
   disabled: boolean;
   helperText?: string;
   customAssessmentFieldsLoading: boolean;
@@ -27,7 +26,6 @@ const CeMatchClauseFieldSelect: React.FC<Props> = ({
   control,
   clausePath,
   fields,
-  fieldLabel,
   disabled,
   helperText,
   customAssessmentFieldsLoading,
@@ -50,7 +48,7 @@ const CeMatchClauseFieldSelect: React.FC<Props> = ({
     <ControlledSelect
       name={`${clausePath}.field`}
       control={control}
-      label={getRequiredLabel(fieldLabel, true)}
+      label={getRequiredLabel('Field', true)}
       placeholder='Select field'
       required
       options={fieldOptions}
