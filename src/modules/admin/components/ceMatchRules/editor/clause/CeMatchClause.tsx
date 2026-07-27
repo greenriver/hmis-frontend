@@ -10,7 +10,6 @@ import CeMatchClauseComparatorSelect, {
 import CeMatchClauseFieldSelect from './CeMatchClauseFieldSelect';
 import CeMatchClauseFieldSourceSelect from './CeMatchClauseFieldSourceSelect';
 import CeMatchClauseValueInput from './CeMatchClauseValueInput';
-import { HmisEnums } from '@/types/gqlEnums';
 import {
   CeMatchCustomAssessmentFormFieldsFragment,
   CeMatchFieldDetailsFragment,
@@ -132,7 +131,7 @@ const CeMatchClause: React.FC<Props> = ({
   return (
     <Stack gap={2}>
       <Grid container spacing={2} alignItems='flex-start'>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={4}>
           <CeMatchClauseFieldSourceSelect
             clausePath={clausePath}
             control={control}
@@ -141,7 +140,7 @@ const CeMatchClause: React.FC<Props> = ({
           />
         </Grid>
         {source === CeMatchRuleFieldSource.CustomDataElement && (
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={8}>
             <CeMatchClauseAssessmentSelect
               clausePath={clausePath}
               control={control}
@@ -157,11 +156,6 @@ const CeMatchClause: React.FC<Props> = ({
             clausePath={clausePath}
             control={control}
             fields={fields}
-            fieldLabel={
-              source
-                ? `${HmisEnums.CeMatchRuleFieldSource[source]} Field`
-                : 'Field'
-            }
             disabled={fieldSelectDisabled}
             helperText={fieldSelectHelperText}
             customAssessmentFieldsLoading={customAssessmentFieldsLoading}
@@ -174,7 +168,7 @@ const CeMatchClause: React.FC<Props> = ({
             }}
           />
         </Grid>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={isNullCheck ? 8 : 4}>
           <CeMatchClauseComparatorSelect
             clausePath={clausePath}
             control={control}
