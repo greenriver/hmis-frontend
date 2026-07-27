@@ -2,7 +2,6 @@ import { DocumentNode } from '@apollo/client';
 import { Breakpoint, Button } from '@mui/material';
 import { useCallback, useMemo, useState } from 'react';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
-import { ErrorFilterFn } from '@/modules/errors/util';
 import { DynamicFormHandlerArgs } from '@/modules/form/hooks/useDynamicFormHandlersForRecord';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import useViewDialog from '@/modules/form/hooks/useViewDialog';
@@ -20,7 +19,6 @@ interface Args<T> {
   localConstants?: LocalConstants;
   maxWidth?: Breakpoint | false;
   projectId?: string; // Project context for fetching form definition
-  errorFilter?: ErrorFilterFn;
 }
 
 /**
@@ -39,7 +37,6 @@ export function useViewEditRecordDialogs<T extends SubmitFormAllowedTypes>({
   localConstants,
   projectId,
   maxWidth = 'md',
-  errorFilter,
 }: Args<T>) {
   const [viewingRecord, setViewingRecord] = useState<T | undefined>();
 
@@ -63,7 +60,6 @@ export function useViewEditRecordDialogs<T extends SubmitFormAllowedTypes>({
     record: viewingRecord,
     localConstants,
     projectId,
-    errorFilter,
     onClose: () => setViewingRecord(undefined),
   });
 
