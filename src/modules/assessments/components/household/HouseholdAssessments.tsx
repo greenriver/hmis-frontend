@@ -116,7 +116,7 @@ const HouseholdAssessments: React.FC<Props> = ({
     const hashString = window.location.hash.replace('#', '');
     const hashNum = hashString ? parseInt(hashString) : -1;
     const isValid =
-      hashString === 'summary' || (isFinite(hashNum) && hashNum >= 0);
+      hashString === SUMMARY_TAB_ID || (isFinite(hashNum) && hashNum >= 0);
     return isValid ? hashString : '1';
   });
   const [nextTab, setNextTab] = useState<string>();

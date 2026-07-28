@@ -44,8 +44,11 @@ const useAssessmentFormDefinition = ({
     });
 
   const { formDefinition, itemMap } = useMemo(() => {
-    // Find the definition from the fetched data OR from the previous data, if this query has already run.
-    // This guards against totally remounting consumers when there's a refetch (e.g. assessmentDate updates after submit).
+    // Prefer previousData while refetching so consumers (e.g. IntakeAssessmentPage) keep
+    // formDefinition and do not unmount HouseholdAssessments. Apollo clears `data` when
+    // query variables change — e.g. assessmentDate when exitDate appears after submit.
+    // assessmentDate is part of the query (and Apollo cache key) because the backend applies
+    // date-based funder rules, so the same form can return different questions by date.
     const formDefinition = data
       ? data.assessmentFormDefinition
       : previousData?.assessmentFormDefinition;
