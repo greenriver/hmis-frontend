@@ -80,9 +80,9 @@ const CeMatchStructuredExpressionBuilder: React.FC<Props> = ({
       {validationError && <Alert severity='error'>{validationError}</Alert>}
       {fields.length > 1 && (
         <Stack>
-          <Stack direction='row' alignItems='center' gap={1} flexWrap='wrap'>
+          <Stack direction='column' gap={1}>
             <Typography variant='body2' fontWeight={600}>
-              Match:
+              Applicants must match:
             </Typography>
             <Controller
               control={control}
@@ -101,13 +101,6 @@ const CeMatchStructuredExpressionBuilder: React.FC<Props> = ({
               )}
             />
           </Stack>
-          <Typography variant='body2'>
-            Applicants must meet{' '}
-            {operator === CeMatchRuleBooleanOperator.And
-              ? 'every'
-              : 'at least one'}{' '}
-            requirement below.
-          </Typography>
         </Stack>
       )}
       {loading && <Loading />}
@@ -134,13 +127,18 @@ const CeMatchStructuredExpressionBuilder: React.FC<Props> = ({
                   borderColor: 'grayscale.50',
                 }}
               >
-                <CeMatchClause
-                  control={control}
-                  setValue={setValue}
-                  index={index}
-                  clientItems={clientItems}
-                  customAssessmentForms={customAssessmentForms}
-                />
+                <Stack direction='column' gap={2}>
+                  <Typography variant='body1' component='h3'>
+                    Requirement
+                  </Typography>
+                  <CeMatchClause
+                    control={control}
+                    setValue={setValue}
+                    index={index}
+                    clientItems={clientItems}
+                    customAssessmentForms={customAssessmentForms}
+                  />
+                </Stack>
               </RemovableCard>
             </Fragment>
           ))}
