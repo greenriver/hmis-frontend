@@ -33,18 +33,25 @@ const useAssessmentFormDefinition = ({
   // optimized but we may need to read/write directly from the cache based on the `cacheKey`
   // for the definition, which is a string formatted like: <id|projectId|date>
 
-  const { data, loading, error } = useGetAssessmentFormDefinitionQuery({
-    variables: {
-      projectId,
-      id: formDefinitionId,
-      role,
-      assessmentDate,
-    },
-  });
+  const { data, previousData, loading, error } =
+    useGetAssessmentFormDefinitionQuery({
+      variables: {
+        projectId,
+        id: formDefinitionId,
+        role,
+        assessmentDate,
+      },
+    });
 
   const { formDefinition, itemMap } = useMemo(() => {
-    // Find the definition that we actually have
-    const formDefinition = data?.assessmentFormDefinition;
+    // Prefer previousData while refetching so consumers (e.g. IntakeAssessmentPage) keep
+    // formDefinition and do not unmount HouseholdAssessments. Apollo clears `data` when
+    // query variables change — e.g. assessmentDate when exitDate appears after submit.
+    // assessmentDate is part of the query (and Apollo cache key) because the backend applies
+    // date-based funder rules, so the same form can return different questions by date.
+    const formDefinition = data
+      ? data.assessmentFormDefinition
+      : previousData?.assessmentFormDefinition;
     if (!formDefinition) return {};
 
     return {
@@ -52,7 +59,7 @@ const useAssessmentFormDefinition = ({
       // Generate ItemMap for convenience
       itemMap: getItemMap(formDefinition.definition, false),
     };
-  }, [data]);
+  }, [data, previousData]);
 
   if (error) throw error;
 
