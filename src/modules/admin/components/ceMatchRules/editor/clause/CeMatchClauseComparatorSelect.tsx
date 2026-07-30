@@ -38,6 +38,10 @@ const comparatorLabel = (comparator: CeMatchRuleComparator) => {
       return 'Includes';
     case CeMatchRuleComparator.Excludes:
       return 'Excludes';
+    case CeMatchRuleComparator.IsNotNull:
+      return 'Has a value';
+    case CeMatchRuleComparator.IsNull:
+      return 'Does not have a value';
     default:
       return comparator;
   }
@@ -49,13 +53,17 @@ const comparatorOptionsForField = (
   const comparators = new Set<CeMatchRuleComparator>();
 
   if (field?.multiple) {
-    // For a multiple value (array), only allow Includes/Excludes
+    // For a multiple value (array), only allow Includes/Excludes.
+    // Null/Not Null comparisons don't currently work for array CDEs,
+    // since the backend CdeFieldMap uses a default of [], not null, when no values are present
     comparators.add(CeMatchRuleComparator.Includes);
     comparators.add(CeMatchRuleComparator.Excludes);
   } else {
-    // Otherwise, start with Equals/Not Equals
+    // Otherwise, start with Equals/Not Equals/null checks
     comparators.add(CeMatchRuleComparator.Eq);
     comparators.add(CeMatchRuleComparator.NotEq);
+    comparators.add(CeMatchRuleComparator.IsNotNull);
+    comparators.add(CeMatchRuleComparator.IsNull);
 
     // If the field type is comparable (numeric/date/etc), add the comparable operators
     if (field && COMPARABLE_ITEM_TYPES.includes(field.itemType)) {

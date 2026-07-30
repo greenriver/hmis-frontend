@@ -838,6 +838,8 @@ export enum CeMatchRuleComparator {
   Gt = 'GT',
   Gte = 'GTE',
   Includes = 'INCLUDES',
+  IsNotNull = 'IS_NOT_NULL',
+  IsNull = 'IS_NULL',
   Lt = 'LT',
   Lte = 'LTE',
   NotEq = 'NOT_EQ',
@@ -867,10 +869,12 @@ export type CeMatchRuleGroup = {
 
 export type CeMatchRuleInput = {
   expression?: InputMaybe<Scalars['String']['input']>;
+  funders: Array<FundingSource>;
   name?: InputMaybe<Scalars['String']['input']>;
   ownerId?: InputMaybe<Scalars['ID']['input']>;
   ownerType?: InputMaybe<CeMatchRuleOwnerType>;
   priorityRank?: InputMaybe<Scalars['Int']['input']>;
+  projectTypes: Array<ProjectType>;
   ruleType?: InputMaybe<CeMatchRuleType>;
   structuredExpression?: InputMaybe<CeMatchRuleStructuredExpressionInput>;
 };

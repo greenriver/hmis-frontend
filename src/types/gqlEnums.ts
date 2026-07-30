@@ -85,6 +85,8 @@ export const HmisEnums = {
     GT: 'GT',
     GTE: 'GTE',
     INCLUDES: 'INCLUDES',
+    IS_NOT_NULL: 'IS_NOT_NULL',
+    IS_NULL: 'IS_NULL',
     LT: 'LT',
     LTE: 'LTE',
     NOT_EQ: 'NOT_EQ',

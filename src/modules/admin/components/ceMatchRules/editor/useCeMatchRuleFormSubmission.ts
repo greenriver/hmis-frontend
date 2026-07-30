@@ -7,6 +7,7 @@ import {
   partitionValidations,
 } from '@/modules/errors/util';
 import {
+  CeMatchRuleComparator,
   CeMatchRuleDetailsFragment,
   CeMatchRuleInput,
   CeMatchRuleOwnerType,
@@ -16,19 +17,25 @@ import {
   useUpdateCeMatchRuleMutation,
 } from '@/types/gqlTypes';
 
+const NULL_COMPARATORS = new Set<CeMatchRuleComparator>([
+  CeMatchRuleComparator.IsNull,
+  CeMatchRuleComparator.IsNotNull,
+]);
+
 const buildStructuredExpressionInput = ({
   operator,
   clauses,
 }: CeMatchRuleFormValues['structuredExpression']) => ({
   operator,
-  clauses: clauses.map(
-    // Strip out unneeded fields from the draft clause.
-    ({ field, comparator, value }) => ({
-      field,
-      comparator,
-      value,
-    })
-  ),
+  clauses: clauses.map(({ field, comparator, value }) => ({
+    field,
+    comparator,
+    // CeMatchClauseValueInput is not rendered for IS_NULL/IS_NOT_NULL, but we
+    // still coerce here because clauses live inside a useFieldArray, and RHF does not
+    // reliably clear nested field values on unmount when shouldUnregister is true.
+    // (See RHF docs for useFieldArray).
+    value: NULL_COMPARATORS.has(comparator) ? null : value,
+  })),
 });
 
 const buildCreateCeMatchRuleInput = (
@@ -37,6 +44,8 @@ const buildCreateCeMatchRuleInput = (
     mode,
     structuredExpression,
     freeTextExpression,
+    projectTypes,
+    funders,
   }: CeMatchRuleFormValues,
   ownerType?: CeMatchRuleOwnerType,
   ownerId?: string
@@ -46,6 +55,8 @@ const buildCreateCeMatchRuleInput = (
     ownerId,
     ownerType,
     ruleType: CeMatchRuleType.EligibilityRequirement,
+    projectTypes,
+    funders,
   };
 
   if (mode === 'freeText') {
@@ -71,6 +82,8 @@ const buildUpdateCeMatchRuleInput = (
     mode,
     structuredExpression,
     freeTextExpression,
+    projectTypes,
+    funders,
   }: CeMatchRuleFormValues,
   { expressionDirty = false }: BuildUpdateCeMatchRuleInputArgs = {}
 ): CeMatchRuleInput => {
@@ -79,6 +92,8 @@ const buildUpdateCeMatchRuleInput = (
   // does not rewrite equivalent saved expressions or trigger impact preview.
   const input: CeMatchRuleInput = {
     name: name.trim(),
+    projectTypes,
+    funders,
   };
 
   if (!expressionDirty) return input;
@@ -160,7 +175,9 @@ const useCeMatchRuleFormSubmission = ({
         updateCeMatchRule({
           variables: {
             id: ruleId,
-            input: buildUpdateCeMatchRuleInput(values, { expressionDirty }),
+            input: buildUpdateCeMatchRuleInput(values, {
+              expressionDirty,
+            }),
             confirmed,
           },
         });
