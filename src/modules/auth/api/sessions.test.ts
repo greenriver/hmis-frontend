@@ -14,7 +14,7 @@ vi.mock('@/modules/auth/api/storage', () => ({
   clearSessionTacking: vi.fn(),
 }));
 
-import { logout, sendSessionKeepalive } from './sessions';
+import { HmisResponseError, logout, sendSessionKeepalive } from './sessions';
 import * as storage from '@/modules/auth/api/storage';
 import apolloClient from '@/providers/apolloClient';
 
@@ -22,6 +22,9 @@ const getAppSettings = storage.getAppSettings as ReturnType<typeof vi.fn>;
 
 const okResponse = () =>
   ({ ok: true, headers: new Map() }) as unknown as Response;
+
+const errorResponse = (json: () => Promise<any>) =>
+  ({ ok: false, headers: new Map(), json }) as unknown as Response;
 
 describe('session transport by auth method', () => {
   let fetchMock: ReturnType<typeof vi.fn>;
@@ -87,6 +90,40 @@ describe('session transport by auth method', () => {
       // Full resetLocalSession teardown: dropping any of these would leak the
       // prior user's data to the next login on a shared device. The Apollo cache
       // clear is the highest-risk one - it holds fetched client PII/PHI.
+      expect(apolloClient.clearStore).toHaveBeenCalled();
+      expect(storage.clearUser).toHaveBeenCalled();
+      expect(storage.clearAppSettings).toHaveBeenCalled();
+      expect(storage.clearSessionTacking).toHaveBeenCalled();
+    });
+
+    it('throws HmisResponseError when the server refuses the sign-out', async () => {
+      getAppSettings.mockReturnValue({ authMethod: 'jwt' });
+      fetchMock.mockResolvedValue(
+        errorResponse(() =>
+          Promise.resolve({
+            error: { type: 'server_error', message: 'Could not end session' },
+          })
+        )
+      );
+
+      const err = await logout().catch((e) => e);
+      expect(err).toBeInstanceOf(HmisResponseError);
+      expect(err.type).toBe('server_error');
+      expect(err.message).toBe('Could not end session');
+      // The local teardown still has to happen on the failure path.
+      expect(apolloClient.clearStore).toHaveBeenCalled();
+      expect(storage.clearUser).toHaveBeenCalled();
+      expect(storage.clearAppSettings).toHaveBeenCalled();
+      expect(storage.clearSessionTacking).toHaveBeenCalled();
+    });
+
+    it('throws when a failed sign-out has an unparseable body', async () => {
+      getAppSettings.mockReturnValue({ authMethod: 'jwt' });
+      fetchMock.mockResolvedValue(
+        errorResponse(() => Promise.reject(new SyntaxError('Unexpected token')))
+      );
+
+      await expect(logout()).rejects.toThrow();
       expect(apolloClient.clearStore).toHaveBeenCalled();
       expect(storage.clearUser).toHaveBeenCalled();
       expect(storage.clearAppSettings).toHaveBeenCalled();

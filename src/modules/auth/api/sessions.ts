@@ -189,7 +189,14 @@ export async function logout() {
     method: 'DELETE',
   });
   trackSessionFromResponse(response);
+  // Unconditional, before the ok check: the Apollo cache holds client PII/PHI
+  // and should not survive a sign-out attempt on a shared device even when the
+  // server-side session does.
   resetLocalSession();
+
+  if (!response.ok) {
+    return response.json().then(throwMaybeHmisError);
+  }
   return response;
 }
 
