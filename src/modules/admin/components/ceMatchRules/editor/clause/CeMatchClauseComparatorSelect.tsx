@@ -22,26 +22,28 @@ interface Props {
 
 const comparatorLabel = (comparator: CeMatchRuleComparator) => {
   switch (comparator) {
+    // Grammatically these labels should follow "Must", the form element label.
+    // for example "Must Equal", rather than "Must Equals"
     case CeMatchRuleComparator.Eq:
-      return 'Equals';
+      return 'Equal';
     case CeMatchRuleComparator.NotEq:
-      return 'Does not equal';
+      return 'Not equal';
     case CeMatchRuleComparator.Gt:
-      return 'Greater than';
+      return 'Be greater than';
     case CeMatchRuleComparator.Gte:
-      return 'Greater than or equal to';
+      return 'Be greater than or equal to';
     case CeMatchRuleComparator.Lt:
-      return 'Less than';
+      return 'Be less than';
     case CeMatchRuleComparator.Lte:
-      return 'Less than or equal to';
+      return 'Be less than or equal to';
     case CeMatchRuleComparator.Includes:
-      return 'Includes';
+      return 'Include';
     case CeMatchRuleComparator.Excludes:
-      return 'Excludes';
+      return 'Exclude';
     case CeMatchRuleComparator.IsNotNull:
-      return 'Has a value';
+      return 'Have a value';
     case CeMatchRuleComparator.IsNull:
-      return 'Does not have a value';
+      return 'Not have a value';
     default:
       return comparator;
   }
@@ -104,7 +106,7 @@ const CeMatchClauseComparatorSelect: React.FC<Props> = ({
     <ControlledSelect
       name={`${clausePath}.comparator`}
       control={control}
-      label={getRequiredLabel('Comparator', true)}
+      label={getRequiredLabel('Must', true)}
       placeholder='Select'
       required
       options={comparatorOptions}

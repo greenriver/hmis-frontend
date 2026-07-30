@@ -198,3 +198,9 @@ query GetCeClientEligibleUnitGroups(
     }
   }
 }
+
+query GetCeCandidatePoolSummary($projectGroupId: ID) {
+  ceCandidatePoolSummary(projectGroupId: $projectGroupId) {
+    ...CeCandidatePoolSummaryFields
+  }
+}
