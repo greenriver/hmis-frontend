@@ -47119,13 +47119,9 @@
               }
             ],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "CeMatchRule",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "CeMatchRule",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null

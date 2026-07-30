@@ -6978,7 +6978,7 @@ export type Query = {
   ceMatchCustomAssessmentFields: Array<CeMatchField>;
   /** Custom assessment form definitions for use in CE match rule management. */
   ceMatchCustomAssessmentForms: Array<FormDefinition>;
-  ceMatchRule: CeMatchRule;
+  ceMatchRule?: Maybe<CeMatchRule>;
   /** Coordinated Entry Match Rules in the current data source. */
   ceMatchRules: CeMatchRulesPaginated;
   ceOpportunities: CeOpportunitiesPaginated;
@@ -23077,7 +23077,7 @@ export type GetCeMatchRuleQueryVariables = Exact<{
 
 export type GetCeMatchRuleQuery = {
   __typename?: 'Query';
-  ceMatchRule: {
+  ceMatchRule?: {
     __typename?: 'CeMatchRule';
     ownerId: string;
     ownerName: string;
@@ -23101,7 +23101,7 @@ export type GetCeMatchRuleQuery = {
         value?: any | null;
       }>;
     } | null;
-  };
+  } | null;
 };
 
 export type GetCeMatchRuleOrganizationsQueryVariables = Exact<{
