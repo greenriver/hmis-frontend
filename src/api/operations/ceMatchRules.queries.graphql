@@ -6,6 +6,14 @@ query GetCeMatchClientFields {
   }
 }
 
+# HUD Program Specific Data Element fields exposed through the static PSDE
+# registry for CE Match Rule expressions.
+query GetCeMatchPsdeFields {
+  ceMatchPsdeFields {
+    ...CeMatchFieldDetails
+  }
+}
+
 # Published/retired custom assessment forms in the user's data source that have at
 # least one usable CDED field for CE Match Rule expressions.
 query GetCeMatchCustomAssessmentForms {

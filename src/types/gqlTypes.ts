@@ -858,6 +858,8 @@ export enum CeMatchRuleFieldSource {
   Client = 'CLIENT',
   /** Custom */
   CustomDataElement = 'CUSTOM_DATA_ELEMENT',
+  /** HUD */
+  Psde = 'PSDE',
 }
 
 export type CeMatchRuleFilterOptions = {
@@ -6978,6 +6980,8 @@ export type Query = {
   ceMatchCustomAssessmentFields: Array<CeMatchField>;
   /** Custom assessment form definitions for use in CE match rule management. */
   ceMatchCustomAssessmentForms: Array<FormDefinition>;
+  /** HUD Program Specific Data Element fields available for CE Match Rule expressions. */
+  ceMatchPsdeFields: Array<CeMatchField>;
   ceMatchRule?: Maybe<CeMatchRule>;
   /** Coordinated Entry Match Rules in the current data source. */
   ceMatchRules: CeMatchRulesPaginated;
@@ -22979,6 +22983,36 @@ export type GetCeMatchClientFieldsQueryVariables = Exact<{
 export type GetCeMatchClientFieldsQuery = {
   __typename?: 'Query';
   ceMatchClientFields: Array<{
+    __typename?: 'CeMatchField';
+    id: string;
+    key: string;
+    label: string;
+    itemType: ItemType;
+    multiple: boolean;
+    expressionField: string;
+    pickListReference?: string | null;
+    pickListOptions?: Array<{
+      __typename?: 'PickListOption';
+      code: string;
+      label?: string | null;
+      secondaryLabel?: string | null;
+      groupLabel?: string | null;
+      groupCode?: string | null;
+      initialSelected?: boolean | null;
+      helperText?: string | null;
+      numericValue?: number | null;
+      disabled?: boolean | null;
+    }> | null;
+  }>;
+};
+
+export type GetCeMatchPsdeFieldsQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type GetCeMatchPsdeFieldsQuery = {
+  __typename?: 'Query';
+  ceMatchPsdeFields: Array<{
     __typename?: 'CeMatchField';
     id: string;
     key: string;
@@ -59437,6 +59471,105 @@ export type GetCeMatchClientFieldsSuspenseQueryHookResult = ReturnType<
 export type GetCeMatchClientFieldsQueryResult = Apollo.QueryResult<
   GetCeMatchClientFieldsQuery,
   GetCeMatchClientFieldsQueryVariables
+>;
+export const GetCeMatchPsdeFieldsDocument = gql`
+  query GetCeMatchPsdeFields {
+    ceMatchPsdeFields {
+      ...CeMatchFieldDetails
+    }
+  }
+  ${CeMatchFieldDetailsFragmentDoc}
+`;
+
+/**
+ * __useGetCeMatchPsdeFieldsQuery__
+ *
+ * To run a query within a React component, call `useGetCeMatchPsdeFieldsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCeMatchPsdeFieldsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCeMatchPsdeFieldsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCeMatchPsdeFieldsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetCeMatchPsdeFieldsQuery,
+    GetCeMatchPsdeFieldsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetCeMatchPsdeFieldsQuery,
+    GetCeMatchPsdeFieldsQueryVariables
+  >(GetCeMatchPsdeFieldsDocument, options);
+}
+export function useGetCeMatchPsdeFieldsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCeMatchPsdeFieldsQuery,
+    GetCeMatchPsdeFieldsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetCeMatchPsdeFieldsQuery,
+    GetCeMatchPsdeFieldsQueryVariables
+  >(GetCeMatchPsdeFieldsDocument, options);
+}
+// @ts-ignore
+export function useGetCeMatchPsdeFieldsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetCeMatchPsdeFieldsQuery,
+    GetCeMatchPsdeFieldsQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchPsdeFieldsQuery,
+  GetCeMatchPsdeFieldsQueryVariables
+>;
+export function useGetCeMatchPsdeFieldsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchPsdeFieldsQuery,
+        GetCeMatchPsdeFieldsQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetCeMatchPsdeFieldsQuery | undefined,
+  GetCeMatchPsdeFieldsQueryVariables
+>;
+export function useGetCeMatchPsdeFieldsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCeMatchPsdeFieldsQuery,
+        GetCeMatchPsdeFieldsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetCeMatchPsdeFieldsQuery,
+    GetCeMatchPsdeFieldsQueryVariables
+  >(GetCeMatchPsdeFieldsDocument, options);
+}
+export type GetCeMatchPsdeFieldsQueryHookResult = ReturnType<
+  typeof useGetCeMatchPsdeFieldsQuery
+>;
+export type GetCeMatchPsdeFieldsLazyQueryHookResult = ReturnType<
+  typeof useGetCeMatchPsdeFieldsLazyQuery
+>;
+export type GetCeMatchPsdeFieldsSuspenseQueryHookResult = ReturnType<
+  typeof useGetCeMatchPsdeFieldsSuspenseQuery
+>;
+export type GetCeMatchPsdeFieldsQueryResult = Apollo.QueryResult<
+  GetCeMatchPsdeFieldsQuery,
+  GetCeMatchPsdeFieldsQueryVariables
 >;
 export const GetCeMatchCustomAssessmentFormsDocument = gql`
   query GetCeMatchCustomAssessmentForms {

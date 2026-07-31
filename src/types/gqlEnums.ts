@@ -91,7 +91,11 @@ export const HmisEnums = {
     LTE: 'LTE',
     NOT_EQ: 'NOT_EQ',
   },
-  CeMatchRuleFieldSource: { CLIENT: 'Client', CUSTOM_DATA_ELEMENT: 'Custom' },
+  CeMatchRuleFieldSource: {
+    CLIENT: 'Client',
+    CUSTOM_DATA_ELEMENT: 'Custom',
+    PSDE: 'HUD',
+  },
   CeMatchRuleOwnerType: {
     DATA_SOURCE: 'Global',
     ORGANIZATION: 'Organization',

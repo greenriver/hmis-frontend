@@ -24,6 +24,7 @@ import {
   CeMatchRuleBooleanOperator,
   useGetCeMatchClientFieldsQuery,
   useGetCeMatchCustomAssessmentFormsQuery,
+  useGetCeMatchPsdeFieldsQuery,
 } from '@/types/gqlTypes';
 
 interface Props {
@@ -66,14 +67,24 @@ const CeMatchStructuredExpressionBuilder: React.FC<Props> = ({
     loading: customAssessmentFormsLoading,
     error: customAssessmentFormsError,
   } = useGetCeMatchCustomAssessmentFormsQuery();
+  // PSDE fields come from a static backend registry, so they can be loaded once
+  // for the whole builder and shared by every requirement clause.
+  const {
+    data: psdeFieldsData,
+    loading: psdeFieldsLoading,
+    error: psdeFieldsError,
+  } = useGetCeMatchPsdeFieldsQuery();
 
-  const loading = clientItemsLoading || customAssessmentFormsLoading;
+  const loading =
+    clientItemsLoading || customAssessmentFormsLoading || psdeFieldsLoading;
   const clientItems = clientItemsData?.ceMatchClientFields || [];
+  const psdeFields = psdeFieldsData?.ceMatchPsdeFields || [];
   const customAssessmentForms =
     customAssessmentFormsData?.ceMatchCustomAssessmentForms || [];
 
   if (clientItemsError) throw clientItemsError;
   if (customAssessmentFormsError) throw customAssessmentFormsError;
+  if (psdeFieldsError) throw psdeFieldsError;
 
   return (
     <Stack gap={2}>
@@ -136,6 +147,7 @@ const CeMatchStructuredExpressionBuilder: React.FC<Props> = ({
                     setValue={setValue}
                     index={index}
                     clientItems={clientItems}
+                    psdeFields={psdeFields}
                     customAssessmentForms={customAssessmentForms}
                   />
                 </Stack>

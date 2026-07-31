@@ -6015,6 +6015,12 @@
             "description": "Custom",
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "PSDE",
+            "description": "HUD",
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "possibleTypes": null
@@ -47089,6 +47095,30 @@
                   "ofType": {
                     "kind": "OBJECT",
                     "name": "FormDefinition",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ceMatchPsdeFields",
+            "description": "HUD Program Specific Data Element fields available for CE Match Rule expressions.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "CeMatchField",
                     "ofType": null
                   }
                 }
