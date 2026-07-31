@@ -86,8 +86,6 @@ const CeMatchClause: React.FC<Props> = ({
 
   const fields = useMemo(() => {
     if (source === CeMatchRuleFieldSource.Client) return clientItems;
-    // PSDE metadata already has the common field shape, so the existing field,
-    // comparator, and value controls can consume it without special handling.
     if (source === CeMatchRuleFieldSource.Psde) return psdeFields;
     if (source === CeMatchRuleFieldSource.CustomDataElement)
       return customAssessmentFields;
