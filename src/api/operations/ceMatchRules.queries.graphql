@@ -1,15 +1,8 @@
-# Client-level fields (current_age, veteran_status, days_since_last_exit) available
-# for CE Match Rule expressions.
-query GetCeMatchClientFields {
-  ceMatchClientFields {
-    ...CeMatchFieldDetails
-  }
-}
-
-# HUD Program Specific Data Element fields exposed through the static PSDE
-# registry for CE Match Rule expressions.
-query GetCeMatchPsdeFields {
-  ceMatchPsdeFields {
+# CE Match Rule expression fields for one field source: client-level fields such
+# as current_age, or HUD Program Specific Data Elements. Custom data element
+# fields are scoped to a form, so they use GetCeMatchCustomAssessmentFields.
+query GetCeMatchFields($fieldSource: CeMatchRuleFieldSource!) {
+  ceMatchFields(fieldSource: $fieldSource) {
     ...CeMatchFieldDetails
   }
 }

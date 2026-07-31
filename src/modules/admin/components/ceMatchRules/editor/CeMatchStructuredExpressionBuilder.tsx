@@ -22,9 +22,9 @@ import CardGroup, { RemovableCard } from '@/components/elements/CardGroup';
 import Loading from '@/components/elements/Loading';
 import {
   CeMatchRuleBooleanOperator,
-  useGetCeMatchClientFieldsQuery,
+  CeMatchRuleFieldSource,
   useGetCeMatchCustomAssessmentFormsQuery,
-  useGetCeMatchPsdeFieldsQuery,
+  useGetCeMatchFieldsQuery,
 } from '@/types/gqlTypes';
 
 interface Props {
@@ -61,7 +61,9 @@ const CeMatchStructuredExpressionBuilder: React.FC<Props> = ({
     data: clientItemsData,
     loading: clientItemsLoading,
     error: clientItemsError,
-  } = useGetCeMatchClientFieldsQuery();
+  } = useGetCeMatchFieldsQuery({
+    variables: { fieldSource: CeMatchRuleFieldSource.Client },
+  });
   const {
     data: customAssessmentFormsData,
     loading: customAssessmentFormsLoading,
@@ -73,12 +75,14 @@ const CeMatchStructuredExpressionBuilder: React.FC<Props> = ({
     data: psdeFieldsData,
     loading: psdeFieldsLoading,
     error: psdeFieldsError,
-  } = useGetCeMatchPsdeFieldsQuery();
+  } = useGetCeMatchFieldsQuery({
+    variables: { fieldSource: CeMatchRuleFieldSource.Psde },
+  });
 
   const loading =
     clientItemsLoading || customAssessmentFormsLoading || psdeFieldsLoading;
-  const clientItems = clientItemsData?.ceMatchClientFields || [];
-  const psdeFields = psdeFieldsData?.ceMatchPsdeFields || [];
+  const clientItems = clientItemsData?.ceMatchFields || [];
+  const psdeFields = psdeFieldsData?.ceMatchFields || [];
   const customAssessmentForms =
     customAssessmentFormsData?.ceMatchCustomAssessmentForms || [];
 
