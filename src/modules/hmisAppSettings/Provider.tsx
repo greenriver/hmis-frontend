@@ -16,6 +16,7 @@ import {
 import * as storage from '@/modules/auth/api/storage';
 import { HmisAuthContext, HmisAuthState } from '@/modules/auth/AuthContext';
 import LogoutFailedDialog from '@/modules/auth/components/LogoutFailedDialog';
+import StopImpersonatingFailedDialog from '@/modules/auth/components/StopImpersonatingFailedDialog';
 import { useSessionTrackingObserver } from '@/modules/auth/hooks/useSessionTrackingObserver';
 import { fetchHmisAppSettings } from '@/modules/hmisAppSettings/api';
 import { HmisAppSettingsContext } from '@/modules/hmisAppSettings/Context';
@@ -49,6 +50,9 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
   // Kept separate from `error`: a failed sign-out needs its own copy and its own
   // affordance, and the user stays in the app behind the dialog.
   const [logoutFailed, setLogoutFailed] = useState(false);
+  // Same reasoning as `logoutFailed`, for the impersonating branch: the user is
+  // still impersonating and stays in the app behind the dialog.
+  const [stopImpersonatingFailed, setStopImpersonatingFailed] = useState(false);
   // Tracked separately from `loading` because `loading` unmounts the whole tree
   // (see the render below), which would take the failure dialog and the app
   // behind it with it. Drives the dialog's own spinner instead.
@@ -76,7 +80,10 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
   // dialog, which has to leave the app mounted behind it.
   const attemptLogout = useCallback(
     async (fullPageLoading: boolean) => {
-      setLogoutFailed(false);
+      // Neither failure flag is cleared here: that would unmount the dialog that
+      // launched the retry, so logoutInFlight's spinner would never render. Nothing
+      // goes stale -- every exit sets a flag again or leaves the page, and
+      // dismissing clears it.
       setLogoutInFlight(true);
       if (fullPageLoading) setLoading(true);
 
@@ -85,9 +92,15 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
           await stopImpersonating();
           reloadWindow();
         } catch (e) {
+          // stopImpersonating() rejects on a network error or a non-ok response, and
+          // only stores the reverted user on success, so the impersonation is still
+          // live here. Reloading would land them back in the app still acting as the
+          // other user.
+          console.error('Stop impersonating failed', e);
+          Sentry.captureException(e, { user: sentryUser(user) });
           setLoading(false);
           setLogoutInFlight(false);
-          setError(e as Error);
+          setStopImpersonatingFailed(true);
         }
         return;
       }
@@ -150,6 +163,13 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
   // is still usable, so dismissing and going back to work is a legitimate choice.
   // Sign out is still in the user menu when they're ready to try again.
   const dismissLogoutFailure = useCallback(() => setLogoutFailed(false), []);
+
+  // Dismissing leaves them impersonating, which the "Acting as" banner already
+  // announces, and its Exit button is the same retry as this dialog's.
+  const dismissStopImpersonatingFailure = useCallback(
+    () => setStopImpersonatingFailed(false),
+    []
+  );
 
   const impersonateUser = useCallback((userId: string) => {
     setLoading(true);
@@ -272,6 +292,14 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
             onRetry={retryLogout}
             onDismiss={dismissLogoutFailure}
             authMethod={resolveAuthMethod(appSettings.authMethod)}
+          />
+        )}
+        {stopImpersonatingFailed && (
+          <StopImpersonatingFailedDialog
+            loading={logoutInFlight}
+            onRetry={retryLogout}
+            onDismiss={dismissStopImpersonatingFailure}
+            impersonatedUserName={user?.name}
           />
         )}
       </HmisAuthContext.Provider>

@@ -174,10 +174,16 @@ export async function login({
   }
 }
 
-export function resetLocalSession() {
+// The Apollo cache and stored user hold client PII/PHI and should not survive a
+// sign-out attempt on a shared device, even when the server-side session does.
+// `keepSessionTracking` spares the tracking record on a failed sign-out:
+// useSessionStatus reads it to decide whether the session is still alive, so
+// clearing it while the session survives makes the app report "Your session has
+// ended". That record holds no PII.
+export function resetLocalSession({ keepSessionTracking = false } = {}) {
   storage.clearUser();
   storage.clearAppSettings();
-  storage.clearSessionTacking();
+  if (!keepSessionTracking) storage.clearSessionTacking();
   // Clear cache without re-fetching any queries
   apolloClient.clearStore();
 }
@@ -188,15 +194,18 @@ export async function logout() {
   const response = await fetchWithCsrf('/hmis/logout', {
     method: 'DELETE',
   });
-  trackSessionFromResponse(response);
-  // Unconditional, before the ok check: the Apollo cache holds client PII/PHI
-  // and should not survive a sign-out attempt on a shared device even when the
-  // server-side session does.
-  resetLocalSession();
-
   if (!response.ok) {
+    // No trackSessionFromResponse on this path: a failed sign-out says nothing about
+    // whether the session ended, and the Devise logout controller descends from
+    // Devise::SessionsController rather than Hmis::BaseController, so it never sets
+    // the user header that call reads. Every failure would look like a sign-out and
+    // clear the record this resetLocalSession keeps.
+    resetLocalSession({ keepSessionTracking: true });
     return response.json().then(throwMaybeHmisError);
   }
+
+  trackSessionFromResponse(response);
+  resetLocalSession();
   return response;
 }
 

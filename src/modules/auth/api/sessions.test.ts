@@ -110,11 +110,13 @@ describe('session transport by auth method', () => {
       expect(err).toBeInstanceOf(HmisResponseError);
       expect(err.type).toBe('server_error');
       expect(err.message).toBe('Could not end session');
-      // The local teardown still has to happen on the failure path.
+      // The PII teardown still has to happen on the failure path.
       expect(apolloClient.clearStore).toHaveBeenCalled();
       expect(storage.clearUser).toHaveBeenCalled();
       expect(storage.clearAppSettings).toHaveBeenCalled();
-      expect(storage.clearSessionTacking).toHaveBeenCalled();
+      // But not the tracking record: the session is still live, and clearing it
+      // makes useSessionStatus report "Your session has ended" over the dialog.
+      expect(storage.clearSessionTacking).not.toHaveBeenCalled();
     });
 
     it('throws when a failed sign-out has an unparseable body', async () => {
@@ -127,7 +129,19 @@ describe('session transport by auth method', () => {
       expect(apolloClient.clearStore).toHaveBeenCalled();
       expect(storage.clearUser).toHaveBeenCalled();
       expect(storage.clearAppSettings).toHaveBeenCalled();
-      expect(storage.clearSessionTacking).toHaveBeenCalled();
+      expect(storage.clearSessionTacking).not.toHaveBeenCalled();
+    });
+
+    it('does not announce a session change when the sign-out fails', async () => {
+      getAppSettings.mockReturnValue({ authMethod: 'jwt' });
+      fetchMock.mockResolvedValue(
+        errorResponse(() => Promise.resolve({ error: { type: 'server' } }))
+      );
+
+      await logout().catch(() => undefined);
+      // Announcing here would report the failure as a sign-out and clear the
+      // record kept above; see logout().
+      expect(document.dispatchEvent).not.toHaveBeenCalled();
     });
   });
 });
