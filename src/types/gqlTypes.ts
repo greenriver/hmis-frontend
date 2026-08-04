@@ -858,6 +858,8 @@ export enum CeMatchRuleFieldSource {
   Client = 'CLIENT',
   /** Custom */
   CustomDataElement = 'CUSTOM_DATA_ELEMENT',
+  /** HUD */
+  Psde = 'PSDE',
 }
 
 export type CeMatchRuleFilterOptions = {
@@ -6972,12 +6974,20 @@ export type Query = {
   ceClient?: Maybe<CeClient>;
   /** Clients who belong to at least one CE candidate pool */
   ceClients: CeClientsPaginated;
-  /** Client fields available for CE Match Rule expressions. */
+  /**
+   * Client fields available for CE Match Rule expressions.
+   * @deprecated Use ceMatchFields(fieldSource: CLIENT)
+   */
   ceMatchClientFields: Array<CeMatchField>;
   /** Fields on the form that are usable as CE Match Rule condition fields. */
   ceMatchCustomAssessmentFields: Array<CeMatchField>;
   /** Custom assessment form definitions for use in CE match rule management. */
   ceMatchCustomAssessmentForms: Array<FormDefinition>;
+  /**
+   * Fields available for CE Match Rule expressions. CUSTOM_DATA_ELEMENT fields are
+   * scoped to a form, so request those through ceMatchCustomAssessmentFields instead.
+   */
+  ceMatchFields: Array<CeMatchField>;
   ceMatchRule?: Maybe<CeMatchRule>;
   /** Coordinated Entry Match Rules in the current data source. */
   ceMatchRules: CeMatchRulesPaginated;
@@ -7090,6 +7100,10 @@ export type QueryCeClientsArgs = {
 
 export type QueryCeMatchCustomAssessmentFieldsArgs = {
   formDefinitionIdentifier: Scalars['String']['input'];
+};
+
+export type QueryCeMatchFieldsArgs = {
+  fieldSource: CeMatchRuleFieldSource;
 };
 
 export type QueryCeMatchRuleArgs = {
@@ -22972,13 +22986,13 @@ export type DeleteCeMatchRuleMutation = {
   } | null;
 };
 
-export type GetCeMatchClientFieldsQueryVariables = Exact<{
-  [key: string]: never;
+export type GetCeMatchFieldsQueryVariables = Exact<{
+  fieldSource: CeMatchRuleFieldSource;
 }>;
 
-export type GetCeMatchClientFieldsQuery = {
+export type GetCeMatchFieldsQuery = {
   __typename?: 'Query';
-  ceMatchClientFields: Array<{
+  ceMatchFields: Array<{
     __typename?: 'CeMatchField';
     id: string;
     key: string;
@@ -59339,9 +59353,9 @@ export type DeleteCeMatchRuleMutationOptions = Apollo.BaseMutationOptions<
   DeleteCeMatchRuleMutation,
   DeleteCeMatchRuleMutationVariables
 >;
-export const GetCeMatchClientFieldsDocument = gql`
-  query GetCeMatchClientFields {
-    ceMatchClientFields {
+export const GetCeMatchFieldsDocument = gql`
+  query GetCeMatchFields($fieldSource: CeMatchRuleFieldSource!) {
+    ceMatchFields(fieldSource: $fieldSource) {
       ...CeMatchFieldDetails
     }
   }
@@ -59349,71 +59363,76 @@ export const GetCeMatchClientFieldsDocument = gql`
 `;
 
 /**
- * __useGetCeMatchClientFieldsQuery__
+ * __useGetCeMatchFieldsQuery__
  *
- * To run a query within a React component, call `useGetCeMatchClientFieldsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCeMatchClientFieldsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetCeMatchFieldsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCeMatchFieldsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetCeMatchClientFieldsQuery({
+ * const { data, loading, error } = useGetCeMatchFieldsQuery({
  *   variables: {
+ *      fieldSource: // value for 'fieldSource'
  *   },
  * });
  */
-export function useGetCeMatchClientFieldsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    GetCeMatchClientFieldsQuery,
-    GetCeMatchClientFieldsQueryVariables
-  >
+export function useGetCeMatchFieldsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetCeMatchFieldsQuery,
+    GetCeMatchFieldsQueryVariables
+  > &
+    (
+      | { variables: GetCeMatchFieldsQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetCeMatchClientFieldsQuery,
-    GetCeMatchClientFieldsQueryVariables
-  >(GetCeMatchClientFieldsDocument, options);
+  return Apollo.useQuery<GetCeMatchFieldsQuery, GetCeMatchFieldsQueryVariables>(
+    GetCeMatchFieldsDocument,
+    options
+  );
 }
-export function useGetCeMatchClientFieldsLazyQuery(
+export function useGetCeMatchFieldsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetCeMatchClientFieldsQuery,
-    GetCeMatchClientFieldsQueryVariables
+    GetCeMatchFieldsQuery,
+    GetCeMatchFieldsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
-    GetCeMatchClientFieldsQuery,
-    GetCeMatchClientFieldsQueryVariables
-  >(GetCeMatchClientFieldsDocument, options);
+    GetCeMatchFieldsQuery,
+    GetCeMatchFieldsQueryVariables
+  >(GetCeMatchFieldsDocument, options);
 }
 // @ts-ignore
-export function useGetCeMatchClientFieldsSuspenseQuery(
+export function useGetCeMatchFieldsSuspenseQuery(
   baseOptions?: Apollo.SuspenseQueryHookOptions<
-    GetCeMatchClientFieldsQuery,
-    GetCeMatchClientFieldsQueryVariables
+    GetCeMatchFieldsQuery,
+    GetCeMatchFieldsQueryVariables
   >
 ): Apollo.UseSuspenseQueryResult<
-  GetCeMatchClientFieldsQuery,
-  GetCeMatchClientFieldsQueryVariables
+  GetCeMatchFieldsQuery,
+  GetCeMatchFieldsQueryVariables
 >;
-export function useGetCeMatchClientFieldsSuspenseQuery(
+export function useGetCeMatchFieldsSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
     | Apollo.SuspenseQueryHookOptions<
-        GetCeMatchClientFieldsQuery,
-        GetCeMatchClientFieldsQueryVariables
+        GetCeMatchFieldsQuery,
+        GetCeMatchFieldsQueryVariables
       >
 ): Apollo.UseSuspenseQueryResult<
-  GetCeMatchClientFieldsQuery | undefined,
-  GetCeMatchClientFieldsQueryVariables
+  GetCeMatchFieldsQuery | undefined,
+  GetCeMatchFieldsQueryVariables
 >;
-export function useGetCeMatchClientFieldsSuspenseQuery(
+export function useGetCeMatchFieldsSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
     | Apollo.SuspenseQueryHookOptions<
-        GetCeMatchClientFieldsQuery,
-        GetCeMatchClientFieldsQueryVariables
+        GetCeMatchFieldsQuery,
+        GetCeMatchFieldsQueryVariables
       >
 ) {
   const options =
@@ -59421,22 +59440,22 @@ export function useGetCeMatchClientFieldsSuspenseQuery(
       ? baseOptions
       : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<
-    GetCeMatchClientFieldsQuery,
-    GetCeMatchClientFieldsQueryVariables
-  >(GetCeMatchClientFieldsDocument, options);
+    GetCeMatchFieldsQuery,
+    GetCeMatchFieldsQueryVariables
+  >(GetCeMatchFieldsDocument, options);
 }
-export type GetCeMatchClientFieldsQueryHookResult = ReturnType<
-  typeof useGetCeMatchClientFieldsQuery
+export type GetCeMatchFieldsQueryHookResult = ReturnType<
+  typeof useGetCeMatchFieldsQuery
 >;
-export type GetCeMatchClientFieldsLazyQueryHookResult = ReturnType<
-  typeof useGetCeMatchClientFieldsLazyQuery
+export type GetCeMatchFieldsLazyQueryHookResult = ReturnType<
+  typeof useGetCeMatchFieldsLazyQuery
 >;
-export type GetCeMatchClientFieldsSuspenseQueryHookResult = ReturnType<
-  typeof useGetCeMatchClientFieldsSuspenseQuery
+export type GetCeMatchFieldsSuspenseQueryHookResult = ReturnType<
+  typeof useGetCeMatchFieldsSuspenseQuery
 >;
-export type GetCeMatchClientFieldsQueryResult = Apollo.QueryResult<
-  GetCeMatchClientFieldsQuery,
-  GetCeMatchClientFieldsQueryVariables
+export type GetCeMatchFieldsQueryResult = Apollo.QueryResult<
+  GetCeMatchFieldsQuery,
+  GetCeMatchFieldsQueryVariables
 >;
 export const GetCeMatchCustomAssessmentFormsDocument = gql`
   query GetCeMatchCustomAssessmentForms {

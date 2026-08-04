@@ -22,8 +22,9 @@ import CardGroup, { RemovableCard } from '@/components/elements/CardGroup';
 import Loading from '@/components/elements/Loading';
 import {
   CeMatchRuleBooleanOperator,
-  useGetCeMatchClientFieldsQuery,
+  CeMatchRuleFieldSource,
   useGetCeMatchCustomAssessmentFormsQuery,
+  useGetCeMatchFieldsQuery,
 } from '@/types/gqlTypes';
 
 interface Props {
@@ -60,20 +61,34 @@ const CeMatchStructuredExpressionBuilder: React.FC<Props> = ({
     data: clientItemsData,
     loading: clientItemsLoading,
     error: clientItemsError,
-  } = useGetCeMatchClientFieldsQuery();
+  } = useGetCeMatchFieldsQuery({
+    variables: { fieldSource: CeMatchRuleFieldSource.Client },
+  });
   const {
     data: customAssessmentFormsData,
     loading: customAssessmentFormsLoading,
     error: customAssessmentFormsError,
   } = useGetCeMatchCustomAssessmentFormsQuery();
+  // PSDE fields come from a static backend registry, so they can be loaded once
+  // for the whole builder and shared by every requirement clause.
+  const {
+    data: psdeFieldsData,
+    loading: psdeFieldsLoading,
+    error: psdeFieldsError,
+  } = useGetCeMatchFieldsQuery({
+    variables: { fieldSource: CeMatchRuleFieldSource.Psde },
+  });
 
-  const loading = clientItemsLoading || customAssessmentFormsLoading;
-  const clientItems = clientItemsData?.ceMatchClientFields || [];
+  const loading =
+    clientItemsLoading || customAssessmentFormsLoading || psdeFieldsLoading;
+  const clientItems = clientItemsData?.ceMatchFields || [];
+  const psdeFields = psdeFieldsData?.ceMatchFields || [];
   const customAssessmentForms =
     customAssessmentFormsData?.ceMatchCustomAssessmentForms || [];
 
   if (clientItemsError) throw clientItemsError;
   if (customAssessmentFormsError) throw customAssessmentFormsError;
+  if (psdeFieldsError) throw psdeFieldsError;
 
   return (
     <Stack gap={2}>
@@ -136,6 +151,7 @@ const CeMatchStructuredExpressionBuilder: React.FC<Props> = ({
                     setValue={setValue}
                     index={index}
                     clientItems={clientItems}
+                    psdeFields={psdeFields}
                     customAssessmentForms={customAssessmentForms}
                   />
                 </Stack>
