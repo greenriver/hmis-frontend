@@ -38,8 +38,9 @@ const LogoutFailedDialog: React.FC<Props> = ({
         : 'You are still signed in, so anyone using this computer next could still reach your account.'}
     </Typography>
     <Typography sx={{ mt: 2 }}>
-      Try signing out again. If it keeps failing, close every browser window
-      before you walk away.
+      Try signing out again. If it keeps failing, quitting your browser
+      completely will usually end the session. Let your administrator know if it
+      persists.
     </Typography>
   </ConfirmationDialog>
 );
