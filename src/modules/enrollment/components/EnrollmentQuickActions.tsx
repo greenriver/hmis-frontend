@@ -46,7 +46,7 @@ const EnrollmentQuickActions = ({
 
   const canViewEsgFundingReport =
     enrollment.project.access.canManageIncomingReferrals &&
-    globalFeatureFlags?.externalReferralsEnabled;
+    globalFeatureFlags?.esgFundingReportEnabled;
 
   if (
     ![canRecordService, canEditClient, canViewEsgFundingReport].some((b) => !!b)

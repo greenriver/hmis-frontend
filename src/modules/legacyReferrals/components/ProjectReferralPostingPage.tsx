@@ -23,8 +23,12 @@ import {
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const ProjectReferralPostingPage: React.FC = () => {
-  const { globalFeatureFlags: { externalReferralsEnabled } = {} } =
-    useGlobalFeatureFlags();
+  const {
+    globalFeatureFlags: {
+      externalReferralsEnabled,
+      esgFundingReportEnabled,
+    } = {},
+  } = useGlobalFeatureFlags();
   const { referralPostingId } = useSafeParams<{ referralPostingId: string }>();
   const { data, loading, error } = useGetReferralPostingQuery({
     variables: { id: referralPostingId as any as string },
@@ -61,7 +65,7 @@ const ProjectReferralPostingPage: React.FC = () => {
             />
           </TitleCard>
           <Stack gap={2}>
-            {externalReferralsEnabled && (
+            {esgFundingReportEnabled && (
               <ButtonLink
                 fullWidth
                 variant='outlined'

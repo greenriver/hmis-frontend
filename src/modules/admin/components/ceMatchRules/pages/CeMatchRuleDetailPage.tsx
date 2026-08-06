@@ -53,6 +53,14 @@ const CeMatchRuleDetailPage: React.FC = () => {
     return ceMatchRuleToFormValues(rule);
   }, [rule]);
 
+  const pageTitle = useMemo(() => {
+    if (!rule) return undefined;
+    const ownerLevel = getCeMatchRuleOwnerLevelByOwnerType(rule.ownerType);
+    const { label } = ceMatchRuleOwnerLevelConfigs[ownerLevel];
+    if (ownerLevel === 'global') return `${label} Rule`;
+    return `${label} Rule for ${rule.ownerName}`;
+  }, [rule]);
+
   useEffect(() => {
     // Override the parent breadcrumb title to the rule owner name
     const parentPath = currentPath
@@ -72,7 +80,7 @@ const CeMatchRuleDetailPage: React.FC = () => {
 
   return (
     <>
-      <PageTitle overlineText='Coordinated Entry Rules' title={rule.name} />
+      <PageTitle overlineText='Coordinated Entry Rules' title={pageTitle} />
       <CeMatchRuleForm
         ruleId={rule.id}
         initialValues={initialValues}

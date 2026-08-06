@@ -80,13 +80,13 @@ const CeMatchExpressionModeSwitch: React.FC<Props> = ({
     <>
       <Button
         size='small'
-        variant='text'
+        variant='outlined'
         startIcon={<CodeIcon />}
         onClick={handleSwitchEditorMode}
       >
         {mode === 'structured'
-          ? 'Switch to Advanced Expression Editor'
-          : 'Switch to Structured Editor'}
+          ? 'Advanced Expression Editor'
+          : 'Structured Editor'}
       </Button>
       <ConfirmationDialog
         id='confirmSwitchExpressionEditor'
