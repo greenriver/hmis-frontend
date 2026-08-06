@@ -699,6 +699,7 @@ export type CeClientsPaginated = {
   nodesCount: Scalars['Int']['output'];
   offset: Scalars['Int']['output'];
   pagesCount: Scalars['Int']['output'];
+  searchQueryId?: Maybe<Scalars['String']['output']>;
 };
 
 export type CeCustomReferralStatus = {
@@ -1348,6 +1349,7 @@ export type CeReferralsPaginated = {
   nodesCount: Scalars['Int']['output'];
   offset: Scalars['Int']['output'];
   pagesCount: Scalars['Int']['output'];
+  searchQueryId?: Maybe<Scalars['String']['output']>;
 };
 
 export type CeSwimlane = {
@@ -22449,6 +22451,7 @@ export type GetCeReferralsQuery = {
     offset: number;
     limit: number;
     nodesCount: number;
+    searchQueryId?: string | null;
     nodes: Array<{
       __typename?: 'CeReferral';
       targetOrganizationName: string;
@@ -22531,6 +22534,7 @@ export type GetCeClientsQuery = {
     offset: number;
     limit: number;
     nodesCount: number;
+    searchQueryId?: string | null;
     nodes: Array<{
       __typename?: 'CeClient';
       id: string;
@@ -58742,6 +58746,7 @@ export const GetCeReferralsDocument = gql`
       offset
       limit
       nodesCount
+      searchQueryId
       nodes {
         ...CeReferralTableFields
       }
@@ -58855,6 +58860,7 @@ export const GetCeClientsDocument = gql`
       offset
       limit
       nodesCount
+      searchQueryId
       nodes {
         ...CeClientFields
       }

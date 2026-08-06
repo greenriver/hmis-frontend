@@ -3,7 +3,6 @@ import React, { useCallback, useMemo } from 'react';
 
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import Loading from '@/components/elements/Loading';
-import useDebouncedState from '@/hooks/useDebouncedState';
 import { useGlobalFeatureFlags } from '@/hooks/useGlobalFeatureFlags';
 import useTableFilters from '@/hooks/useTableFilters';
 import useTablePagination from '@/hooks/useTablePagination';
@@ -13,6 +12,7 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import { DataColumnDef } from '@/modules/dataFetching/types';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
+import usePersistedTableSimpleTextSearch from '@/modules/search/hooks/usePersistedTableSimpleTextSearch';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   CeCandidateFieldsFragment,
@@ -59,6 +59,9 @@ export const configurableCeColumns = (
   }));
 };
 
+const getCeClientsSearchQueryId = (data: GetCeClientsQuery) =>
+  data.ceClients.searchQueryId;
+
 interface Props {
   projectGroupId?: string;
 }
@@ -83,8 +86,15 @@ const AdminCeClientsTable: React.FC<Props> = ({ projectGroupId }) => {
     variables: { projectGroupId: projectGroupId || null },
   });
 
-  // Internal state for search and dialog
-  const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
+  const {
+    search,
+    setSearch,
+    activeSearchTerm,
+    searchQueryIdLoading,
+    onNetworkDataReady,
+  } = usePersistedTableSimpleTextSearch<GetCeClientsQuery>({
+    getSearchQueryId: getCeClientsSearchQueryId,
+  });
   const [selectedRow, setSelectedRow] =
     React.useState<CeClientFieldsFragment | null>(null);
 
@@ -142,7 +152,9 @@ const AdminCeClientsTable: React.FC<Props> = ({ projectGroupId }) => {
   );
 
   if (error) throw error;
-  if (loading && !tableConfigLookup) return <Loading />;
+  if ((loading && !tableConfigLookup) || searchQueryIdLoading) {
+    return <Loading />;
+  }
 
   return (
     <Stack spacing={2}>
@@ -171,7 +183,7 @@ const AdminCeClientsTable: React.FC<Props> = ({ projectGroupId }) => {
           columns={columnsWithCustom}
           queryVariables={{
             filters: {
-              searchTerm: debouncedSearch || undefined,
+              searchTerm: activeSearchTerm || undefined,
               projectGroupId,
             },
             clientAttributeKeys,
@@ -184,6 +196,7 @@ const AdminCeClientsTable: React.FC<Props> = ({ projectGroupId }) => {
           filterValues={filterValues}
           onFilterChange={setFilterValues}
           pagination={pagination}
+          onNetworkDataReady={onNetworkDataReady}
           handleRowClick={(row) => setSelectedRow(row)}
           rowActionTitle='View Eligible Projects'
           rowSecondaryActionConfigs={rowSecondaryActionConfigs}
