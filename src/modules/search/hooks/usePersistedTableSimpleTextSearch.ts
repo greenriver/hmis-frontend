@@ -49,18 +49,27 @@ const usePersistedTableSimpleTextSearch = <TQuery>({
     if (searchQueryId === null) setSearch('');
   }, [searchQueryId, setSearch]);
 
-  // Emptying the input should drop the URL id (no raw term in the URL).
-  useEffect(() => {
-    if (debouncedSearch === '' && searchQueryId) {
-      setSearchParams({ searchQueryId: null });
-    }
-  }, [debouncedSearch, searchQueryId, setSearchParams]);
+  // Clear the URL id when the user empties the input. Do this in the change
+  // handler (not via debounced ''): an initial empty debounce during restore
+  // would otherwise wipe searchQueryId before persisted params are applied.
+  const handleSearchChange = useCallback(
+    (value: string) => {
+      setSearch(value);
+      if (value === '' && searchQueryId) {
+        setSearchParams({ searchQueryId: null });
+      }
+    },
+    [searchQueryId, setSearch, setSearchParams]
+  );
 
-  // Until debounce catches up after restore, prefer the persisted term so the first
-  // network request already filters correctly.
   const restoredTerm = clientSearchParams?.textSearch || '';
+  // Prefer the persisted term while restoring (input still empty) and after
+  // restore has seeded `search` but debounce has not caught up yet.
+  // Once the user types a different value, fall through to debounced search.
   const activeSearchTerm =
-    debouncedSearch !== undefined ? debouncedSearch : restoredTerm;
+    restoredTerm && searchQueryId && (search === '' || search === restoredTerm)
+      ? restoredTerm
+      : (debouncedSearch ?? '');
 
   const onNetworkDataReady = useCallback(
     (data: TQuery) => {
@@ -86,7 +95,7 @@ const usePersistedTableSimpleTextSearch = <TQuery>({
 
   return {
     search,
-    setSearch,
+    setSearch: handleSearchChange,
     activeSearchTerm,
     searchQueryIdLoading,
     onNetworkDataReady,
