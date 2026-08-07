@@ -100,8 +100,11 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       ? undefined
       : formValue;
   const onChangeEvent = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) =>
-      itemChanged({ linkId, value: e.target.value, type: ChangeType.User }),
+    (
+      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+      // Accept a ChangeType arg. Default to User if not provided
+      eventType: ChangeType = ChangeType.User
+    ) => itemChanged({ linkId, value: e.target.value, type: eventType }),
     [linkId, itemChanged]
   );
   const onChangeValue = useCallback(
