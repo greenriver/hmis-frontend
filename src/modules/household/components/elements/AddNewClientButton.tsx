@@ -57,6 +57,7 @@ const AddNewClientButton: React.FC<Props> = ({
         title: 'Enroll a New Client',
         submitButtonText: 'Create & Enroll Client',
         DialogProps: { maxWidth: 'lg', fullScreen: isMobile },
+        preFormComponent: <div>restrict client?</div>,
       })}
     </>
   );
