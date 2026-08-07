@@ -6015,6 +6015,12 @@
             "description": "Custom",
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "PSDE",
+            "description": "HUD",
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "possibleTypes": null
@@ -47029,8 +47035,8 @@
                 }
               }
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Use ceMatchFields(fieldSource: CLIENT)"
           },
           {
             "name": "ceMatchCustomAssessmentFields",
@@ -47089,6 +47095,47 @@
                   "ofType": {
                     "kind": "OBJECT",
                     "name": "FormDefinition",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ceMatchFields",
+            "description": "Fields available for CE Match Rule expressions. CUSTOM_DATA_ELEMENT fields are\nscoped to a form, so request those through ceMatchCustomAssessmentFields instead.",
+            "args": [
+              {
+                "name": "fieldSource",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "ENUM",
+                    "name": "CeMatchRuleFieldSource",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "CeMatchField",
                     "ofType": null
                   }
                 }
