@@ -60,7 +60,7 @@ const ClientRestrictedChip: React.FC<Props> = ({
       <Chip
         label={restricted ? 'Restricted Record' : 'Unrestricted Record'}
         icon={<Icon fontSize='small' />}
-        color={restricted ? 'warning' : 'default'}
+        color={restricted ? 'warning' : 'grayscale'}
         clickable={clickable}
         onClick={clickable ? () => setDialogOpen(true) : undefined}
         data-testid='clientRestrictedChip'
