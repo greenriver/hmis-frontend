@@ -6,6 +6,7 @@ export const SESSION_KEY = '_hmis_session_id';
 export const USER_STORAGE_KEY = '_hmis_user_info';
 export const SETTINGS_STORAGE_KEY = '_hmis_app_settings';
 export const SESSION_TRACKING_STORAGE_KEY = '_hmis_session_ts';
+export const LAST_CONNECTOR_ID_KEY = '_hmis_last_connector_id';
 const PATH_PARAMS_KEY = '_hmis_path_params';
 
 // Stores user name and email. No sensitive information stored!
@@ -37,6 +38,17 @@ export const getAppSettings = () => {
 
 export const clearAppSettings = () =>
   localStorage.removeItem(SETTINGS_STORAGE_KEY);
+
+// Store last used connector/IDP ID to bypass IDP picker on next sign-in
+export const setLastConnectorId = (value: string) =>
+  localStorage.setItem(LAST_CONNECTOR_ID_KEY, value);
+
+export const getLastConnectorId = () => {
+  return localStorage.getItem(LAST_CONNECTOR_ID_KEY);
+};
+
+export const clearLastConnectorId = () =>
+  localStorage.removeItem(LAST_CONNECTOR_ID_KEY);
 
 export interface HmisSessionTracking {
   userId: string;

@@ -10,16 +10,17 @@ export const fetchHmisAppSettings = async (): Promise<HmisAppSettings> => {
     },
   });
 
-  const json = await response.json();
-
-  if (response.ok) {
-    return json;
-  } else {
+  if (!response.ok) {
     const error = new HttpError(
       `Failed to fetch app settings`,
       response.status
     );
-    error.cause = json;
+    // Best-effort: attach a parsed body if there is one, but never let a
+    // non-JSON error body (e.g. an oauth2-proxy HTML redirect on 401) throw a
+    // SyntaxError that masks the HttpError the reload-once-on-401 recovery needs.
+    error.cause = await response.json().catch(() => undefined);
     throw error;
   }
+
+  return response.json();
 };

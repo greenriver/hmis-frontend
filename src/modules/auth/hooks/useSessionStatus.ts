@@ -20,7 +20,10 @@ const useSessionStatus = ({
   // expiry will change from network events
   const tracking = useSessionTracking();
 
-  // useState prevents user from changing underneath us
+  // useState prevents user from changing underneath us.
+  // During impersonation the session UID header (and therefore tracking.userId)
+  // reflects the *impersonated* user, which is exactly `initialUser.id` here, so
+  // compare against that rather than the true user.
   const [{ sessionDuration, id: initialUserId }] = useState(initialUser);
   // if this session has ended
   const [exitStatus, setExitStatus] = useState<'invalid' | 'expired'>();
@@ -100,22 +103,6 @@ const useSessionStatus = ({
       setExitStatus('expired');
     }
   }, [exitStatus, timeRemaining, tracking?.userId, initialUserId]);
-
-  // debugging
-  /*
-  useEffect(() => {
-    console.info('expiry', expiry, currentTimeInSeconds());
-  }, [expiry]);
-  useEffect(() => {
-    console.info('time remaining', timeRemaining, currentTimeInSeconds());
-  }, [timeRemaining]);
-  useEffect(() => {
-    console.info('exit status', exitStatus, currentTimeInSeconds());
-  }, [exitStatus]);
-  useEffect(() => {
-    console.info('initial user id', initialUserId, currentTimeInSeconds());
-  }, [initialUserId]);
-  */
 
   return useMemo<HmisSessionProps>(() => {
     if (exitStatus) return { status: exitStatus, promptToExtend: false };
