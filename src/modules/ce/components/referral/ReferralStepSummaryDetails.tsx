@@ -19,6 +19,7 @@ const ReferralStepSummaryDetails: React.FC<Props> = ({ step }) => {
   const summaryRows = step.customDataElements
     .filter((cde) => cde.displayHooks.includes(DisplayHook.TableSummary))
     .map((cde) => ({
+      key: cde.key,
       label: cde.label,
       value: customDataElementValueAsString(cde),
     }))
@@ -29,7 +30,7 @@ const ReferralStepSummaryDetails: React.FC<Props> = ({ step }) => {
   return (
     <Stack gap={1}>
       {summaryRows.map((row) => (
-        <CommonLabeledTextBlock key={row.label} title={`${row.label}:`}>
+        <CommonLabeledTextBlock key={row.key} title={`${row.label}:`}>
           {row.value}
         </CommonLabeledTextBlock>
       ))}
