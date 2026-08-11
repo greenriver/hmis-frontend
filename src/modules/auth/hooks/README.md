@@ -124,5 +124,11 @@ with no exit. Guarded routes still answer `403` with these types for a
 mid-session change; nothing in the SPA reads those, and the next reload picks the
 state up from the bootstrap payload.
 
+`DELETE /hmis/logout` is the exception: the terminal dialog's only action is
+sign-out, so under `jwt` that route resolves a holder off the token alone and does
+not require a `current_hmis_user`. Without that, a deactivated / no-account user
+could never sign out, and on a shared machine the next person would inherit the
+live IdP session.
+
 The `devise` arm reaches the same states as a 401 and keeps using the re-auth
 path, so this terminal-page flow is specific to the `jwt` arm.
