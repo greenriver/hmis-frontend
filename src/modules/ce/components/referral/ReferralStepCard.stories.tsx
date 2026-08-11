@@ -70,6 +70,15 @@ const summaryCustomDataElements: CustomDataElementFieldsFragment[] = [
       { id: 'v-2b', valueString: 'Verify income' },
     ],
   },
+  {
+    id: 'cde-3',
+    key: 'item_with_no_value',
+    label: 'Item With No Value',
+    fieldType: CustomDataElementType.String,
+    repeats: false,
+    displayHooks: [DisplayHook.TableSummary],
+    value: null,
+  },
 ];
 
 const mockReferral: CeReferralFieldsFragment = {
