@@ -5,6 +5,7 @@ import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import Loading from '@/components/elements/Loading';
 import {
+  CurrentUserResult,
   fetchCurrentUser,
   HmisUser,
   logout,
@@ -17,6 +18,7 @@ import * as storage from '@/modules/auth/api/storage';
 import { HmisAuthContext, HmisAuthState } from '@/modules/auth/AuthContext';
 import LogoutFailedDialog from '@/modules/auth/components/LogoutFailedDialog';
 import StopImpersonatingFailedDialog from '@/modules/auth/components/StopImpersonatingFailedDialog';
+import { TerminalAccountErrorType } from '@/modules/auth/events';
 import { useSessionTrackingObserver } from '@/modules/auth/hooks/useSessionTrackingObserver';
 import { fetchHmisAppSettings } from '@/modules/hmisAppSettings/api';
 import { HmisAppSettingsContext } from '@/modules/hmisAppSettings/Context';
@@ -26,6 +28,22 @@ import { HttpError } from '@/utils/HttpError';
 import { reloadWindow } from '@/utils/location';
 import { getCurrentSessionId } from '@/utils/sessionId';
 import { currentTimeInSeconds } from '@/utils/time';
+
+const TERMINAL_ACCOUNT_ERROR_COPY: Record<
+  TerminalAccountErrorType,
+  { title: string; message: string }
+> = {
+  account_deactivated: {
+    title: 'Your account has been deactivated',
+    message:
+      'Your account is no longer active. Please contact your administrator for assistance.',
+  },
+  no_warehouse_account: {
+    title: "You don't have access to this application",
+    message:
+      'There is no account associated with your sign-in. Please contact your administrator for assistance.',
+  },
+};
 
 // cached user if the session has not expired
 const getValidCachedUser = (): HmisUser | undefined => {
@@ -58,6 +76,7 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
   // behind it with it. Drives the dialog's own spinner instead.
   const [logoutInFlight, setLogoutInFlight] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [accountError, setAccountError] = useState<TerminalAccountErrorType>();
 
   // clear stale localStorage if session has changed
   useEffect(() => {
@@ -225,14 +244,17 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
     (async () => {
       try {
         // Kick the currentUser fetch off alongside settings so we don't add a round-trip.
-        const userPromise: Promise<HmisUser | undefined> = cachedUser
-          ? Promise.resolve(cachedUser)
+        const userPromise: Promise<CurrentUserResult> = cachedUser
+          ? Promise.resolve({ user: cachedUser })
           : fetchCurrentUser();
 
         await loadSettings();
 
-        const fetchedUser = await userPromise;
+        // Not routed through `error`: its dialog offers only a reload, and the probe
+        // returns the same accountError on every load.
+        const { user: fetchedUser, accountError } = await userPromise;
         if (fetchedUser) setUser(fetchedUser);
+        else if (accountError) setAccountError(accountError);
       } catch (err) {
         setError(err as Error);
       } finally {
@@ -264,6 +286,37 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
   }, []);
 
   if (loading) return <Loading />;
+  if (accountError) {
+    const { title, message } = TERMINAL_ACCOUNT_ERROR_COPY[accountError];
+    return (
+      <>
+        <ConfirmationDialog
+          open={true}
+          confirmText='Sign out'
+          title={title}
+          loading={logoutInFlight}
+          hideCancelButton
+          // Not logoutUser: its full-page loading state unmounts this dialog
+          // (see logoutInFlight).
+          onConfirm={retryLogout}
+          maxWidth='sm'
+          fullWidth
+        >
+          <Typography>{message}</Typography>
+        </ConfirmationDialog>
+        {/* Without this copy a failed sign-out is invisible: the early return above
+        skips the signed-in tree's LogoutFailedDialog. */}
+        {logoutFailed && (
+          <LogoutFailedDialog
+            loading={logoutInFlight}
+            onRetry={retryLogout}
+            onDismiss={dismissLogoutFailure}
+            authMethod={resolveAuthMethod(appSettings?.authMethod)}
+          />
+        )}
+      </>
+    );
+  }
   if (error) {
     return (
       <ConfirmationDialog

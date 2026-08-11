@@ -4,6 +4,10 @@ import {
   HMIS_SESSION_UID_HEADER,
 } from '@/modules/auth/api/constants';
 import * as storage from '@/modules/auth/api/storage';
+import {
+  isTerminalAccountErrorType,
+  TerminalAccountErrorType,
+} from '@/modules/auth/events';
 
 import { resolveAuthMethod } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import apolloClient from '@/providers/apolloClient';
@@ -83,24 +87,36 @@ const trackSessionFromResponse = (response: Response) => {
   }
 };
 
-export async function fetchCurrentUser(): Promise<HmisUser | undefined> {
+// Neither field set is the signed-out case: /hmis/user.json answers 200 with no token.
+export interface CurrentUserResult {
+  user?: HmisUser;
+  // Set only under 'jwt', and on a 200 rather than an error status
+  // (Hmis::UsersController#show).
+  accountError?: TerminalAccountErrorType;
+}
+
+export async function fetchCurrentUser(): Promise<CurrentUserResult> {
   const response = await fetch('/hmis/user.json', {
     credentials: 'include',
   });
   trackSessionFromResponse(response);
 
   if (response.ok) {
-    const user: HmisUser | undefined = await response.json();
-    if (user?.id) {
-      storage.setUser(user);
+    const payload: (HmisUser & { accountError?: unknown }) | undefined =
+      await response.json();
+    if (payload?.id) {
+      storage.setUser(payload);
       // Store primaryIdp for bypassing IDP picker on next sign-in
-      if (user.primaryIdp) {
-        storage.setLastConnectorId(user.primaryIdp);
+      if (payload.primaryIdp) {
+        storage.setLastConnectorId(payload.primaryIdp);
       }
-      return user;
+      return { user: payload };
     }
     storage.clearUser();
-    return undefined;
+    // An unrecognized value reads as signed out: TERMINAL_ACCOUNT_ERROR_COPY has no
+    // entry for it, so the terminal dialog would render with no title or message.
+    const accountError = payload?.accountError;
+    return isTerminalAccountErrorType(accountError) ? { accountError } : {};
   } else {
     return Promise.reject(
       new HttpError('Failed to fetch currentUser', response.status)

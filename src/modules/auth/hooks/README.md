@@ -89,3 +89,40 @@ flowchart TD
 4. **Session Recovery** - When a session becomes invalid, the system attempts page reload once to reestablish it
 
 5. **Timing Mechanism** - `useSessionStatus` calculates remaining time and schedules appropriate UI notifications
+
+## Terminal account errors vs. re-authentication
+
+Two states are terminal — re-authenticating cannot clear them — so they must not
+take the "session ended" re-auth path above:
+
+* **Account deactivated** — the user's warehouse account was disabled.
+* **No warehouse account** — the signed-in identity has no warehouse account.
+
+How each auth arm signals them, and what the SPA does:
+
+| State | `AUTH_METHOD=devise` (backend) | `AUTH_METHOD=jwt` (backend) | SPA result |
+| --- | --- | --- | --- |
+| Session ended / signed out elsewhere | `401` (`custom_auth_failure.rb`, type `unauthenticated`/`inactive`) | `401` (proxy-level, or a tokenless race) | Session-ended dialog → reload → login |
+| Account deactivated | `401` (goes through the re-auth path) | `accountError` on the bootstrap payload | Terminal page (see below) |
+| No warehouse account | `401` | `accountError` on the bootstrap payload | Terminal page |
+
+Under `jwt` these are read at **bootstrap, not from a failed request**.
+`GET /hmis/user.json` skips authentication (it is an oauth2-proxy
+`skip_auth_route` and legitimately arrives with no token), so it answers `200`
+for all three of signed-out, deactivated, and no-account. It distinguishes them
+with an `accountError` field on that payload
+(`jwt_hmis_current_user.rb#terminal_account_error`); a tokenless request has no
+such field and stays the ordinary signed-out case. `fetchCurrentUser` returns it
+alongside the user, and `HmisAppSettingsProvider` replaces the app with a
+terminal dialog whose only action is to sign out.
+
+Reading it here rather than from a request failure is the point. The SPA only
+mounts its authenticated routes once it has a user, so a user in either state
+would otherwise never issue the request that fails — they would land on the
+sign-in page, sign in, and be returned by the proxy to the same empty payload,
+with no exit. Guarded routes still answer `403` with these types for a
+mid-session change; nothing in the SPA reads those, and the next reload picks the
+state up from the bootstrap payload.
+
+The `devise` arm reaches the same states as a 401 and keeps using the re-auth
+path, so this terminal-page flow is specific to the `jwt` arm.

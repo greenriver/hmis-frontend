@@ -12,9 +12,15 @@ vi.mock('@/modules/auth/api/storage', () => ({
   clearUser: vi.fn(),
   clearAppSettings: vi.fn(),
   clearSessionTacking: vi.fn(),
+  setLastConnectorId: vi.fn(),
 }));
 
-import { HmisResponseError, logout, sendSessionKeepalive } from './sessions';
+import {
+  fetchCurrentUser,
+  HmisResponseError,
+  logout,
+  sendSessionKeepalive,
+} from './sessions';
 import * as storage from '@/modules/auth/api/storage';
 import apolloClient from '@/providers/apolloClient';
 
@@ -25,6 +31,13 @@ const okResponse = () =>
 
 const errorResponse = (json: () => Promise<any>) =>
   ({ ok: false, headers: new Map(), json }) as unknown as Response;
+
+const jsonResponse = (body: any) =>
+  ({
+    ok: true,
+    headers: new Map(),
+    json: () => Promise.resolve(body),
+  }) as unknown as Response;
 
 describe('session transport by auth method', () => {
   let fetchMock: ReturnType<typeof vi.fn>;
@@ -70,6 +83,64 @@ describe('session transport by auth method', () => {
       expect(opts.method).toBe('GET');
       expect(opts.credentials).toBe('include');
       expect(opts.headers['X-CSRF-Token']).toBeUndefined();
+    });
+  });
+
+  describe('fetchCurrentUser: the 200 payload separates signed out from terminal states', () => {
+    it('returns the user for a signed-in payload', async () => {
+      fetchMock.mockResolvedValue(
+        jsonResponse({ id: '1', name: 'Test User', primaryIdp: 'keycloak' })
+      );
+
+      const result = await fetchCurrentUser();
+      expect(result.user?.id).toBe('1');
+      expect(result.accountError).toBeUndefined();
+      expect(storage.setUser).toHaveBeenCalled();
+      expect(storage.setLastConnectorId).toHaveBeenCalledWith('keycloak');
+    });
+
+    it.each(['account_deactivated', 'no_warehouse_account'])(
+      'reports %s from the 200 payload, with no user',
+      async (accountError) => {
+        fetchMock.mockResolvedValue(
+          jsonResponse({ impersonating: false, accountError })
+        );
+
+        const result = await fetchCurrentUser();
+        expect(result.accountError).toBe(accountError);
+        expect(result.user).toBeUndefined();
+        expect(storage.clearUser).toHaveBeenCalled();
+      }
+    );
+
+    it('reads a tokenless payload as signed out, not as a terminal state', async () => {
+      // Reading this as terminal would show the sign-out page to every visitor who
+      // is not signed in yet.
+      fetchMock.mockResolvedValue(jsonResponse({ impersonating: false }));
+
+      const result = await fetchCurrentUser();
+      expect(result.user).toBeUndefined();
+      expect(result.accountError).toBeUndefined();
+    });
+
+    it('ignores an unrecognized accountError rather than showing a page with no copy', async () => {
+      fetchMock.mockResolvedValue(
+        jsonResponse({ impersonating: false, accountError: 'something_new' })
+      );
+
+      const result = await fetchCurrentUser();
+      expect(result.accountError).toBeUndefined();
+    });
+
+    it('rejects with an HttpError on a non-ok response', async () => {
+      fetchMock.mockResolvedValue({
+        ok: false,
+        status: 500,
+        headers: new Map(),
+      } as unknown as Response);
+
+      const err = await fetchCurrentUser().catch((e) => e);
+      expect(err.status).toBe(500);
     });
   });
 
