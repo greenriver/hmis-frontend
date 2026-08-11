@@ -22,22 +22,28 @@ interface Props {
 
 const comparatorLabel = (comparator: CeMatchRuleComparator) => {
   switch (comparator) {
+    // Grammatically these labels should follow "Must", the form element label.
+    // for example "Must Equal", rather than "Must Equals"
     case CeMatchRuleComparator.Eq:
-      return 'Equals';
+      return 'Equal';
     case CeMatchRuleComparator.NotEq:
-      return 'Does not equal';
+      return 'Not equal';
     case CeMatchRuleComparator.Gt:
-      return 'Greater than';
+      return 'Be greater than';
     case CeMatchRuleComparator.Gte:
-      return 'Greater than or equal to';
+      return 'Be greater than or equal to';
     case CeMatchRuleComparator.Lt:
-      return 'Less than';
+      return 'Be less than';
     case CeMatchRuleComparator.Lte:
-      return 'Less than or equal to';
+      return 'Be less than or equal to';
     case CeMatchRuleComparator.Includes:
-      return 'Includes';
+      return 'Include';
     case CeMatchRuleComparator.Excludes:
-      return 'Excludes';
+      return 'Exclude';
+    case CeMatchRuleComparator.IsNotNull:
+      return 'Have a value';
+    case CeMatchRuleComparator.IsNull:
+      return 'Not have a value';
     default:
       return comparator;
   }
@@ -49,13 +55,17 @@ const comparatorOptionsForField = (
   const comparators = new Set<CeMatchRuleComparator>();
 
   if (field?.multiple) {
-    // For a multiple value (array), only allow Includes/Excludes
+    // For a multiple value (array), only allow Includes/Excludes.
+    // Null/Not Null comparisons don't currently work for array CDEs,
+    // since the backend CdeFieldMap uses a default of [], not null, when no values are present
     comparators.add(CeMatchRuleComparator.Includes);
     comparators.add(CeMatchRuleComparator.Excludes);
   } else {
-    // Otherwise, start with Equals/Not Equals
+    // Otherwise, start with Equals/Not Equals/null checks
     comparators.add(CeMatchRuleComparator.Eq);
     comparators.add(CeMatchRuleComparator.NotEq);
+    comparators.add(CeMatchRuleComparator.IsNotNull);
+    comparators.add(CeMatchRuleComparator.IsNull);
 
     // If the field type is comparable (numeric/date/etc), add the comparable operators
     if (field && COMPARABLE_ITEM_TYPES.includes(field.itemType)) {
@@ -96,7 +106,7 @@ const CeMatchClauseComparatorSelect: React.FC<Props> = ({
     <ControlledSelect
       name={`${clausePath}.comparator`}
       control={control}
-      label={getRequiredLabel('Comparator', true)}
+      label={getRequiredLabel('Must', true)}
       placeholder='Select'
       required
       options={comparatorOptions}

@@ -26,6 +26,7 @@ const adminDashboardRoutes = {
   PERFORM_CLIENT_MERGES: 'client-merge-history/candidates',
   AVAILABLE_UNITS: 'available-units',
   DEFAULT_CONTACTS: 'default-contacts',
+  BULK_VOID: 'bulk-void',
   ELIGIBLE_CLIENTS: 'eligible-clients',
   REFERRALS: 'referrals',
   REFERRAL: ReferralSubRoutes.ReferralPath,

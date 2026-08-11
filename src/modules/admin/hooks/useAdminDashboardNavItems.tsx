@@ -30,6 +30,13 @@ export const useAdminDashboardNavItems = () => {
             hide: !globalFeatureFlags?.coordinatedEntryEnabled,
           },
           {
+            id: 'bulk-void',
+            title: 'Bulk Void',
+            path: AdminDashboardRoutes.BULK_VOID,
+            permissions: ['canBulkVoidCeClients'],
+            hide: !globalFeatureFlags?.bulkVoidEnabled,
+          },
+          {
             id: 'eligibility-rules',
             title: 'Eligibility Rules',
             path: AdminDashboardRoutes.CE_RULES_ROOT,

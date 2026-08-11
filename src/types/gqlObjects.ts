@@ -599,6 +599,27 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'CeCandidatePoolSummary',
+    fields: [
+      {
+        name: 'neverFullyGeneratedCount',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
+      },
+      {
+        name: 'totalCount',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'CeClient',
     fields: [
       {
@@ -1121,6 +1142,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
         },
+      },
+      {
+        name: 'candidatesFullyGeneratedAt',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'candidatesGeneratedAt',
@@ -5154,7 +5179,23 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'GlobalFeatureFlags',
     fields: [
       {
+        name: 'bulkVoidEnabled',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'coordinatedEntryEnabled',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'esgFundingReportEnabled',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6679,14 +6720,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'QueryAccess',
     fields: [
       {
-        name: 'canAdministerHmis',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'canAdministrateConfig',
         type: {
           kind: 'NON_NULL',
@@ -6695,7 +6728,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canAdministrateCoordinatedEntry',
+        name: 'canAuditUsers',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6703,7 +6736,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canAuditUsers',
+        name: 'canBulkVoidCeClients',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6856,14 +6889,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canMergeClients',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canTransferEnrollments',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -8310,6 +8335,22 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         name: 'expression',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
+      {
+        name: 'funders',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'ENUM', name: 'FundingSource', ofType: null },
+            },
+          },
+        },
+      },
       { name: 'name', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       { name: 'ownerId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       {
@@ -8319,6 +8360,22 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'priorityRank',
         type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
+        name: 'projectTypes',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+            },
+          },
+        },
       },
       {
         name: 'ruleType',

@@ -28,7 +28,7 @@ const CeMatchClauseFieldSourceSelect: React.FC<Props> = ({
   <ControlledSelect
     name={`${clausePath}.source`}
     control={control}
-    label={getRequiredLabel('Field Type', true)}
+    label={getRequiredLabel('Source', true)}
     placeholder='Select type'
     required
     options={Object.values(CeMatchRuleFieldSource).map((code) => ({

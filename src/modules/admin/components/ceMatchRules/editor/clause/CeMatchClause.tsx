@@ -10,7 +10,6 @@ import CeMatchClauseComparatorSelect, {
 import CeMatchClauseFieldSelect from './CeMatchClauseFieldSelect';
 import CeMatchClauseFieldSourceSelect from './CeMatchClauseFieldSourceSelect';
 import CeMatchClauseValueInput from './CeMatchClauseValueInput';
-import { HmisEnums } from '@/types/gqlEnums';
 import {
   CeMatchCustomAssessmentFormFieldsFragment,
   CeMatchFieldDetailsFragment,
@@ -27,6 +26,7 @@ interface Props {
   setValue: UseFormSetValue<CeMatchRuleFormValues>;
   index: number;
   clientItems: CeMatchFieldDetailsFragment[];
+  psdeFields: CeMatchFieldDetailsFragment[];
   customAssessmentForms: CeMatchCustomAssessmentFormFieldsFragment[];
 }
 
@@ -38,6 +38,7 @@ const CeMatchClause: React.FC<Props> = ({
   setValue,
   index,
   clientItems,
+  psdeFields,
   customAssessmentForms,
 }) => {
   // Path to the current clause in the RHF form state
@@ -56,6 +57,14 @@ const CeMatchClause: React.FC<Props> = ({
     control,
     name: `${clausePath}.field`,
   });
+  const comparator = useWatch({
+    control,
+    name: `${clausePath}.comparator`,
+  });
+  const isNullCheck = [
+    CeMatchRuleComparator.IsNull,
+    CeMatchRuleComparator.IsNotNull,
+  ].includes(comparator);
 
   // Query for custom assessment field at this level, rather than in the child CeMatchClauseFieldSelect,
   // because the selected field metadata also impacts the other child controls (comparator and value dropdowns).
@@ -77,10 +86,11 @@ const CeMatchClause: React.FC<Props> = ({
 
   const fields = useMemo(() => {
     if (source === CeMatchRuleFieldSource.Client) return clientItems;
+    if (source === CeMatchRuleFieldSource.Psde) return psdeFields;
     if (source === CeMatchRuleFieldSource.CustomDataElement)
       return customAssessmentFields;
     return [];
-  }, [clientItems, source, customAssessmentFields]);
+  }, [clientItems, psdeFields, source, customAssessmentFields]);
 
   const selectedField = useMemo(
     () => fields.find((field) => field.expressionField === fieldValue),
@@ -124,7 +134,7 @@ const CeMatchClause: React.FC<Props> = ({
   return (
     <Stack gap={2}>
       <Grid container spacing={2} alignItems='flex-start'>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={4}>
           <CeMatchClauseFieldSourceSelect
             clausePath={clausePath}
             control={control}
@@ -133,7 +143,7 @@ const CeMatchClause: React.FC<Props> = ({
           />
         </Grid>
         {source === CeMatchRuleFieldSource.CustomDataElement && (
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={8}>
             <CeMatchClauseAssessmentSelect
               clausePath={clausePath}
               control={control}
@@ -149,11 +159,6 @@ const CeMatchClause: React.FC<Props> = ({
             clausePath={clausePath}
             control={control}
             fields={fields}
-            fieldLabel={
-              source
-                ? `${HmisEnums.CeMatchRuleFieldSource[source]} Field`
-                : 'Field'
-            }
             disabled={fieldSelectDisabled}
             helperText={fieldSelectHelperText}
             customAssessmentFieldsLoading={customAssessmentFieldsLoading}
@@ -166,7 +171,7 @@ const CeMatchClause: React.FC<Props> = ({
             }}
           />
         </Grid>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={isNullCheck ? 8 : 4}>
           <CeMatchClauseComparatorSelect
             clausePath={clausePath}
             control={control}
@@ -174,13 +179,15 @@ const CeMatchClause: React.FC<Props> = ({
             onComparatorChange={resetValueSelection}
           />
         </Grid>
-        <Grid item xs={12} md={4}>
-          <CeMatchClauseValueInput
-            clausePath={clausePath}
-            control={control}
-            selectedField={selectedField}
-          />
-        </Grid>
+        {!isNullCheck && (
+          <Grid item xs={12} md={4}>
+            <CeMatchClauseValueInput
+              clausePath={clausePath}
+              control={control}
+              selectedField={selectedField}
+            />
+          </Grid>
+        )}
       </Grid>
     </Stack>
   );

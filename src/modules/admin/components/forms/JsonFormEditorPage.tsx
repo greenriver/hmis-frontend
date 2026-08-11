@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import JsonFormEditor from './JsonFormEditor';
 import Loading from '@/components/elements/Loading';
 import PageTitle from '@/components/layout/PageTitle';
+import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
@@ -13,11 +14,14 @@ import {
 const JsonFormEditorPage = () => {
   const { formId } = useSafeParams() as { formId: string };
 
-  const { data: { formDefinition } = {}, error } =
-    useGetFormDefinitionFieldsForJsonEditorQuery({
-      variables: { id: formId },
-      fetchPolicy: 'network-only', // always get the latest form
-    });
+  const {
+    data: { formDefinition } = {},
+    loading: fetchLoading,
+    error,
+  } = useGetFormDefinitionFieldsForJsonEditorQuery({
+    variables: { id: formId },
+    fetchPolicy: 'network-only', // always get the latest form
+  });
 
   const [
     updateFormDefinition,
@@ -29,7 +33,8 @@ const JsonFormEditorPage = () => {
     [saveResponse]
   );
   if (error) throw error;
-  if (!formDefinition) return <Loading />;
+  if (!formDefinition && fetchLoading) return <Loading />;
+  if (!formDefinition) return <NotFound />;
 
   return (
     <>
