@@ -9,13 +9,16 @@ import {
   TerminalAccountErrorType,
 } from '@/modules/auth/events';
 
-import { resolveAuthMethod } from '@/modules/hmisAppSettings/useHmisAppSettings';
+import {
+  AuthMethod,
+  resolveAuthMethod,
+} from '@/modules/hmisAppSettings/authMethod';
 import apolloClient from '@/providers/apolloClient';
 import { getCsrfToken } from '@/utils/csrf';
 import { HttpError } from '@/utils/HttpError';
 
 // Non-hook counterpart of useAuthMethod, for callers outside React.
-const getAuthMethod = (): 'devise' | 'jwt' =>
+const getAuthMethod = (): AuthMethod =>
   resolveAuthMethod(storage.getAppSettings()?.authMethod);
 
 export interface HmisUser {

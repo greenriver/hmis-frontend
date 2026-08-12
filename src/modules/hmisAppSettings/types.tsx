@@ -1,4 +1,7 @@
 import { ThemeOptions } from '@mui/material';
+
+import { AuthMethod } from './authMethod';
+
 export interface HmisAppSettings {
   oktaPath?: string;
   logoPath?: string;
@@ -14,5 +17,5 @@ export interface HmisAppSettings {
   // time, so one set of compiled assets serves installations on either auth
   // method. Optional: backends predating SSO omit it, and resolveAuthMethod
   // treats that as 'devise'.
-  authMethod?: 'devise' | 'jwt';
+  authMethod?: AuthMethod;
 }

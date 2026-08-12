@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { resolveAuthMethod } from './useHmisAppSettings';
+import { resolveAuthMethod } from './authMethod';
 
 describe('resolveAuthMethod', () => {
   it("opts into 'jwt' only for the exact backend value 'jwt'", () => {

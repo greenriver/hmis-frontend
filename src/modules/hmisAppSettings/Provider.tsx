@@ -21,9 +21,9 @@ import StopImpersonatingFailedDialog from '@/modules/auth/components/StopImperso
 import { TerminalAccountErrorType } from '@/modules/auth/events';
 import { useSessionTrackingObserver } from '@/modules/auth/hooks/useSessionTrackingObserver';
 import { fetchHmisAppSettings } from '@/modules/hmisAppSettings/api';
+import { resolveAuthMethod } from '@/modules/hmisAppSettings/authMethod';
 import { HmisAppSettingsContext } from '@/modules/hmisAppSettings/Context';
 import { HmisAppSettings } from '@/modules/hmisAppSettings/types';
-import { resolveAuthMethod } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { HttpError } from '@/utils/HttpError';
 import { reloadWindow } from '@/utils/location';
 import { getCurrentSessionId } from '@/utils/sessionId';
@@ -222,13 +222,12 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
       });
     };
 
-    const loadSettings = async (): Promise<HmisAppSettings> => {
+    const loadSettings = async (): Promise<void> => {
       const cached = cachedUser ? storage.getAppSettings() : undefined;
       const settings = cached ?? (await fetchHmisAppSettings());
       setAppSettings(settings);
       if (!cached) storage.setAppSettings(settings);
       await prefetchLogo(settings.logoPath);
-      return settings;
     };
 
     (async () => {
@@ -276,6 +275,27 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
     reloadWindow();
   }, []);
 
+  const logoutFailureDialogs = (
+    <>
+      {logoutFailed && (
+        <LogoutFailedDialog
+          loading={logoutInFlight}
+          onRetry={retryLogout}
+          onDismiss={dismissLogoutFailure}
+          authMethod={resolveAuthMethod(appSettings?.authMethod)}
+        />
+      )}
+      {stopImpersonatingFailed && (
+        <StopImpersonatingFailedDialog
+          loading={logoutInFlight}
+          onRetry={retryLogout}
+          onDismiss={dismissStopImpersonatingFailure}
+          impersonatedUserName={user?.name}
+        />
+      )}
+    </>
+  );
+
   if (loading) return <Loading />;
   if (accountError) {
     const { title, message } = TERMINAL_ACCOUNT_ERROR_COPY[accountError];
@@ -295,16 +315,7 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
         >
           <Typography>{message}</Typography>
         </ConfirmationDialog>
-        {/* Rendered again here because this branch returns before the signed-in
-        tree below, where the other LogoutFailedDialog lives. */}
-        {logoutFailed && (
-          <LogoutFailedDialog
-            loading={logoutInFlight}
-            onRetry={retryLogout}
-            onDismiss={dismissLogoutFailure}
-            authMethod={resolveAuthMethod(appSettings?.authMethod)}
-          />
-        )}
+        {logoutFailureDialogs}
       </>
     );
   }
@@ -330,22 +341,7 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
     <HmisAppSettingsContext.Provider value={appSettings}>
       <HmisAuthContext.Provider value={authState}>
         {children}
-        {logoutFailed && (
-          <LogoutFailedDialog
-            loading={logoutInFlight}
-            onRetry={retryLogout}
-            onDismiss={dismissLogoutFailure}
-            authMethod={resolveAuthMethod(appSettings.authMethod)}
-          />
-        )}
-        {stopImpersonatingFailed && (
-          <StopImpersonatingFailedDialog
-            loading={logoutInFlight}
-            onRetry={retryLogout}
-            onDismiss={dismissStopImpersonatingFailure}
-            impersonatedUserName={user?.name}
-          />
-        )}
+        {logoutFailureDialogs}
       </HmisAuthContext.Provider>
     </HmisAppSettingsContext.Provider>
   );
