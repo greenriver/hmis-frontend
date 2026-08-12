@@ -118,6 +118,19 @@ const populateParams = (
   });
 };
 
+// Order-insensitive comparison of two query strings, so we can skip navigations
+// that wouldn't actually change the URL. Skipping is load-bearing: a redundant
+// navigation to the same URL can still push a duplicate entry and, when it fires
+// from behind the history tip, truncate forward history.
+const searchStringsEqual = (a: string, b: string) => {
+  const normalize = (s: string) => {
+    const params = new URLSearchParams(s.startsWith('?') ? s.slice(1) : s);
+    params.sort();
+    return params.toString();
+  };
+  return normalize(a) === normalize(b);
+};
+
 // Type for internal state representation of search params
 type ValueType = Record<string, any>; // Future improvement: constrain value type
 
@@ -241,11 +254,17 @@ const useSearchParamsState = ({
 
       const accumulator = new URLSearchParams();
       populateParams(currentParams, accumulator);
+
+      const nextSearch = accumulator.toString();
+      // Skip a no-op navigation. Without this, e.g. resetting to page 0 when already
+      // on page 0 pushes a duplicate entry (and can truncate forward history).
+      if (searchStringsEqual(nextSearch, window.location.search)) return;
+
       // `navigate` instead of `useSearchParams` as workaround for https://github.com/remix-run/react-router/issues/8393
       navigate({
         pathname,
         hash,
-        search: accumulator.toString(),
+        search: nextSearch,
       });
     },
     [hash, navigate, paramsDefinition, pathname, searchParams]
