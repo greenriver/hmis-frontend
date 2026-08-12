@@ -44,7 +44,9 @@ export const DeviseOkta: Story = {
       dialog().queryByText(/identity provider/)
     ).not.toBeInTheDocument();
     await expect(
-      dialog().getByText(/You are still signed in, so anyone using this computer/)
+      dialog().getByText(
+        /You are still signed in, so anyone using this computer/
+      )
     ).toBeInTheDocument();
   },
 };
