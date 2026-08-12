@@ -50,8 +50,8 @@ const PublicRoutes: React.FC = () => {
       },
       {
         path: '/',
-        // 'devise' covers the existing Devise/Okta login form (<Login /> renders the
-        // Okta button internally via oktaPath); only the JWT/SSO path uses PublicLanding.
+        // <Login /> serves Okta as well as passwords, rendering the Okta button
+        // internally via oktaPath; only 'jwt' uses PublicLanding.
         element: authMethod === 'devise' ? <Login /> : <PublicLanding />,
       },
       {

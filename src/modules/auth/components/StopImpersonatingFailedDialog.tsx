@@ -6,14 +6,9 @@ interface Props {
   loading: boolean;
   onRetry: VoidFunction;
   onDismiss: VoidFunction;
-  // Name of the user still being impersonated, as shown in the "Acting as" banner.
   impersonatedUserName?: string;
 }
 
-// Shown when exiting impersonation did not go through. Sibling of
-// LogoutFailedDialog, and for the same reason: the generic "failed to connect"
-// dialog described a network problem and offered a reload, which dropped the
-// user back into the app still impersonating.
 const StopImpersonatingFailedDialog: React.FC<Props> = ({
   loading,
   onRetry,

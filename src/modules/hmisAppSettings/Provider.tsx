@@ -65,15 +65,10 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
   const [appSettings, setAppSettings] = useState<HmisAppSettings>();
   const [user, setUser] = useState<HmisUser>();
   const [error, setError] = useState<Error | HttpError>();
-  // Kept separate from `error`: a failed sign-out needs its own copy and its own
-  // affordance, and the user stays in the app behind the dialog.
   const [logoutFailed, setLogoutFailed] = useState(false);
-  // Same reasoning as `logoutFailed`, for the impersonating branch: the user is
-  // still impersonating and stays in the app behind the dialog.
   const [stopImpersonatingFailed, setStopImpersonatingFailed] = useState(false);
-  // Tracked separately from `loading` because `loading` unmounts the whole tree
-  // (see the render below), which would take the failure dialog and the app
-  // behind it with it. Drives the dialog's own spinner instead.
+  // Don't drive the retry spinner off `loading`: the render below unmounts the
+  // whole tree while `loading` is set, taking the failure dialog with it.
   const [logoutInFlight, setLogoutInFlight] = useState(false);
   const [loading, setLoading] = useState(true);
   const [accountError, setAccountError] = useState<TerminalAccountErrorType>();
@@ -94,15 +89,13 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
     }
   }, []);
 
-  // `fullPageLoading` is true for the first attempt from the user menu, where we
-  // expect to leave the page anyway, and false for a retry from the failure
-  // dialog, which has to leave the app mounted behind it.
   const attemptLogout = useCallback(
     async (fullPageLoading: boolean) => {
-      // Neither failure flag is cleared here: that would unmount the dialog that
-      // launched the retry, so logoutInFlight's spinner would never render. Nothing
-      // goes stale -- every exit sets a flag again or leaves the page, and
-      // dismissing clears it.
+      // Don't clear logoutFailed / stopImpersonatingFailed here: a retry comes
+      // from one of those dialogs, and clearing the flag unmounts the dialog that
+      // is meant to show logoutInFlight's spinner. Neither flag goes stale --
+      // every path out of this function sets one again, leaves the page, or is
+      // dismissed by the user.
       setLogoutInFlight(true);
       if (fullPageLoading) setLoading(true);
 
@@ -111,10 +104,9 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
           await stopImpersonating();
           reloadWindow();
         } catch (e) {
-          // stopImpersonating() rejects on a network error or a non-ok response, and
-          // only stores the reverted user on success, so the impersonation is still
-          // live here. Reloading would land them back in the app still acting as the
-          // other user.
+          // stopImpersonating() stores the reverted user only on success, so the
+          // impersonation is still live here. Reloading would land the user back
+          // in the app still acting as the other user.
           console.error('Stop impersonating failed', e);
           Sentry.captureException(e, { user: sentryUser(user) });
           setLoading(false);
@@ -124,9 +116,9 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
         return;
       }
 
-      // Explicit sign-out is the reset point for the remembered IdP connector:
-      // forget it so the next sign-in shows the picker. Session *expiry* does not
-      // clear it, so routine re-logins stay streamlined. No-op under Devise/Okta.
+      // An explicit sign-out is the only thing that forgets the remembered IdP,
+      // so the next sign-in shows the picker again. Session expiry leaves it, so
+      // routine re-logins skip the picker.
       storage.clearLastConnectorId();
 
       let response: Response;
@@ -135,10 +127,8 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
       } catch (e) {
         // Only a failed sign-out reaches here: logout() rejects on a network
         // error or a non-ok response, and nothing else runs inside the try. The
-        // session is still live either way, so say so instead of reloading into
-        // an app that looks signed in.
-        // Users can't diagnose this one themselves, and it leaves a live session
-        // on a machine they think they've left. Report it.
+        // session is still live either way, so say so instead of reloading with
+        // no sign that the sign-out failed.
         console.error('Sign out failed', e);
         Sentry.captureException(e, { user: sentryUser(user) });
         setLoading(false);
@@ -147,12 +137,10 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
         return;
       }
 
-      // Past this point the server ended the session, so nothing that goes wrong
-      // is a failed sign-out. JWT/SSO logout returns JSON with a redirect_url to
-      // the IdP end-session endpoint; the Devise/Okta logout may return an empty
-      // body, so only parse JSON when the server actually sent it. If the body
-      // doesn't parse, fall through to the reload rather than telling the user
-      // they're still signed in.
+      // The server ended the session, so nothing that goes wrong below is a
+      // failed sign-out: read what we can and reload either way. The 'jwt'
+      // logout answers with JSON carrying a redirect_url to the IdP end-session
+      // endpoint; the Devise/Okta logout may answer with an empty body.
       try {
         const contentType = response.headers.get('content-type') || '';
         if (contentType.includes('application/json')) {
@@ -180,11 +168,9 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
 
   // A sign-out can fail for a transient reason, and the session it failed to end
   // is still usable, so dismissing and going back to work is a legitimate choice.
-  // Sign out is still in the user menu when they're ready to try again.
+  // Sign out stays in the user menu for a later attempt.
   const dismissLogoutFailure = useCallback(() => setLogoutFailed(false), []);
 
-  // Dismissing leaves them impersonating, which the "Acting as" banner already
-  // announces, and its Exit button is the same retry as this dialog's.
   const dismissStopImpersonatingFailure = useCallback(
     () => setStopImpersonatingFailed(false),
     []
@@ -243,15 +229,16 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
 
     (async () => {
       try {
-        // Kick the currentUser fetch off alongside settings so we don't add a round-trip.
+        // Start this fetch before awaiting loadSettings, so the two requests
+        // overlap instead of costing two serial round-trips.
         const userPromise: Promise<CurrentUserResult> = cachedUser
           ? Promise.resolve({ user: cachedUser })
           : fetchCurrentUser();
 
         await loadSettings();
 
-        // Not routed through `error`: its dialog offers only a reload, and the probe
-        // returns the same accountError on every load.
+        // accountError does not go through `error`: that dialog offers only a
+        // reload, and every reload fetches the same accountError back.
         const { user: fetchedUser, accountError } = await userPromise;
         if (fetchedUser) setUser(fetchedUser);
         else if (accountError) setAccountError(accountError);
@@ -304,8 +291,8 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
         >
           <Typography>{message}</Typography>
         </ConfirmationDialog>
-        {/* Without this copy a failed sign-out is invisible: the early return above
-        skips the signed-in tree's LogoutFailedDialog. */}
+        {/* Rendered again here because this branch returns before the signed-in
+        tree below, where the other LogoutFailedDialog lives. */}
         {logoutFailed && (
           <LogoutFailedDialog
             loading={logoutInFlight}
@@ -332,8 +319,8 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
     );
   }
 
-  // app_settings is public and has loaded by now in both auth modes (an
-  // unauthenticated JWT/SSO user still gets settings), so it's always present here.
+  // GET /hmis/app_settings is public, so it answers for an unauthenticated
+  // JWT/SSO visitor too, and loadSettings has already run by this point.
   if (!appSettings) throw new Error(); // shouldn't get here
   return (
     <HmisAppSettingsContext.Provider value={appSettings}>

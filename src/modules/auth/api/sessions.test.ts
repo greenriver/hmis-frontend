@@ -1,7 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-// Keep the module graph light and side-effect free: the real apolloClient builds
-// the whole Apollo link chain at import, and csrf reads a DOM meta tag.
 vi.mock('@/providers/apolloClient', () => ({
   default: { clearStore: vi.fn(), resetStore: vi.fn() },
 }));
@@ -64,7 +62,7 @@ describe('session transport by auth method', () => {
   });
 
   describe('sendSessionKeepalive', () => {
-    it('Devise/Okta: POSTs with the CSRF token (unchanged behavior)', async () => {
+    it('Devise/Okta: POSTs with the CSRF token', async () => {
       getAppSettings.mockReturnValue({ authMethod: 'devise' });
       await sendSessionKeepalive();
 
@@ -145,7 +143,7 @@ describe('session transport by auth method', () => {
   });
 
   describe('logout', () => {
-    it('DELETEs with the CSRF token regardless of auth method (backend skips CSRF verification under JWT)', async () => {
+    it('DELETEs with the CSRF token regardless of auth method (JWT logout enforces CSRF too)', async () => {
       getAppSettings.mockReturnValue({ authMethod: 'jwt' });
       await logout();
 
@@ -158,9 +156,8 @@ describe('session transport by auth method', () => {
     it('clears local session state regardless of auth method', async () => {
       getAppSettings.mockReturnValue({ authMethod: 'jwt' });
       await logout();
-      // Full resetLocalSession teardown: dropping any of these would leak the
-      // prior user's data to the next login on a shared device. The Apollo cache
-      // clear is the highest-risk one - it holds fetched client PII/PHI.
+      // Dropping any of these leaks the prior user's data, including the client
+      // PII/PHI in the Apollo cache, to the next login on a shared device.
       expect(apolloClient.clearStore).toHaveBeenCalled();
       expect(storage.clearUser).toHaveBeenCalled();
       expect(storage.clearAppSettings).toHaveBeenCalled();
@@ -203,15 +200,15 @@ describe('session transport by auth method', () => {
       expect(storage.clearSessionTacking).not.toHaveBeenCalled();
     });
 
-    it('does not announce a session change when the sign-out fails', async () => {
+    it('does not dispatch a session-tracking event when the sign-out fails', async () => {
       getAppSettings.mockReturnValue({ authMethod: 'jwt' });
       fetchMock.mockResolvedValue(
         errorResponse(() => Promise.resolve({ error: { type: 'server' } }))
       );
 
       await logout().catch(() => undefined);
-      // Announcing here would report the failure as a sign-out and clear the
-      // record kept above; see logout().
+      // trackSessionFromResponse would read the failed response as a session
+      // change and clear the tracking record kept above; see logout().
       expect(document.dispatchEvent).not.toHaveBeenCalled();
     });
   });

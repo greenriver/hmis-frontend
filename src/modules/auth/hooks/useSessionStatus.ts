@@ -21,9 +21,9 @@ const useSessionStatus = ({
   const tracking = useSessionTracking();
 
   // useState prevents user from changing underneath us.
-  // During impersonation the session UID header (and therefore tracking.userId)
-  // reflects the *impersonated* user, which is exactly `initialUser.id` here, so
-  // compare against that rather than the true user.
+  // During impersonation the session UID header reports the impersonated user, so
+  // tracking.userId holds that id. Compare it against initialUser.id, which is the
+  // same impersonated id, not against the true user.
   const [{ sessionDuration, id: initialUserId }] = useState(initialUser);
   // if this session has ended
   const [exitStatus, setExitStatus] = useState<'invalid' | 'expired'>();

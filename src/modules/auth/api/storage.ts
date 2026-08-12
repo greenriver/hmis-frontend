@@ -39,7 +39,8 @@ export const getAppSettings = () => {
 export const clearAppSettings = () =>
   localStorage.removeItem(SETTINGS_STORAGE_KEY);
 
-// Store last used connector/IDP ID to bypass IDP picker on next sign-in
+// The IdP the user last signed in through. oauth2-proxy skips its picker when
+// /oauth2/sign_in is given a matching `connector_id`.
 export const setLastConnectorId = (value: string) =>
   localStorage.setItem(LAST_CONNECTOR_ID_KEY, value);
 

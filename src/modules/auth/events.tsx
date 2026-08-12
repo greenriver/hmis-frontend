@@ -6,7 +6,7 @@ export const dispatchSessionTrackingEvent = (userId: string | undefined) => {
   );
 };
 
-// The two states re-authenticating can't clear, a disabled account and a missing one
+// The account states re-authenticating cannot clear
 // (jwt_hmis_current_user.rb#terminal_account_error). Sending them down the 401
 // session-ended path returns the user to a sign-in screen that lands them back here.
 export type TerminalAccountErrorType =

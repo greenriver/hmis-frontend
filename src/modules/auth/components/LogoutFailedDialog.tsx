@@ -6,16 +6,12 @@ interface Props {
   loading: boolean;
   onRetry: VoidFunction;
   onDismiss: VoidFunction;
-  // Under 'jwt' the sign-out also ends the IdP session, so a failure leaves that
-  // session live too and the user needs to hear it. A Devise/Okta sign-out never
-  // touched the IdP session either way, so mentioning it there would be noise.
-  // Passed in rather than read from app settings to keep this presentational.
+  // Selects the copy: a 'jwt' sign-out also ends the IdP session, so its failure
+  // leaves that session live and the user has to be told. A Devise/Okta sign-out
+  // never ends the IdP session, so naming one there would be noise.
   authMethod: 'devise' | 'jwt';
 }
 
-// Shown when an explicit sign-out did not go through. The point of the copy is
-// that the session is still live -- the old generic "failed to connect" dialog
-// left users thinking they were signed out when they were not.
 const LogoutFailedDialog: React.FC<Props> = ({
   loading,
   onRetry,

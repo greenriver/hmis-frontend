@@ -10,7 +10,9 @@ export interface HmisAppSettings {
   casUrl?: string;
   appName?: string;
   theme?: ThemeOptions;
-  // Served by GET /hmis/app_settings. Optional because older backends don't send
-  // it - see useAuthMethod() for the fallback behavior.
+  // Read at runtime from GET /hmis/app_settings rather than baked in at build
+  // time, so one set of compiled assets serves installations on either auth
+  // method. Optional: backends predating SSO omit it, and resolveAuthMethod
+  // treats that as 'devise'.
   authMethod?: 'devise' | 'jwt';
 }

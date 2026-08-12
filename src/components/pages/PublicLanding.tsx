@@ -6,7 +6,6 @@ import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings
 const PublicLanding: React.FC = () => {
   const { logoPath } = useHmisAppSettings();
   const handleSignIn = () => {
-    // Get last used connector ID to bypass IDP picker
     const connectorId = getLastConnectorId();
     const signInUrl = connectorId
       ? `/oauth2/sign_in?connector_id=${encodeURIComponent(connectorId)}`

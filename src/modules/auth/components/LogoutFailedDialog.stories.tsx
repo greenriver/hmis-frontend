@@ -38,8 +38,8 @@ export const JwtSso: Story = {
 export const DeviseOkta: Story = {
   args: { ...args, authMethod: 'devise' },
   play: async () => {
-    // The Devise/Okta sign-out never ends the IdP session, so the copy must not
-    // claim anything about it.
+    // A Devise/Okta sign-out never ends the IdP session, so the copy must not
+    // mention one.
     await expect(
       dialog().queryByText(/identity provider/)
     ).not.toBeInTheDocument();
@@ -65,8 +65,6 @@ export const ConfirmRetries: Story = {
 export const CancelDismisses: Story = {
   args,
   play: async ({ args }) => {
-    // There has to be a way out: a sign-out can fail for a transient reason and
-    // the session is still usable, so the user can go back to work.
     await userEvent.click(dialog().getByTestId('cancelDialogAction'));
     await expect(args.onDismiss).toHaveBeenCalled();
     await expect(args.onRetry).not.toHaveBeenCalled();

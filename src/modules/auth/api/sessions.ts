@@ -14,9 +14,7 @@ import apolloClient from '@/providers/apolloClient';
 import { getCsrfToken } from '@/utils/csrf';
 import { HttpError } from '@/utils/HttpError';
 
-// Non-hook auth-method lookup for use outside React. Reads the persisted app
-// settings (kept in sync by HmisAppSettingsProvider) and applies the same
-// fallback chain as useAuthMethod.
+// Non-hook counterpart of useAuthMethod, for callers outside React.
 const getAuthMethod = (): 'devise' | 'jwt' =>
   resolveAuthMethod(storage.getAppSettings()?.authMethod);
 
@@ -87,7 +85,8 @@ const trackSessionFromResponse = (response: Response) => {
   }
 };
 
-// Neither field set is the signed-out case: /hmis/user.json answers 200 with no token.
+// /hmis/user.json answers 200 even with no token, so a result with neither field
+// set means signed out.
 export interface CurrentUserResult {
   user?: HmisUser;
   // Set only under 'jwt', and on a 200 rather than an error status
@@ -106,7 +105,6 @@ export async function fetchCurrentUser(): Promise<CurrentUserResult> {
       await response.json();
     if (payload?.id) {
       storage.setUser(payload);
-      // Store primaryIdp for bypassing IDP picker on next sign-in
       if (payload.primaryIdp) {
         storage.setLastConnectorId(payload.primaryIdp);
       }
@@ -143,10 +141,8 @@ export type LoginParams = {
 };
 
 export async function sendSessionKeepalive() {
-  // In JWT/SSO mode the request passes through oauth2-proxy, which rejects the
-  // Devise CSRF POST; a plain credentialed GET keeps the id_token cookie alive.
-  // Preserve the original POST+CSRF behavior for the Devise/Okta session so the
-  // current auth flow is unchanged.
+  // Under 'jwt' the request passes through oauth2-proxy, which rejects the Devise
+  // CSRF POST; a plain credentialed GET keeps the id_token cookie alive.
   const response =
     getAuthMethod() === 'jwt'
       ? await fetch('/hmis/session_keepalive', {
@@ -205,17 +201,14 @@ export function resetLocalSession({ keepSessionTracking = false } = {}) {
 }
 
 export async function logout() {
-  // Same CSRF'd DELETE for JWT/SSO and Devise/Okta; response shape differs (redirect_url vs
-  // plain success), handled in logoutUser.
   const response = await fetchWithCsrf('/hmis/logout', {
     method: 'DELETE',
   });
   if (!response.ok) {
-    // No trackSessionFromResponse on this path: a failed sign-out says nothing about
-    // whether the session ended, and the Devise logout controller descends from
-    // Devise::SessionsController rather than Hmis::BaseController, so it never sets
-    // the user header that call reads. Every failure would look like a sign-out and
-    // clear the record this resetLocalSession keeps.
+    // Don't add trackSessionFromResponse here: it would read the failed sign-out as
+    // a session change and clear the tracking record resetLocalSession just kept.
+    // The Devise logout controller descends from Devise::SessionsController, not
+    // Hmis::BaseController, so it never sets the user header that call reads.
     resetLocalSession({ keepSessionTracking: true });
     return response.json().then(throwMaybeHmisError);
   }
