@@ -6,6 +6,9 @@ import {
   CeReferralOrigin,
   CeReferralStatus,
   CeReferralStepStatus,
+  CustomDataElementFieldsFragment,
+  CustomDataElementType,
+  DisplayHook,
 } from '@/types/gqlTypes';
 
 export default {
@@ -39,7 +42,44 @@ const mockStep = {
   access: {
     canPerformStep: true,
   },
+  customDataElements: [],
 };
+
+const summaryCustomDataElements: CustomDataElementFieldsFragment[] = [
+  {
+    id: 'cde-1',
+    key: 'denial_reason',
+    label: 'Denial Reason',
+    fieldType: CustomDataElementType.String,
+    repeats: false,
+    displayHooks: [DisplayHook.TableSummary],
+    value: {
+      id: 'v-1',
+      valueString: 'Missing documentation',
+    },
+  },
+  {
+    id: 'cde-2',
+    key: 'follow_up_items',
+    label: 'Follow-up Items',
+    fieldType: CustomDataElementType.String,
+    repeats: true,
+    displayHooks: [DisplayHook.TableSummary],
+    values: [
+      { id: 'v-2a', valueString: 'Call client' },
+      { id: 'v-2b', valueString: 'Verify income' },
+    ],
+  },
+  {
+    id: 'cde-3',
+    key: 'item_with_no_value',
+    label: 'Item With No Value',
+    fieldType: CustomDataElementType.String,
+    repeats: false,
+    displayHooks: [DisplayHook.TableSummary],
+    value: null,
+  },
+];
 
 const mockReferral: CeReferralFieldsFragment = {
   id: '1',
@@ -102,7 +142,11 @@ export const Locked: Story = {
 
 export const Done: Story = {
   args: {
-    step: { ...mockStep, status: CeReferralStepStatus.Completed },
+    step: {
+      ...mockStep,
+      status: CeReferralStepStatus.Completed,
+      customDataElements: summaryCustomDataElements,
+    },
     referral: mockReferral,
   },
 };

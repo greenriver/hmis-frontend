@@ -305,15 +305,15 @@ fragment CeReferralStepSummaryFields on CeReferralStep {
   access {
     canPerformStep
   }
+  customDataElements {
+    ...CustomDataElementFields
+  }
 }
 
 fragment CeReferralStepFields on CeReferralStep {
   ...CeReferralStepSummaryFields
   formDefinition {
     ...FormDefinitionFields
-  }
-  customDataElements {
-    ...CustomDataElementFields
   }
 }
 
