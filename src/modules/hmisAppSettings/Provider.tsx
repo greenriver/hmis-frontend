@@ -143,7 +143,8 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
       // endpoint; the Devise/Okta logout may answer with an empty body.
       try {
         const contentType = response.headers.get('content-type') || '';
-        if (contentType.includes('application/json')) {
+        // A 204 carries no body for the Devise/Okta
+        if (response.status !== 204 && contentType.includes('application/json')) {
           const data: { redirect_url?: string } = await response.json();
           if (data.redirect_url) {
             window.location.href = data.redirect_url;

@@ -25,15 +25,15 @@ import apolloClient from '@/providers/apolloClient';
 const getAppSettings = storage.getAppSettings as ReturnType<typeof vi.fn>;
 
 const okResponse = () =>
-  ({ ok: true, headers: new Map() }) as unknown as Response;
+  ({ ok: true, headers: new Headers() }) as unknown as Response;
 
 const errorResponse = (json: () => Promise<any>) =>
-  ({ ok: false, headers: new Map(), json }) as unknown as Response;
+  ({ ok: false, headers: new Headers(), json }) as unknown as Response;
 
 const jsonResponse = (body: any) =>
   ({
     ok: true,
-    headers: new Map(),
+    headers: new Headers(),
     json: () => Promise.resolve(body),
   }) as unknown as Response;
 
