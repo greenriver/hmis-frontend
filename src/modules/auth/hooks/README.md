@@ -89,3 +89,45 @@ flowchart TD
 4. **Session Recovery** - When a session becomes invalid, the system attempts page reload once to reestablish it
 
 5. **Timing Mechanism** - `useSessionStatus` calculates remaining time and schedules appropriate UI notifications
+
+## Terminal account errors vs. re-authentication
+
+Two states are terminal — re-authenticating cannot clear them — so they must not
+take the "session ended" re-auth path above:
+
+* **Account deactivated** — the warehouse account exists but has been disabled.
+* **No warehouse account** — the IdP authenticated the person, but no warehouse
+  account is provisioned for that identity.
+
+How each `authMethod` signals them, and what the SPA does:
+
+| State | `AUTH_METHOD=devise` (backend) | `AUTH_METHOD=jwt` (backend) | SPA result |
+| --- | --- | --- | --- |
+| Session ended / signed out elsewhere | `401` (`custom_auth_failure.rb`, type `unauthenticated`/`inactive`) | `401` (proxy-level, or a tokenless race) | Session-ended dialog → reload → login |
+| Account deactivated | `401` (goes through the re-auth path) | `accountError` on the bootstrap payload | Terminal page (see below) |
+| No warehouse account | `401` | `accountError` on the bootstrap payload | Terminal page |
+
+Under `jwt` these are read at **bootstrap, not from a failed request**.
+`GET /hmis/user.json` skips authentication — it is an oauth2-proxy
+`skip_auth_route` and legitimately arrives with no token — so it answers `200`
+for all three of signed-out, deactivated, and no-account. It separates them with
+an `accountError` field on that payload
+(`jwt_hmis_current_user.rb#terminal_account_error`); a tokenless request carries
+no such field and stays the ordinary signed-out case. `fetchCurrentUser` returns
+`accountError` alongside the user, and `HmisAppSettingsProvider` replaces the app
+with a terminal dialog whose only action is to sign out.
+
+A failed request could not carry these states instead. The SPA mounts its
+authenticated routes only once it has a user, so a deactivated or no-account user
+never issues a request that could fail — they land on the sign-in page, sign in,
+and the proxy returns them to the same userless payload, with no exit. Guarded
+routes do still answer `403` with these types when the account changes
+mid-session; nothing in the SPA reads those, and the next reload picks the state
+up from the bootstrap payload.
+
+`DELETE /hmis/logout` is the exception. Sign-out is the terminal dialog's only
+action, and neither state has a `current_hmis_user`, so under `jwt` that route
+resolves an `idp_token_holder` from the token instead of requiring a user
+(`Hmis::Idp::SessionsController`). Without it a deactivated or no-account user
+could never sign out, and on a shared machine the next person would inherit the
+live IdP session.
