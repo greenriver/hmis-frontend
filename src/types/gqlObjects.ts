@@ -2151,23 +2151,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canManageAnyClientFiles',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'canManageClientAlerts',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canManageOwnClientFiles',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -2200,14 +2184,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canUploadClientFiles',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canViewAnyFiles',
         type: {
           kind: 'NON_NULL',
           name: null,

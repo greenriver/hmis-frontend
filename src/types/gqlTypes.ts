@@ -1548,17 +1548,11 @@ export type ClientAccess = {
   canDeleteClient: Scalars['Boolean']['output'];
   canEditClient: Scalars['Boolean']['output'];
   canIndexFiles: Scalars['Boolean']['output'];
-  /** @deprecated Resolve canManage on individual file access field instead */
-  canManageAnyClientFiles: Scalars['Boolean']['output'];
   canManageClientAlerts: Scalars['Boolean']['output'];
-  /** @deprecated Resolve canManage on individual file access field instead */
-  canManageOwnClientFiles: Scalars['Boolean']['output'];
   canManageScanCards: Scalars['Boolean']['output'];
   canMergeClients: Scalars['Boolean']['output'];
   canPrintClientCaseNotes: Scalars['Boolean']['output'];
   canUploadClientFiles: Scalars['Boolean']['output'];
-  /** @deprecated Use canIndexFiles */
-  canViewAnyFiles: Scalars['Boolean']['output'];
   canViewClientAlerts: Scalars['Boolean']['output'];
   canViewClientEligibleOpportunities: Scalars['Boolean']['output'];
   canViewClientName: Scalars['Boolean']['output'];
