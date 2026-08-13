@@ -132,6 +132,7 @@ export const RITA_ACKROYD = {
   dateUpdated: '2022-07-27T15:14:29.062',
   dateCreated: '2022-07-27T15:14:29.062',
   pronouns: ['she/hers'],
+  restricted: false,
   enabledFeatures: Object.keys(HmisEnums.ClientDashboardFeature),
   externalIds: [
     {
