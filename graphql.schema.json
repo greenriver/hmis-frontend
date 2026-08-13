@@ -12146,22 +12146,6 @@
             "deprecationReason": null
           },
           {
-            "name": "canManageAnyClientFiles",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Resolve canManage on individual file access field instead"
-          },
-          {
             "name": "canManageClientAlerts",
             "description": null,
             "args": [],
@@ -12176,22 +12160,6 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
-          },
-          {
-            "name": "canManageOwnClientFiles",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Resolve canManage on individual file access field instead"
           },
           {
             "name": "canManageScanCards",
@@ -12272,22 +12240,6 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
-          },
-          {
-            "name": "canViewAnyFiles",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": true,
-            "deprecationReason": "Use canIndexFiles"
           },
           {
             "name": "canViewClientAlerts",
