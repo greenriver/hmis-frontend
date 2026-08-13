@@ -25399,16 +25399,7 @@ export type SetClientRestrictedMutation = {
   __typename?: 'Mutation';
   setClientRestricted?: {
     __typename?: 'SetClientRestrictedPayload';
-    client?: {
-      __typename?: 'Client';
-      id: string;
-      restricted: boolean;
-      access: {
-        __typename?: 'ClientAccess';
-        id: string;
-        canMarkRestricted: boolean;
-      };
-    } | null;
+    client?: { __typename?: 'Client'; id: string; restricted: boolean } | null;
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
@@ -62642,10 +62633,6 @@ export const SetClientRestrictedDocument = gql`
       client {
         id
         restricted
-        access {
-          id
-          canMarkRestricted
-        }
       }
       errors {
         ...ValidationErrorFields
