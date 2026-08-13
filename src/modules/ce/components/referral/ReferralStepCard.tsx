@@ -2,6 +2,7 @@ import { Box, Paper, Stack, Typography } from '@mui/material';
 import React from 'react';
 import ReferralStepDetails from './ReferralStepDetails';
 import ReferralStepAction from '@/modules/ce/components/referral/ReferralStepAction';
+import ReferralStepCdeSummary from '@/modules/ce/components/referral/ReferralStepCdeSummary';
 import {
   CeReferralFieldsFragment,
   CeReferralStepStatus,
@@ -32,6 +33,7 @@ const ReferralStepCard: React.FC<Props> = ({ step, referral, path }) => {
             {name}
           </Typography>
           <ReferralStepDetails step={step} />
+          <ReferralStepCdeSummary step={step} />
         </Stack>
         <Box>
           <ReferralStepAction

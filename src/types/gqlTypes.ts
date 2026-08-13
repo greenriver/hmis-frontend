@@ -18314,6 +18314,135 @@ export type CeReferralFieldsFragment = {
       name: string;
     } | null;
     access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      fieldType: CustomDataElementType;
+      repeats: boolean;
+      displayHooks: Array<DisplayHook>;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      }> | null;
+    }>;
   }> | null;
   opportunity?: {
     __typename?: 'CeOpportunity';
@@ -18528,6 +18657,135 @@ export type CeReferralStepSummaryFieldsFragment = {
     name: string;
   } | null;
   access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    fieldType: CustomDataElementType;
+    repeats: boolean;
+    displayHooks: Array<DisplayHook>;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        email: string;
+      } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        email: string;
+      } | null;
+    }> | null;
+  }>;
 };
 
 export type CeReferralStepFieldsFragment = {
@@ -19060,6 +19318,17 @@ export type CeReferralStepFieldsFragment = {
       canDuplicateForm: boolean;
     };
   };
+  assignees: Array<{
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  }>;
+  updatedBy?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  } | null;
+  access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
     id: string;
@@ -19189,17 +19458,6 @@ export type CeReferralStepFieldsFragment = {
       } | null;
     }> | null;
   }>;
-  assignees: Array<{
-    __typename?: 'ApplicationUser';
-    id: string;
-    name: string;
-  }>;
-  updatedBy?: {
-    __typename?: 'ApplicationUser';
-    id: string;
-    name: string;
-  } | null;
-  access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
 };
 
 export type UserCeReferralStepFieldsFragment = {
@@ -19875,6 +20133,17 @@ export type StartCeReferralStepMutation = {
           canDuplicateForm: boolean;
         };
       };
+      assignees: Array<{
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      }>;
+      updatedBy?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
+      access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
         id: string;
@@ -20004,17 +20273,6 @@ export type StartCeReferralStepMutation = {
           } | null;
         }> | null;
       }>;
-      assignees: Array<{
-        __typename?: 'ApplicationUser';
-        id: string;
-        name: string;
-      }>;
-      updatedBy?: {
-        __typename?: 'ApplicationUser';
-        id: string;
-        name: string;
-      } | null;
-      access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -20576,6 +20834,17 @@ export type SubmitCeReferralStepMutation = {
           canDuplicateForm: boolean;
         };
       };
+      assignees: Array<{
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      }>;
+      updatedBy?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
+      access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
         id: string;
@@ -20705,17 +20974,6 @@ export type SubmitCeReferralStepMutation = {
           } | null;
         }> | null;
       }>;
-      assignees: Array<{
-        __typename?: 'ApplicationUser';
-        id: string;
-        name: string;
-      }>;
-      updatedBy?: {
-        __typename?: 'ApplicationUser';
-        id: string;
-        name: string;
-      } | null;
-      access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
     } | null;
     referral?: {
       __typename?: 'CeReferral';
@@ -20800,6 +21058,135 @@ export type SubmitCeReferralStepMutation = {
           __typename?: 'CeReferralStepAccess';
           canPerformStep: boolean;
         };
+        customDataElements: Array<{
+          __typename?: 'CustomDataElement';
+          id: string;
+          key: string;
+          label: string;
+          fieldType: CustomDataElementType;
+          repeats: boolean;
+          displayHooks: Array<DisplayHook>;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          }> | null;
+        }>;
       }> | null;
       access: {
         __typename?: 'CeReferralAccess';
@@ -21153,6 +21540,135 @@ export type AssignParticipantsMutation = {
           __typename?: 'CeReferralStepAccess';
           canPerformStep: boolean;
         };
+        customDataElements: Array<{
+          __typename?: 'CustomDataElement';
+          id: string;
+          key: string;
+          label: string;
+          fieldType: CustomDataElementType;
+          repeats: boolean;
+          displayHooks: Array<DisplayHook>;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          }> | null;
+        }>;
       }> | null;
       swimlanes?: Array<{
         __typename?: 'CeReferralSwimlane';
@@ -21483,6 +21999,135 @@ export type GetCeReferralQuery = {
         name: string;
       } | null;
       access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
+      customDataElements: Array<{
+        __typename?: 'CustomDataElement';
+        id: string;
+        key: string;
+        label: string;
+        fieldType: CustomDataElementType;
+        repeats: boolean;
+        displayHooks: Array<DisplayHook>;
+        value?: {
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          valueFile?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            url?: string | null;
+            tags: Array<string>;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            access: {
+              __typename?: 'FileAccess';
+              canEditFile: boolean;
+              canDeleteFile: boolean;
+            };
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
+        values?: Array<{
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          valueFile?: {
+            __typename?: 'File';
+            confidential?: boolean | null;
+            contentType?: string | null;
+            effectiveDate?: string | null;
+            expirationDate?: string | null;
+            id: string;
+            name: string;
+            url?: string | null;
+            tags: Array<string>;
+            redacted: boolean;
+            enrollmentId?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            access: {
+              __typename?: 'FileAccess';
+              canEditFile: boolean;
+              canDeleteFile: boolean;
+            };
+            enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+            uploadedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            updatedBy?: {
+              __typename?: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        }> | null;
+      }>;
     }> | null;
     opportunity?: {
       __typename?: 'CeOpportunity';
@@ -22154,6 +22799,17 @@ export type GetCeReferralStepQuery = {
         canDuplicateForm: boolean;
       };
     };
+    assignees: Array<{
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    }>;
+    updatedBy?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
+    access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
       id: string;
@@ -22283,17 +22939,6 @@ export type GetCeReferralStepQuery = {
         } | null;
       }> | null;
     }>;
-    assignees: Array<{
-      __typename?: 'ApplicationUser';
-      id: string;
-      name: string;
-    }>;
-    updatedBy?: {
-      __typename?: 'ApplicationUser';
-      id: string;
-      name: string;
-    } | null;
-    access: { __typename?: 'CeReferralStepAccess'; canPerformStep: boolean };
   } | null;
 };
 
@@ -52749,7 +53394,11 @@ export const CeReferralStepSummaryFieldsFragmentDoc = gql`
     access {
       canPerformStep
     }
+    customDataElements {
+      ...CustomDataElementFields
+    }
   }
+  ${CustomDataElementFieldsFragmentDoc}
 `;
 export const CeReferralAuditEventFieldsFragmentDoc = gql`
   fragment CeReferralAuditEventFields on CeReferralAuditEvent {
@@ -52982,13 +53631,9 @@ export const CeReferralStepFieldsFragmentDoc = gql`
     formDefinition {
       ...FormDefinitionFields
     }
-    customDataElements {
-      ...CustomDataElementFields
-    }
   }
   ${CeReferralStepSummaryFieldsFragmentDoc}
   ${FormDefinitionFieldsFragmentDoc}
-  ${CustomDataElementFieldsFragmentDoc}
 `;
 export const UserCeReferralStepFieldsFragmentDoc = gql`
   fragment UserCeReferralStepFields on CeReferralStep {
