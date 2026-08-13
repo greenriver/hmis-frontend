@@ -4,6 +4,10 @@ import {
   HMIS_SESSION_UID_HEADER,
 } from '@/modules/auth/api/constants';
 import * as storage from '@/modules/auth/api/storage';
+import {
+  isTerminalAccountErrorType,
+  TerminalAccountErrorType,
+} from '@/modules/auth/events';
 
 import apolloClient from '@/providers/apolloClient';
 import { getCsrfToken } from '@/utils/csrf';
@@ -16,6 +20,7 @@ export interface HmisUser {
   phone?: string;
   sessionDuration: number;
   impersonating: boolean;
+  primaryIdp?: string;
 }
 interface HmisError {
   type: string;
@@ -75,20 +80,36 @@ const trackSessionFromResponse = (response: Response) => {
   }
 };
 
-export async function fetchCurrentUser(): Promise<HmisUser | undefined> {
+// /hmis/user.json answers 200 even with no token, so a result with neither field
+// set means signed out.
+export interface CurrentUserResult {
+  user?: HmisUser;
+  // Set only under 'jwt', and on a 200 rather than an error status
+  // (Hmis::UsersController#show).
+  accountError?: TerminalAccountErrorType;
+}
+
+export async function fetchCurrentUser(): Promise<CurrentUserResult> {
   const response = await fetch('/hmis/user.json', {
     credentials: 'include',
   });
   trackSessionFromResponse(response);
 
   if (response.ok) {
-    const user: HmisUser | undefined = await response.json();
-    if (user?.id) {
-      storage.setUser(user);
-      return user;
+    const payload: (HmisUser & { accountError?: unknown }) | undefined =
+      await response.json();
+    if (payload?.id) {
+      storage.setUser(payload);
+      if (payload.primaryIdp) {
+        storage.setLastConnectorId(payload.primaryIdp);
+      }
+      return { user: payload };
     }
     storage.clearUser();
-    return undefined;
+    // An unrecognized value reads as signed out: TERMINAL_ACCOUNT_ERROR_COPY has no
+    // entry for it, so the terminal dialog would render with no title or message.
+    const accountError = payload?.accountError;
+    return isTerminalAccountErrorType(accountError) ? { accountError } : {};
   } else {
     return Promise.reject(
       new HttpError('Failed to fetch currentUser', response.status)
@@ -149,10 +170,16 @@ export async function login({
   }
 }
 
-export function resetLocalSession() {
+// The Apollo cache and stored user hold client PII/PHI and should not survive a
+// sign-out attempt on a shared device, even when the server-side session does.
+// `keepSessionTracking` spares the tracking record on a failed sign-out:
+// useSessionStatus reads it to decide whether the session is still alive, so
+// clearing it while the session survives makes the app report "Your session has
+// ended". That record holds no PII.
+export function resetLocalSession({ keepSessionTracking = false } = {}) {
   storage.clearUser();
   storage.clearAppSettings();
-  storage.clearSessionTacking();
+  if (!keepSessionTracking) storage.clearSessionTacking();
   // Clear cache without re-fetching any queries
   apolloClient.clearStore();
 }
@@ -161,6 +188,15 @@ export async function logout() {
   const response = await fetchWithCsrf('/hmis/logout', {
     method: 'DELETE',
   });
+  if (!response.ok) {
+    // Don't add trackSessionFromResponse here: it would read the failed sign-out as
+    // a session change and clear the tracking record resetLocalSession just kept.
+    // The Devise logout controller descends from Devise::SessionsController, not
+    // Hmis::BaseController, so it never sets the user header that call reads.
+    resetLocalSession({ keepSessionTracking: true });
+    return response.json().then(throwMaybeHmisError);
+  }
+
   trackSessionFromResponse(response);
   resetLocalSession();
   return response;
