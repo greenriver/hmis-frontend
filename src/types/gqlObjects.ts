@@ -2067,6 +2067,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
           },
         },
       },
+      {
+        name: 'restricted',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
       { name: 'sex', type: { kind: 'ENUM', name: 'Sex', ofType: null } },
       { name: 'ssn', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       {
@@ -2160,6 +2168,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canManageScanCards',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canMarkRestricted',
         type: {
           kind: 'NON_NULL',
           name: null,
