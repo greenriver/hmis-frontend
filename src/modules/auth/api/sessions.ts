@@ -9,17 +9,9 @@ import {
   TerminalAccountErrorType,
 } from '@/modules/auth/events';
 
-import {
-  AuthMethod,
-  resolveAuthMethod,
-} from '@/modules/hmisAppSettings/authMethod';
 import apolloClient from '@/providers/apolloClient';
 import { getCsrfToken } from '@/utils/csrf';
 import { HttpError } from '@/utils/HttpError';
-
-// Non-hook counterpart of useAuthMethod, for callers outside React.
-const getAuthMethod = (): AuthMethod =>
-  resolveAuthMethod(storage.getAppSettings()?.authMethod);
 
 export interface HmisUser {
   id: string;
@@ -144,20 +136,9 @@ export type LoginParams = {
 };
 
 export async function sendSessionKeepalive() {
-  // Under 'jwt' the request passes through oauth2-proxy, which rejects the Devise
-  // CSRF POST; a plain credentialed GET keeps the id_token cookie alive.
-  const response =
-    getAuthMethod() === 'jwt'
-      ? await fetch('/hmis/session_keepalive', {
-          method: 'GET',
-          credentials: 'include',
-          headers: {
-            Accept: 'application/json',
-          },
-        })
-      : await fetchWithCsrf('/hmis/session_keepalive', {
-          method: 'POST',
-        });
+  const response = await fetchWithCsrf('/hmis/session_keepalive', {
+    method: 'POST',
+  });
   trackSessionFromResponse(response);
   return response;
 }

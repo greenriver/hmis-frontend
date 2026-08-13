@@ -62,26 +62,18 @@ describe('session transport by auth method', () => {
   });
 
   describe('sendSessionKeepalive', () => {
-    it('Devise/Okta: POSTs with the CSRF token', async () => {
-      getAppSettings.mockReturnValue({ authMethod: 'devise' });
-      await sendSessionKeepalive();
+    it.each(['devise', 'jwt'] as const)(
+      'POSTs with the CSRF token under either auth method (%s)',
+      async (authMethod) => {
+        getAppSettings.mockReturnValue({ authMethod });
+        await sendSessionKeepalive();
 
-      const [url, opts] = fetchMock.mock.calls[0];
-      expect(url).toBe('/hmis/session_keepalive');
-      expect(opts.method).toBe('POST');
-      expect(opts.headers['X-CSRF-Token']).toBe('test-csrf-token');
-    });
-
-    it('JWT/SSO: GETs without a CSRF token so oauth2-proxy accepts it', async () => {
-      getAppSettings.mockReturnValue({ authMethod: 'jwt' });
-      await sendSessionKeepalive();
-
-      const [url, opts] = fetchMock.mock.calls[0];
-      expect(url).toBe('/hmis/session_keepalive');
-      expect(opts.method).toBe('GET');
-      expect(opts.credentials).toBe('include');
-      expect(opts.headers['X-CSRF-Token']).toBeUndefined();
-    });
+        const [url, opts] = fetchMock.mock.calls[0];
+        expect(url).toBe('/hmis/session_keepalive');
+        expect(opts.method).toBe('POST');
+        expect(opts.headers['X-CSRF-Token']).toBe('test-csrf-token');
+      }
+    );
   });
 
   describe('fetchCurrentUser: the 200 payload separates signed out from terminal states', () => {
