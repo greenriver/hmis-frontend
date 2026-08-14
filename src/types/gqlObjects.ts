@@ -2830,6 +2830,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'displayValue',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'fieldType',
         type: {
           kind: 'NON_NULL',

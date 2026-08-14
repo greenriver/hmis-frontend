@@ -552,6 +552,7 @@ export const serviceTypeSummary = (st: ServiceTypeFieldsFragment) => {
 export const customDataElementValueAsString = (
   cde: CustomDataElementFieldsFragment
 ): string | undefined => {
+  if (cde.displayValue) return cde.displayValue;
   if (cde.value) return customDataElementValue(cde.value, 'for_display');
   if (cde.values) {
     return cde.values

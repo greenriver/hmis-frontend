@@ -47,6 +47,20 @@ const mockStep = {
 
 const summaryCustomDataElements: CustomDataElementFieldsFragment[] = [
   {
+    id: 'cde-0',
+    key: 'decision',
+    label: 'Decision',
+    fieldType: CustomDataElementType.String,
+    repeats: false,
+    displayHooks: [DisplayHook.TableSummary],
+    // Pick-list CDE: value holds the raw code, backend resolves the label into displayValue
+    displayValue: 'HMIS user error',
+    value: {
+      id: 'v-0',
+      valueString: 'hmis_user_error',
+    },
+  },
+  {
     id: 'cde-1',
     key: 'denial_reason',
     label: 'Denial Reason',

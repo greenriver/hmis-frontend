@@ -17316,6 +17316,18 @@
             "deprecationReason": null
           },
           {
+            "name": "displayValue",
+            "description": "Human-readable value, with pick-list codes resolved to labels",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "fieldType",
             "description": null,
             "args": [],

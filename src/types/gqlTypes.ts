@@ -2319,6 +2319,8 @@ export type CustomDataElement = {
   __typename?: 'CustomDataElement';
   /** Where to display the custom field in the application */
   displayHooks: Array<DisplayHook>;
+  /** Human-readable value, with pick-list codes resolved to labels */
+  displayValue?: Maybe<Scalars['String']['output']>;
   fieldType: CustomDataElementType;
   id: Scalars['ID']['output'];
   key: Scalars['String']['output'];
@@ -9959,6 +9961,7 @@ export type AssessmentWithRecordsFragment = {
       fieldType: CustomDataElementType;
       repeats: boolean;
       displayHooks: Array<DisplayHook>;
+      displayValue?: string | null;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -10209,6 +10212,7 @@ export type AssessmentWithRecordsFragment = {
       fieldType: CustomDataElementType;
       repeats: boolean;
       displayHooks: Array<DisplayHook>;
+      displayValue?: string | null;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -10419,6 +10423,7 @@ export type AssessmentWithRecordsFragment = {
       fieldType: CustomDataElementType;
       repeats: boolean;
       displayHooks: Array<DisplayHook>;
+      displayValue?: string | null;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -10574,6 +10579,7 @@ export type AssessmentWithRecordsFragment = {
     fieldType: CustomDataElementType;
     repeats: boolean;
     displayHooks: Array<DisplayHook>;
+    displayValue?: string | null;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -10857,6 +10863,7 @@ export type FullAssessmentFragment = {
       fieldType: CustomDataElementType;
       repeats: boolean;
       displayHooks: Array<DisplayHook>;
+      displayValue?: string | null;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -11107,6 +11114,7 @@ export type FullAssessmentFragment = {
       fieldType: CustomDataElementType;
       repeats: boolean;
       displayHooks: Array<DisplayHook>;
+      displayValue?: string | null;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -11317,6 +11325,7 @@ export type FullAssessmentFragment = {
       fieldType: CustomDataElementType;
       repeats: boolean;
       displayHooks: Array<DisplayHook>;
+      displayValue?: string | null;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -11472,6 +11481,7 @@ export type FullAssessmentFragment = {
     fieldType: CustomDataElementType;
     repeats: boolean;
     displayHooks: Array<DisplayHook>;
+    displayValue?: string | null;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -11651,6 +11661,7 @@ export type AssessmentWithCdesFragment = {
     fieldType: CustomDataElementType;
     repeats: boolean;
     displayHooks: Array<DisplayHook>;
+    displayValue?: string | null;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -12931,6 +12942,7 @@ export type GetAssessmentQuery = {
         fieldType: CustomDataElementType;
         repeats: boolean;
         displayHooks: Array<DisplayHook>;
+        displayValue?: string | null;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -13181,6 +13193,7 @@ export type GetAssessmentQuery = {
         fieldType: CustomDataElementType;
         repeats: boolean;
         displayHooks: Array<DisplayHook>;
+        displayValue?: string | null;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -13391,6 +13404,7 @@ export type GetAssessmentQuery = {
         fieldType: CustomDataElementType;
         repeats: boolean;
         displayHooks: Array<DisplayHook>;
+        displayValue?: string | null;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -13546,6 +13560,7 @@ export type GetAssessmentQuery = {
       fieldType: CustomDataElementType;
       repeats: boolean;
       displayHooks: Array<DisplayHook>;
+      displayValue?: string | null;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -13760,6 +13775,7 @@ export type GetClientAssessmentsQuery = {
           fieldType: CustomDataElementType;
           repeats: boolean;
           displayHooks: Array<DisplayHook>;
+          displayValue?: string | null;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -13947,6 +13963,7 @@ export type GetEnrollmentAssessmentsQuery = {
           fieldType: CustomDataElementType;
           repeats: boolean;
           displayHooks: Array<DisplayHook>;
+          displayValue?: string | null;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -14148,6 +14165,7 @@ export type GetHouseholdAssessmentsQuery = {
           fieldType: CustomDataElementType;
           repeats: boolean;
           displayHooks: Array<DisplayHook>;
+          displayValue?: string | null;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -14478,6 +14496,7 @@ export type SubmitAssessmentMutation = {
           fieldType: CustomDataElementType;
           repeats: boolean;
           displayHooks: Array<DisplayHook>;
+          displayValue?: string | null;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -14728,6 +14747,7 @@ export type SubmitAssessmentMutation = {
           fieldType: CustomDataElementType;
           repeats: boolean;
           displayHooks: Array<DisplayHook>;
+          displayValue?: string | null;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -14938,6 +14958,7 @@ export type SubmitAssessmentMutation = {
           fieldType: CustomDataElementType;
           repeats: boolean;
           displayHooks: Array<DisplayHook>;
+          displayValue?: string | null;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -15093,6 +15114,7 @@ export type SubmitAssessmentMutation = {
         fieldType: CustomDataElementType;
         repeats: boolean;
         displayHooks: Array<DisplayHook>;
+        displayValue?: string | null;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -15363,6 +15385,7 @@ export type SubmitHouseholdAssessmentsMutation = {
           fieldType: CustomDataElementType;
           repeats: boolean;
           displayHooks: Array<DisplayHook>;
+          displayValue?: string | null;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -15613,6 +15636,7 @@ export type SubmitHouseholdAssessmentsMutation = {
           fieldType: CustomDataElementType;
           repeats: boolean;
           displayHooks: Array<DisplayHook>;
+          displayValue?: string | null;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -15823,6 +15847,7 @@ export type SubmitHouseholdAssessmentsMutation = {
           fieldType: CustomDataElementType;
           repeats: boolean;
           displayHooks: Array<DisplayHook>;
+          displayValue?: string | null;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -15978,6 +16003,7 @@ export type SubmitHouseholdAssessmentsMutation = {
         fieldType: CustomDataElementType;
         repeats: boolean;
         displayHooks: Array<DisplayHook>;
+        displayValue?: string | null;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -16265,6 +16291,7 @@ export type GetAssessmentsForPopulationQuery = {
             fieldType: CustomDataElementType;
             repeats: boolean;
             displayHooks: Array<DisplayHook>;
+            displayValue?: string | null;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -16515,6 +16542,7 @@ export type GetAssessmentsForPopulationQuery = {
             fieldType: CustomDataElementType;
             repeats: boolean;
             displayHooks: Array<DisplayHook>;
+            displayValue?: string | null;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -16725,6 +16753,7 @@ export type GetAssessmentsForPopulationQuery = {
             fieldType: CustomDataElementType;
             repeats: boolean;
             displayHooks: Array<DisplayHook>;
+            displayValue?: string | null;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -16880,6 +16909,7 @@ export type GetAssessmentsForPopulationQuery = {
           fieldType: CustomDataElementType;
           repeats: boolean;
           displayHooks: Array<DisplayHook>;
+          displayValue?: string | null;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -18316,6 +18346,7 @@ export type CeReferralFieldsFragment = {
       fieldType: CustomDataElementType;
       repeats: boolean;
       displayHooks: Array<DisplayHook>;
+      displayValue?: string | null;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -18659,6 +18690,7 @@ export type CeReferralStepSummaryFieldsFragment = {
     fieldType: CustomDataElementType;
     repeats: boolean;
     displayHooks: Array<DisplayHook>;
+    displayValue?: string | null;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -19331,6 +19363,7 @@ export type CeReferralStepFieldsFragment = {
     fieldType: CustomDataElementType;
     repeats: boolean;
     displayHooks: Array<DisplayHook>;
+    displayValue?: string | null;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -20146,6 +20179,7 @@ export type StartCeReferralStepMutation = {
         fieldType: CustomDataElementType;
         repeats: boolean;
         displayHooks: Array<DisplayHook>;
+        displayValue?: string | null;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -20847,6 +20881,7 @@ export type SubmitCeReferralStepMutation = {
         fieldType: CustomDataElementType;
         repeats: boolean;
         displayHooks: Array<DisplayHook>;
+        displayValue?: string | null;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -21060,6 +21095,7 @@ export type SubmitCeReferralStepMutation = {
           fieldType: CustomDataElementType;
           repeats: boolean;
           displayHooks: Array<DisplayHook>;
+          displayValue?: string | null;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -21542,6 +21578,7 @@ export type AssignParticipantsMutation = {
           fieldType: CustomDataElementType;
           repeats: boolean;
           displayHooks: Array<DisplayHook>;
+          displayValue?: string | null;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -22001,6 +22038,7 @@ export type GetCeReferralQuery = {
         fieldType: CustomDataElementType;
         repeats: boolean;
         displayHooks: Array<DisplayHook>;
+        displayValue?: string | null;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -22812,6 +22850,7 @@ export type GetCeReferralStepQuery = {
       fieldType: CustomDataElementType;
       repeats: boolean;
       displayHooks: Array<DisplayHook>;
+      displayValue?: string | null;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -24156,6 +24195,7 @@ export type ClientFieldsFragment = {
     fieldType: CustomDataElementType;
     repeats: boolean;
     displayHooks: Array<DisplayHook>;
+    displayValue?: string | null;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -24653,6 +24693,7 @@ export type GetClientQuery = {
       fieldType: CustomDataElementType;
       repeats: boolean;
       displayHooks: Array<DisplayHook>;
+      displayValue?: string | null;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -25081,6 +25122,7 @@ export type GetClientServicesQuery = {
           fieldType: CustomDataElementType;
           repeats: boolean;
           displayHooks: Array<DisplayHook>;
+          displayValue?: string | null;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -26409,6 +26451,7 @@ export type MergeClientsMutation = {
         fieldType: CustomDataElementType;
         repeats: boolean;
         displayHooks: Array<DisplayHook>;
+        displayValue?: string | null;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -27153,6 +27196,7 @@ export type CurrentLivingSituationFieldsFragment = {
     fieldType: CustomDataElementType;
     repeats: boolean;
     displayHooks: Array<DisplayHook>;
+    displayValue?: string | null;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -27334,6 +27378,7 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
     fieldType: CustomDataElementType;
     repeats: boolean;
     displayHooks: Array<DisplayHook>;
+    displayValue?: string | null;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -27515,6 +27560,7 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
           fieldType: CustomDataElementType;
           repeats: boolean;
           displayHooks: Array<DisplayHook>;
+          displayValue?: string | null;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -27715,6 +27761,7 @@ export type GetProjectCurrentLivingSituationsQuery = {
           fieldType: CustomDataElementType;
           repeats: boolean;
           displayHooks: Array<DisplayHook>;
+          displayValue?: string | null;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -27883,6 +27930,7 @@ export type CustomCaseNoteFieldsFragment = {
     fieldType: CustomDataElementType;
     repeats: boolean;
     displayHooks: Array<DisplayHook>;
+    displayValue?: string | null;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -28055,6 +28103,7 @@ export type GetEnrollmentCustomCaseNotesQuery = {
           fieldType: CustomDataElementType;
           repeats: boolean;
           displayHooks: Array<DisplayHook>;
+          displayValue?: string | null;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -28277,6 +28326,7 @@ export type GetClientCaseNotesQuery = {
           fieldType: CustomDataElementType;
           repeats: boolean;
           displayHooks: Array<DisplayHook>;
+          displayValue?: string | null;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -28472,6 +28522,7 @@ export type CustomDataElementFieldsFragment = {
   fieldType: CustomDataElementType;
   repeats: boolean;
   displayHooks: Array<DisplayHook>;
+  displayValue?: string | null;
   value?: {
     __typename?: 'CustomDataElementValue';
     id: string;
@@ -29720,6 +29771,7 @@ export type EnrolledClientFieldsFragment = {
     fieldType: CustomDataElementType;
     repeats: boolean;
     displayHooks: Array<DisplayHook>;
+    displayValue?: string | null;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -29879,6 +29931,7 @@ export type AllEnrollmentDetailsFragment = {
     fieldType: CustomDataElementType;
     repeats: boolean;
     displayHooks: Array<DisplayHook>;
+    displayValue?: string | null;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -30022,6 +30075,7 @@ export type AllEnrollmentDetailsFragment = {
       fieldType: CustomDataElementType;
       repeats: boolean;
       displayHooks: Array<DisplayHook>;
+      displayValue?: string | null;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -30883,6 +30937,7 @@ export type SubmittedEnrollmentResultFieldsFragment = {
     fieldType: CustomDataElementType;
     repeats: boolean;
     displayHooks: Array<DisplayHook>;
+    displayValue?: string | null;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -31369,6 +31424,7 @@ export type GetEnrollmentDetailsQuery = {
       fieldType: CustomDataElementType;
       repeats: boolean;
       displayHooks: Array<DisplayHook>;
+      displayValue?: string | null;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -31512,6 +31568,7 @@ export type GetEnrollmentDetailsQuery = {
         fieldType: CustomDataElementType;
         repeats: boolean;
         displayHooks: Array<DisplayHook>;
+        displayValue?: string | null;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -39988,6 +40045,7 @@ export type SubmitFormMutation = {
             fieldType: CustomDataElementType;
             repeats: boolean;
             displayHooks: Array<DisplayHook>;
+            displayValue?: string | null;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -40208,6 +40266,7 @@ export type SubmitFormMutation = {
             fieldType: CustomDataElementType;
             repeats: boolean;
             displayHooks: Array<DisplayHook>;
+            displayValue?: string | null;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -40372,6 +40431,7 @@ export type SubmitFormMutation = {
             fieldType: CustomDataElementType;
             repeats: boolean;
             displayHooks: Array<DisplayHook>;
+            displayValue?: string | null;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -40526,6 +40586,7 @@ export type SubmitFormMutation = {
             fieldType: CustomDataElementType;
             repeats: boolean;
             displayHooks: Array<DisplayHook>;
+            displayValue?: string | null;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -40784,6 +40845,7 @@ export type SubmitFormMutation = {
             fieldType: CustomDataElementType;
             repeats: boolean;
             displayHooks: Array<DisplayHook>;
+            displayValue?: string | null;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -40960,6 +41022,7 @@ export type SubmitFormMutation = {
             fieldType: CustomDataElementType;
             repeats: boolean;
             displayHooks: Array<DisplayHook>;
+            displayValue?: string | null;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -41109,6 +41172,7 @@ export type SubmitFormMutation = {
             fieldType: CustomDataElementType;
             repeats: boolean;
             displayHooks: Array<DisplayHook>;
+            displayValue?: string | null;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -41294,6 +41358,7 @@ export type SubmitFormMutation = {
             fieldType: CustomDataElementType;
             repeats: boolean;
             displayHooks: Array<DisplayHook>;
+            displayValue?: string | null;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -41562,6 +41627,7 @@ export type SubmitFormMutation = {
             fieldType: CustomDataElementType;
             repeats: boolean;
             displayHooks: Array<DisplayHook>;
+            displayValue?: string | null;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -44175,6 +44241,7 @@ export type InventoryFieldsFragment = {
     fieldType: CustomDataElementType;
     repeats: boolean;
     displayHooks: Array<DisplayHook>;
+    displayValue?: string | null;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -44516,6 +44583,7 @@ export type OrganizationDetailFieldsFragment = {
     fieldType: CustomDataElementType;
     repeats: boolean;
     displayHooks: Array<DisplayHook>;
+    displayValue?: string | null;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -44666,6 +44734,7 @@ export type OrganizationFieldsFragment = {
     fieldType: CustomDataElementType;
     repeats: boolean;
     displayHooks: Array<DisplayHook>;
+    displayValue?: string | null;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -44850,6 +44919,7 @@ export type GetOrganizationQuery = {
       fieldType: CustomDataElementType;
       repeats: boolean;
       displayHooks: Array<DisplayHook>;
+      displayValue?: string | null;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -45113,6 +45183,7 @@ export type ProjectAllFieldsFragment = {
     fieldType: CustomDataElementType;
     repeats: boolean;
     displayHooks: Array<DisplayHook>;
+    displayValue?: string | null;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -45907,6 +45978,7 @@ export type FunderFieldsFragment = {
     fieldType: CustomDataElementType;
     repeats: boolean;
     displayHooks: Array<DisplayHook>;
+    displayValue?: string | null;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -46211,6 +46283,7 @@ export type GetProjectQuery = {
       fieldType: CustomDataElementType;
       repeats: boolean;
       displayHooks: Array<DisplayHook>;
+      displayValue?: string | null;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -46726,6 +46799,7 @@ export type GetProjectAssessmentsQuery = {
           fieldType: CustomDataElementType;
           repeats: boolean;
           displayHooks: Array<DisplayHook>;
+          displayValue?: string | null;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -46934,6 +47008,7 @@ export type GetFunderQuery = {
       fieldType: CustomDataElementType;
       repeats: boolean;
       displayHooks: Array<DisplayHook>;
+      displayValue?: string | null;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -47101,6 +47176,7 @@ export type GetInventoryQuery = {
       fieldType: CustomDataElementType;
       repeats: boolean;
       displayHooks: Array<DisplayHook>;
+      displayValue?: string | null;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -47309,6 +47385,7 @@ export type GetProjectInventoriesQuery = {
           fieldType: CustomDataElementType;
           repeats: boolean;
           displayHooks: Array<DisplayHook>;
+          displayValue?: string | null;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -47622,6 +47699,7 @@ export type GetProjectFundersQuery = {
           fieldType: CustomDataElementType;
           repeats: boolean;
           displayHooks: Array<DisplayHook>;
+          displayValue?: string | null;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -48242,6 +48320,7 @@ export type UpdateReferralPostingMutation = {
         fieldType: CustomDataElementType;
         repeats: boolean;
         displayHooks: Array<DisplayHook>;
+        displayValue?: string | null;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -48490,6 +48569,7 @@ export type GetReferralPostingQuery = {
       fieldType: CustomDataElementType;
       repeats: boolean;
       displayHooks: Array<DisplayHook>;
+      displayValue?: string | null;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -48777,6 +48857,7 @@ export type ReferralPostingDetailFieldsFragment = {
     fieldType: CustomDataElementType;
     repeats: boolean;
     displayHooks: Array<DisplayHook>;
+    displayValue?: string | null;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -48959,6 +49040,7 @@ export type EsgFundingServiceFieldsFragment = {
     fieldType: CustomDataElementType;
     repeats: boolean;
     displayHooks: Array<DisplayHook>;
+    displayValue?: string | null;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -49118,6 +49200,7 @@ export type GetEsgFundingReportQuery = {
       fieldType: CustomDataElementType;
       repeats: boolean;
       displayHooks: Array<DisplayHook>;
+      displayValue?: string | null;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -49539,6 +49622,7 @@ export type ServiceDetailFieldsFragment = {
     fieldType: CustomDataElementType;
     repeats: boolean;
     displayHooks: Array<DisplayHook>;
+    displayValue?: string | null;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -49709,6 +49793,7 @@ export type ServiceFieldsFragment = {
     fieldType: CustomDataElementType;
     repeats: boolean;
     displayHooks: Array<DisplayHook>;
+    displayValue?: string | null;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -49879,6 +49964,7 @@ export type ClientServiceFieldsFragment = {
     fieldType: CustomDataElementType;
     repeats: boolean;
     displayHooks: Array<DisplayHook>;
+    displayValue?: string | null;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -50068,6 +50154,7 @@ export type GetServiceQuery = {
       fieldType: CustomDataElementType;
       repeats: boolean;
       displayHooks: Array<DisplayHook>;
+      displayValue?: string | null;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -50272,6 +50359,7 @@ export type DeleteServiceMutation = {
         fieldType: CustomDataElementType;
         repeats: boolean;
         displayHooks: Array<DisplayHook>;
+        displayValue?: string | null;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -50475,6 +50563,7 @@ export type GetEnrollmentServicesQuery = {
           fieldType: CustomDataElementType;
           repeats: boolean;
           displayHooks: Array<DisplayHook>;
+          displayValue?: string | null;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -52616,6 +52705,7 @@ export const CustomDataElementFieldsFragmentDoc = gql`
     fieldType
     repeats
     displayHooks
+    displayValue
     value {
       ...CustomDataElementValueFields
     }
