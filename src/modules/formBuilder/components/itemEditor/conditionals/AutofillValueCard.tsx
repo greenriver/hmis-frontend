@@ -1,18 +1,38 @@
 import { Stack, Typography } from '@mui/material';
 import Box from '@mui/system/Box/Box';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Controller, UseFormSetValue, useWatch } from 'react-hook-form';
 import { FormItemControl, FormItemState } from '../types';
 import ManageEnableWhen from './ManageEnableWhen';
-import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
+import { useItemPickList } from './useItemPickList';
+import RadioGroupInput from '@/components/elements/input/RadioGroupInput';
 import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import ControlledCheckbox from '@/modules/form/components/rhf/ControlledCheckbox';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import { usePickList } from '@/modules/form/hooks/usePickList';
 import { ItemMap } from '@/modules/form/types';
-import { determineAutofillField } from '@/modules/formBuilder/formBuilderUtil';
-import { FormItem, ItemType } from '@/types/gqlTypes';
+import {
+  determineAutofillField,
+  isCompatibleAutofillValueQuestion,
+} from '@/modules/formBuilder/formBuilderUtil';
+import { FormItem, ItemType, PickListOption } from '@/types/gqlTypes';
+
+const AUTOFILL_VALUE_SOURCE_FIELDS = [
+  'valueCode',
+  'valueBoolean',
+  'valueNumber',
+  'formula',
+  'valueQuestion',
+] as const;
+
+const AUTOFILL_TYPE_OPTIONS: PickListOption[] = [
+  { code: 'static', label: 'A static value' },
+  { code: 'question', label: 'Another question' },
+  { code: 'formula', label: 'A formula' },
+];
+
+type AutofillType = 'static' | 'question' | 'formula';
 
 interface AutofillValueCardProps {
   control: FormItemControl;
@@ -33,11 +53,21 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
   setValue,
 }) => {
   //TODO: also accept sum_questions for autofilling numeric fields using a sum of other questions
-  const formulaValue = useWatch({
+  const [formulaValue, valueQuestion] = useWatch({
     control,
-    name: `autofillValues.${index}.formula`,
+    name: [
+      `autofillValues.${index}.formula`,
+      `autofillValues.${index}.valueQuestion`,
+    ],
   });
   const fieldType = useMemo(() => determineAutofillField(itemType), [itemType]);
+
+  const [autofillType, setAutofillType] = useState<AutofillType>(() => {
+    // Set the initial autofill type based on the existing autofill clause, if there is one; default to static
+    if (formulaValue) return 'formula';
+    if (valueQuestion) return 'question';
+    return 'static';
+  });
 
   // Get the current set of PickListOptions for the item (if any) to populate the autofill value dropdown
   const pickListOptions = useWatch({ control, name: 'pickListOptions' });
@@ -53,24 +83,48 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
     [itemType, pickListOptions, pickListReference]
   );
 
+  // For static autofill: Picklist of options for the current item, if it is a choice item
   const { pickList: currentItemPickList = [], loading: pickListLoading } =
     usePickList({ item: pickListHookArgs });
 
-  // Advanced behaviors that are toggled off by default, or on if either are set
-  const [advanced, setAdvanced] = useState({
-    useFormula: !!formulaValue,
+  // For autofilling from another question: Picklist of other items in the form, filtered to only include compatible items
+  const itemPickList = useItemPickList({
+    control,
+    itemMap,
+    filterItems: (item) => isCompatibleAutofillValueQuestion(item, itemType),
   });
+
+  // When the autofill type changes, reset value fields to null, since the backend validates that only one autofill value field is present
+  const handleAutofillTypeChange = useCallback(
+    (option?: PickListOption | null) => {
+      if (!option) return;
+      const nextType = option.code as AutofillType;
+      if (nextType === autofillType) return;
+
+      setAutofillType(nextType);
+
+      AUTOFILL_VALUE_SOURCE_FIELDS.forEach((field) => {
+        setValue(`autofillValues.${index}.${field}`, null, {
+          shouldDirty: true,
+        });
+      });
+    },
+    [autofillType, index, setValue]
+  );
 
   return (
     <>
       <Typography sx={{ mb: 2 }}>{title}</Typography>
 
       <Stack gap={2}>
-        <Typography variant='body2'>
-          Enter the value to autofill, or enter a formula to calculate it:
-        </Typography>
+        <RadioGroupInput
+          options={AUTOFILL_TYPE_OPTIONS}
+          label='Autofill from:'
+          value={AUTOFILL_TYPE_OPTIONS.find((o) => o.code === autofillType)}
+          onChange={handleAutofillTypeChange}
+        />
 
-        {!advanced.useFormula && (
+        {autofillType === 'static' && (
           <>
             {fieldType === 'valueCode' && (
               <>
@@ -130,7 +184,19 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
           </>
         )}
 
-        {advanced.useFormula && (
+        {autofillType === 'question' && (
+          <ControlledSelect
+            name={`autofillValues.${index}.valueQuestion`}
+            label='Source Question'
+            control={control}
+            options={itemPickList}
+            placeholder='Select a question'
+            helperText='This item will be filled with the answer from the selected question.'
+            required
+          />
+        )}
+
+        {autofillType === 'formula' && (
           <ControlledTextInput
             name={`autofillValues.${index}.formula`}
             control={control}
@@ -146,14 +212,6 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
             Advanced Options
           </Typography>
           <Stack>
-            <LabeledCheckbox
-              label='Use a formula'
-              checked={advanced.useFormula}
-              sx={{ width: 'fit-content' }}
-              onChange={(evt, checked) =>
-                setAdvanced((old) => ({ ...old, useFormula: checked }))
-              }
-            />
             <ControlledCheckbox
               name={`autofillValues.${index}.autofillReadonly`}
               control={control}
