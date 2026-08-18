@@ -5,6 +5,7 @@ import {
   ThemeOptions,
   alpha,
   createTheme,
+  darken,
 } from '@mui/material/styles';
 import { deepmerge, visuallyHidden } from '@mui/utils';
 
@@ -505,6 +506,11 @@ const createThemeOptions = (theme: Theme) => ({
               color: color,
               '& .MuiChip-icon': {
                 color: iconColor,
+              },
+              '&.MuiChip-clickable:hover': {
+                backgroundColor: backgroundColor
+                  ? darken(backgroundColor, 0.05)
+                  : undefined,
               },
             };
           },

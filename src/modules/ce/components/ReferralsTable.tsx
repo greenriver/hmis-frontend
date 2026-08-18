@@ -91,9 +91,6 @@ const COLUMNS: DataColumnDef<
   },
 ];
 
-const getCeReferralsSearchQueryId = (data: GetCeReferralsQuery) =>
-  data.ceReferrals.searchQueryId;
-
 interface Props {
   projectGroupId?: string;
   searchSize?: CommonSearchInputProps['size'];
@@ -110,7 +107,7 @@ const ReferralsTable: React.FC<Props> = ({
     searchQueryIdLoading,
     onNetworkDataReady,
   } = usePersistedTableSimpleTextSearch<GetCeReferralsQuery>({
-    getSearchQueryId: getCeReferralsSearchQueryId,
+    getSearchQueryId: (data) => data.ceReferrals.searchQueryId,
   });
 
   const { filters, filterValues, setFilterValues } = useTableFilters({

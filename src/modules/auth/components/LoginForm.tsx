@@ -75,7 +75,7 @@ const LoginForm = () => {
           // fetch the current user to get a new csrf cookie
           retryCsrf.current = false;
           fetchCurrentUser()
-            .then((currentUser) => {
+            .then(({ user: currentUser }) => {
               if (currentUser) return reloadWindow(); // already logged in
 
               // retry the login

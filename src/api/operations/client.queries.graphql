@@ -169,6 +169,18 @@ mutation DeleteClient($input: DeleteClientInput!) {
   }
 }
 
+mutation SetClientRestricted($clientId: ID!, $restricted: Boolean!) {
+  setClientRestricted(clientId: $clientId, restricted: $restricted) {
+    client {
+      id
+      restricted
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
 query GetClientHouseholdMemberCandidates(
   $id: ID!
   $limit: Int = 10
