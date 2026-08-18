@@ -118,6 +118,19 @@ const populateParams = (
   });
 };
 
+// Order-insensitive comparison of two query strings, so we can skip navigations
+// that wouldn't actually change the URL. Skipping is load-bearing: a redundant
+// navigation to the same URL can still push a duplicate entry and, when it fires
+// from behind the history tip, truncate forward history.
+const searchStringsEqual = (a: string, b: string) => {
+  const normalize = (s: string) => {
+    const params = new URLSearchParams(s.startsWith('?') ? s.slice(1) : s);
+    params.sort();
+    return params.toString();
+  };
+  return normalize(a) === normalize(b);
+};
+
 // Type for internal state representation of search params
 type ValueType = Record<string, any>; // Future improvement: constrain value type
 
@@ -210,8 +223,17 @@ const useSearchParamsState = ({
    */
   const setValues = useCallback(
     (newValuesOrUpdater: SetStateAction) => {
-      const currentParams = getAllCurrentParams(searchParams);
-      const currentValues = getValues(paramsDefinition, searchParams);
+      // Merge against the live address bar, not this hook instance's render-time
+      // searchParams snapshot. Multiple useSearchParamsState writers (page, filters,
+      // optional columns, searchQueryId) navigate independently; a sibling can update
+      // the URL before this callback re-renders, and merging against a stale snapshot
+      // would drop those sibling params.
+      const liveSearchParams = new URLSearchParams(window.location.search);
+
+      // Full query bag (including keys this hook does not own) — starting point for merge.
+      const currentParams = getAllCurrentParams(liveSearchParams);
+      // This hook's typed values only — used when the caller passes an updater fn.
+      const currentValues = getValues(paramsDefinition, liveSearchParams);
       const nextValues =
         typeof newValuesOrUpdater === 'function'
           ? newValuesOrUpdater(currentValues)
@@ -241,14 +263,21 @@ const useSearchParamsState = ({
 
       const accumulator = new URLSearchParams();
       populateParams(currentParams, accumulator);
+
+      const nextSearch = accumulator.toString();
+      // Skip a no-op navigation. Without this, e.g. resetting to page 0 when already
+      // on page 0 pushes a duplicate entry (and can truncate forward history).
+      if (searchStringsEqual(nextSearch, window.location.search)) return;
+
       // `navigate` instead of `useSearchParams` as workaround for https://github.com/remix-run/react-router/issues/8393
       navigate({
         pathname,
         hash,
-        search: accumulator.toString(),
+        search: nextSearch,
       });
     },
-    [hash, navigate, paramsDefinition, pathname, searchParams]
+    // liveSearchParams is read at call time from window.location; no searchParams dep.
+    [hash, navigate, paramsDefinition, pathname]
   );
   return [values, setValues];
 };
