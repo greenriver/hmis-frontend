@@ -59,9 +59,6 @@ export const configurableCeColumns = (
   }));
 };
 
-const getCeClientsSearchQueryId = (data: GetCeClientsQuery) =>
-  data.ceClients.searchQueryId;
-
 interface Props {
   projectGroupId?: string;
 }
@@ -93,7 +90,7 @@ const AdminCeClientsTable: React.FC<Props> = ({ projectGroupId }) => {
     searchQueryIdLoading,
     onNetworkDataReady,
   } = usePersistedTableSimpleTextSearch<GetCeClientsQuery>({
-    getSearchQueryId: getCeClientsSearchQueryId,
+    getSearchQueryId: (data) => data.ceClients.searchQueryId,
   });
   const [selectedRow, setSelectedRow] =
     React.useState<CeClientFieldsFragment | null>(null);
