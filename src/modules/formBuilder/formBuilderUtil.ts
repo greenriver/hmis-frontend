@@ -136,7 +136,6 @@ export const isCompatibleAutofillValueQuestion = (
     case ItemType.String:
     case ItemType.Text:
       // Most flexible: Can autofill from string/text as well as numeric questions
-      // todo @martha - confirm this saves correctly
       return [
         ItemType.String,
         ItemType.Text,
