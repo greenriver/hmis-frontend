@@ -1,7 +1,7 @@
 import { Paper, Stack } from '@mui/material';
 import React, { useCallback } from 'react';
 
-import useDebouncedState from '@/hooks/useDebouncedState';
+import Loading from '@/components/elements/Loading';
 import useTableFilters from '@/hooks/useTableFilters';
 import useTablePagination from '@/hooks/useTablePagination';
 import {
@@ -13,6 +13,7 @@ import { DataColumnDef } from '@/modules/dataFetching/types';
 import CommonSearchInput, {
   type CommonSearchInputProps,
 } from '@/modules/search/components/CommonSearchInput';
+import usePersistedTableSimpleTextSearch from '@/modules/search/hooks/usePersistedTableSimpleTextSearch';
 import {
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
@@ -99,7 +100,15 @@ const ReferralsTable: React.FC<Props> = ({
   projectGroupId,
   searchSize = 'medium',
 }) => {
-  const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
+  const {
+    search,
+    setSearch,
+    activeSearchTerm,
+    searchQueryIdLoading,
+    onNetworkDataReady,
+  } = usePersistedTableSimpleTextSearch<GetCeReferralsQuery>({
+    getSearchQueryId: (data) => data.ceReferrals.searchQueryId,
+  });
 
   const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'CeReferralFilterOptions',
@@ -150,6 +159,8 @@ const ReferralsTable: React.FC<Props> = ({
     []
   );
 
+  if (searchQueryIdLoading) return <Loading />;
+
   return (
     <Stack gap={2}>
       <CommonSearchInput
@@ -171,7 +182,7 @@ const ReferralsTable: React.FC<Props> = ({
           columns={COLUMNS}
           queryVariables={{
             filters: {
-              searchTerm: debouncedSearch || undefined,
+              searchTerm: activeSearchTerm || undefined,
               projectGroupId,
             },
           }}
@@ -183,6 +194,7 @@ const ReferralsTable: React.FC<Props> = ({
           filterValues={filterValues}
           onFilterChange={setFilterValues}
           pagination={pagination}
+          onNetworkDataReady={onNetworkDataReady}
           rowLinkTo={(row) =>
             generateSafePath(ReferralRoutes.REFERRAL, {
               referralId: row.id,
