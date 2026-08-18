@@ -43,7 +43,6 @@ import CeMatchUnitGroupRulesPage from '@/modules/admin/components/ceMatchRules/p
 import FormDefinitionDetailPage from '@/modules/admin/components/forms/FormDefinitionDetailPage';
 import FormDefinitionsPage from '@/modules/admin/components/forms/FormDefinitionsPage';
 import FormPreview from '@/modules/admin/components/forms/FormPreview';
-import JsonFormEditorPage from '@/modules/admin/components/forms/JsonFormEditorPage';
 import ProjectConfigPage from '@/modules/admin/components/projectConfig/ProjectConfigPage';
 import ServiceTypeDetailPage from '@/modules/admin/components/services/ServiceTypeDetailPage';
 import ServiceTypePage from '@/modules/admin/components/services/ServiceTypePage';
@@ -1086,14 +1085,6 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <RootPermissionsFilter permissions='canManageForms'>
                 <FormBuilderPage />
-              </RootPermissionsFilter>
-            ),
-          },
-          {
-            path: AdminDashboardRoutes.JSON_EDIT_FORM,
-            element: (
-              <RootPermissionsFilter permissions='canAdministrateConfig'>
-                <JsonFormEditorPage />
               </RootPermissionsFilter>
             ),
           },

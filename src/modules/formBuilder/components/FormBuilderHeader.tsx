@@ -3,7 +3,6 @@ import { Stack } from '@mui/system';
 import React, { useCallback } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 
-import ButtonLink from '@/components/elements/ButtonLink';
 import EditIconButton from '@/components/elements/EditIconButton';
 import PageTitle from '@/components/layout/PageTitle';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
@@ -27,11 +26,13 @@ import {
 interface FormEditorHeaderProps {
   formDefinition: FormDefinitionFieldsForEditorFragment;
   onClickPreview: VoidFunction;
+  onClickEditJson: VoidFunction;
 }
 
 const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
   formDefinition,
   onClickPreview,
+  onClickEditJson,
 }) => {
   const navigate = useNavigate();
 
@@ -91,23 +92,13 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
           }
         />
 
-        <Stack direction='row' spacing={4} alignItems='center'>
+        <Stack direction='row' gap={2} alignItems='center'>
           <RootPermissionsFilter permissions='canAdministrateConfig'>
-            <ButtonLink
-              to={generatePath(AdminDashboardRoutes.JSON_EDIT_FORM, {
-                identifier: formDefinition.identifier,
-                formId: formDefinition.id,
-              })}
-              variant='text'
-            >
+            <Button variant='text' onClick={onClickEditJson}>
               Edit JSON
-            </ButtonLink>
+            </Button>
           </RootPermissionsFilter>
-          <Button
-            variant='text'
-            onClick={onClickPreview}
-            sx={{ height: 'fit-content' }}
-          >
+          <Button variant='text' onClick={onClickPreview}>
             Preview / Publish
           </Button>
           <DeleteMutationButton<

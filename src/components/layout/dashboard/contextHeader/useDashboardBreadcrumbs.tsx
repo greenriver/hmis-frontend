@@ -347,10 +347,6 @@ export const useAdminBreadcrumbConfig = (): CrumbConfig => {
         parent: AdminDashboardRoutes.FORMS,
         title: 'View Form Details',
       },
-      [AdminDashboardRoutes.JSON_EDIT_FORM]: {
-        parent: AdminDashboardRoutes.EDIT_FORM,
-        title: 'Edit Form JSON',
-      },
       [AdminDashboardRoutes.EDIT_FORM]: {
         parent: AdminDashboardRoutes.VIEW_FORM,
         title: 'Edit Form',

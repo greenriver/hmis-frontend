@@ -10,21 +10,6 @@ mutation UpdateFormDefinition($id: ID!, $input: FormDefinitionInput!) {
   }
 }
 
-# used for updating form content from JSON Editor
-mutation UpdateFormDefinitionFromJsonEditor(
-  $id: ID!
-  $input: FormDefinitionInput!
-) {
-  updateFormDefinition(id: $id, input: $input) {
-    formDefinition {
-      ...FormDefinitionFieldsForJsonEditor
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
 # used for creating an entirely new form (form submission of static form)
 mutation CreateFormDefinition($input: FormDefinitionInput!) {
   createFormDefinition(input: $input) {

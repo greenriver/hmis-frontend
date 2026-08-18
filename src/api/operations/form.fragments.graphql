@@ -150,13 +150,6 @@ fragment FormDefinitionFields on FormDefinition {
   }
 }
 
-# Contains raw JSON definition used for JSON editor
-fragment FormDefinitionFieldsForJsonEditor on FormDefinition {
-  ...FormDefinitionFields
-  status
-  rawDefinition
-}
-
 # Leaving this fragment as a separate fragment because it may need to include additional
 # fields like form rules that are not used for form rendering
 fragment FormDefinitionFieldsForEditor on FormDefinition {
