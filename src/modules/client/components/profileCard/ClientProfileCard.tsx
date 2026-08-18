@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import ClientProfileCardAccordion from './ClientProfileCardAccordion';
 import ClientProfileCardImage from './ClientProfileCardImage';
 import ClientProfileCardTextTable from './ClientProfileCardTextTable';
+import ClientRestrictedChip from './ClientRestrictedChip';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import ClientForceRefetchButton from '@/modules/client/components/ClientForceRefetchButton';
@@ -67,9 +68,21 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
       >
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography component='h1' variant='h4'>
-              {clientName}
-            </Typography>
+            <Stack
+              direction='row'
+              alignItems='flex-start'
+              justifyContent='space-between'
+              gap={2}
+            >
+              <Typography component='h1' variant='h4'>
+                {clientName}
+              </Typography>
+              <ClientRestrictedChip
+                clientId={client.id}
+                restricted={client.restricted}
+                canMarkRestricted={client.access.canMarkRestricted}
+              />
+            </Stack>
           </Grid>
           <Grid
             item
