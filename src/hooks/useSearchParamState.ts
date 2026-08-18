@@ -223,8 +223,17 @@ const useSearchParamsState = ({
    */
   const setValues = useCallback(
     (newValuesOrUpdater: SetStateAction) => {
-      const currentParams = getAllCurrentParams(searchParams);
-      const currentValues = getValues(paramsDefinition, searchParams);
+      // Merge against the live address bar, not this hook instance's render-time
+      // searchParams snapshot. Multiple useSearchParamsState writers (page, filters,
+      // optional columns, searchQueryId) navigate independently; a sibling can update
+      // the URL before this callback re-renders, and merging against a stale snapshot
+      // would drop those sibling params.
+      const liveSearchParams = new URLSearchParams(window.location.search);
+
+      // Full query bag (including keys this hook does not own) — starting point for merge.
+      const currentParams = getAllCurrentParams(liveSearchParams);
+      // This hook's typed values only — used when the caller passes an updater fn.
+      const currentValues = getValues(paramsDefinition, liveSearchParams);
       const nextValues =
         typeof newValuesOrUpdater === 'function'
           ? newValuesOrUpdater(currentValues)
@@ -267,7 +276,8 @@ const useSearchParamsState = ({
         search: nextSearch,
       });
     },
-    [hash, navigate, paramsDefinition, pathname, searchParams]
+    // liveSearchParams is read at call time from window.location; no searchParams dep.
+    [hash, navigate, paramsDefinition, pathname]
   );
   return [values, setValues];
 };
