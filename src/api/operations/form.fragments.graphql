@@ -162,6 +162,7 @@ fragment FormDefinitionFieldsForJsonEditor on FormDefinition {
 fragment FormDefinitionFieldsForEditor on FormDefinition {
   ...FormDefinitionFields
   version
+  rawDefinition
 }
 
 fragment FormIdentifierDetails on FormIdentifier {

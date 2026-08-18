@@ -35675,6 +35675,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
 export type FormDefinitionFieldsForEditorFragment = {
   __typename?: 'FormDefinition';
   version: string;
+  rawDefinition: any;
   id: string;
   role: FormRole;
   title: string;
@@ -36258,6 +36259,7 @@ export type UpdateFormDefinitionMutation = {
     formDefinition?: {
       __typename?: 'FormDefinition';
       version: string;
+      rawDefinition: any;
       id: string;
       role: FormRole;
       title: string;
@@ -41711,6 +41713,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
   formDefinition?: {
     __typename?: 'FormDefinition';
     version: string;
+    rawDefinition: any;
     id: string;
     role: FormRole;
     title: string;
@@ -54564,6 +54567,7 @@ export const FormDefinitionFieldsForEditorFragmentDoc = gql`
   fragment FormDefinitionFieldsForEditor on FormDefinition {
     ...FormDefinitionFields
     version
+    rawDefinition
   }
   ${FormDefinitionFieldsFragmentDoc}
 `;
