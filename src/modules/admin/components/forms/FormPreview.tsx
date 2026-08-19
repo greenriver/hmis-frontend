@@ -34,6 +34,7 @@ import {
   getInitialValues,
   getItemMap,
 } from '@/modules/form/util/formUtil';
+import { stringifyJson } from '@/modules/formBuilder/formBuilderUtil';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { AdminDashboardRoutes } from '@/routes/routes';
@@ -191,11 +192,12 @@ const FormPreview = () => {
   const rawDefinitionString = useMemo(
     () =>
       formDefinition?.rawDefinition
-        ? JSON.stringify(formDefinition.rawDefinition, null, 2)
+        ? stringifyJson(formDefinition.rawDefinition)
         : '',
     [formDefinition?.rawDefinition]
   );
 
+  const [jsonDrawerOpen, setJsonDrawerOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const { publishLoading, onPublishForm, publishErrorState } = usePublishForm({
     formId: formDefinition?.id,
@@ -235,7 +237,14 @@ const FormPreview = () => {
             variant='gray'
           />
           <RootPermissionsFilter permissions='canAdministrateConfig'>
-            <FormJsonDrawer jsonString={rawDefinitionString} />
+            <Button variant='text' onClick={() => setJsonDrawerOpen(true)}>
+              View JSON
+            </Button>
+            <FormJsonDrawer
+              jsonString={rawDefinitionString}
+              open={jsonDrawerOpen}
+              onClose={() => setJsonDrawerOpen(false)}
+            />
           </RootPermissionsFilter>
         </Stack>
 

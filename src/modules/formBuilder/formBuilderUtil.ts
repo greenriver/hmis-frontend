@@ -15,6 +15,8 @@ import {
   Maybe,
 } from '@/types/gqlTypes';
 
+export const stringifyJson = (value: object) => JSON.stringify(value, null, 2);
+
 // Strip basic HTML tags from a string. This is not fool-proof. This is used to strip tags from form labels and display text,
 // so they can be shown as plain-text in the form builder.
 export const removeHtmlTags = (value?: string | null): string => {

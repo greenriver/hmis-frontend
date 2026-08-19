@@ -2,6 +2,7 @@ import { Box, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import FormJsonPanel from './FormJsonPanel';
 import SimpleAccordion from '@/components/elements/SimpleAccordion';
+import { stringifyJson } from '@/modules/formBuilder/formBuilderUtil';
 
 interface Props {
   localConstants: object;
@@ -25,10 +26,10 @@ const FormPreviewPowerTools: React.FC<Props> = ({
   onInitialValuesChange,
 }) => {
   const [localConstantsJson, setLocalConstantsJson] = useState(
-    JSON.stringify(localConstants, null, 2)
+    stringifyJson(localConstants)
   );
   const [initialValuesJson, setInitialValuesJson] = useState(
-    JSON.stringify(initialValues, null, 2)
+    stringifyJson(initialValues)
   );
 
   return (
