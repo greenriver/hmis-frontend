@@ -41,7 +41,6 @@ export function useUpdateForm({ formId, onSuccess }: Args) {
   if (error) throw error;
 
   // callback to use with rhf submission or raw JSON from the editor drawer
-  // todo @martha - catch the types here. preferably not change to `object`
   const updateForm = useCallback(
     (newDefinition: object) => {
       return updateFormDefinition({

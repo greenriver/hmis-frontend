@@ -91,7 +91,6 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
     }
   }, [setBlockedActionFunction, isDirty, goToPreview]);
 
-  // todo @martha - these could be moved to either a hook or a separate component?
   const [jsonDrawerOpen, setJsonDrawerOpen] = useState(false);
   const [jsonDirty, setJsonDirty] = useState(false);
   const jsonWorkingDefinitionRef = useRef<object>(
