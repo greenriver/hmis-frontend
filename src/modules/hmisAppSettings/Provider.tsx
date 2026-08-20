@@ -1,26 +1,49 @@
 import { Typography } from '@mui/material';
+import * as Sentry from '@sentry/react';
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import Loading from '@/components/elements/Loading';
 import {
+  CurrentUserResult,
   fetchCurrentUser,
   HmisUser,
   logout,
   RELOAD_ONCE_SESSION_KEY,
+  sentryUser,
   startImpersonating,
   stopImpersonating,
 } from '@/modules/auth/api/sessions';
 import * as storage from '@/modules/auth/api/storage';
 import { HmisAuthContext, HmisAuthState } from '@/modules/auth/AuthContext';
+import LogoutFailedDialog from '@/modules/auth/components/LogoutFailedDialog';
+import StopImpersonatingFailedDialog from '@/modules/auth/components/StopImpersonatingFailedDialog';
+import { TerminalAccountErrorType } from '@/modules/auth/events';
 import { useSessionTrackingObserver } from '@/modules/auth/hooks/useSessionTrackingObserver';
 import { fetchHmisAppSettings } from '@/modules/hmisAppSettings/api';
+import { resolveAuthMethod } from '@/modules/hmisAppSettings/authMethod';
 import { HmisAppSettingsContext } from '@/modules/hmisAppSettings/Context';
 import { HmisAppSettings } from '@/modules/hmisAppSettings/types';
 import { HttpError } from '@/utils/HttpError';
 import { reloadWindow } from '@/utils/location';
 import { getCurrentSessionId } from '@/utils/sessionId';
 import { currentTimeInSeconds } from '@/utils/time';
+
+const TERMINAL_ACCOUNT_ERROR_COPY: Record<
+  TerminalAccountErrorType,
+  { title: string; message: string }
+> = {
+  account_deactivated: {
+    title: 'Your account has been deactivated',
+    message:
+      'Your account is no longer active. Please contact your administrator for assistance.',
+  },
+  no_warehouse_account: {
+    title: "You don't have access to this application",
+    message:
+      'There is no account associated with your sign-in. Please contact your administrator for assistance.',
+  },
+};
 
 // cached user if the session has not expired
 const getValidCachedUser = (): HmisUser | undefined => {
@@ -42,7 +65,13 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
   const [appSettings, setAppSettings] = useState<HmisAppSettings>();
   const [user, setUser] = useState<HmisUser>();
   const [error, setError] = useState<Error | HttpError>();
+  const [logoutFailed, setLogoutFailed] = useState(false);
+  const [stopImpersonatingFailed, setStopImpersonatingFailed] = useState(false);
+  // Don't drive the retry spinner off `loading`: the render below unmounts the
+  // whole tree while `loading` is set, taking the failure dialog with it.
+  const [logoutInFlight, setLogoutInFlight] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [accountError, setAccountError] = useState<TerminalAccountErrorType>();
 
   // clear stale localStorage if session has changed
   useEffect(() => {
@@ -60,18 +89,96 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
     }
   }, []);
 
-  const logoutUser = useCallback(() => {
-    setLoading(true);
-    const fn = user?.impersonating ? stopImpersonating : logout;
-    return fn()
-      .then(() => {
-        reloadWindow();
-      })
-      .catch((e) => {
+  const attemptLogout = useCallback(
+    async (fullPageLoading: boolean) => {
+      // Don't clear logoutFailed / stopImpersonatingFailed here: a retry comes
+      // from one of those dialogs, and clearing the flag unmounts the dialog that
+      // is meant to show logoutInFlight's spinner. Neither flag goes stale --
+      // every path out of this function sets one again, leaves the page, or is
+      // dismissed by the user.
+      setLogoutInFlight(true);
+      if (fullPageLoading) setLoading(true);
+
+      if (user?.impersonating) {
+        try {
+          await stopImpersonating();
+          reloadWindow();
+        } catch (e) {
+          // stopImpersonating() stores the reverted user only on success, so the
+          // impersonation is still live here. Reloading would land the user back
+          // in the app still acting as the other user.
+          console.error('Stop impersonating failed', e);
+          Sentry.captureException(e, { user: sentryUser(user) });
+          setLoading(false);
+          setLogoutInFlight(false);
+          setStopImpersonatingFailed(true);
+        }
+        return;
+      }
+
+      // An explicit sign-out is the only thing that forgets the remembered IdP,
+      // so the next sign-in shows the picker again. Session expiry leaves it, so
+      // routine re-logins skip the picker.
+      storage.clearLastConnectorId();
+
+      let response: Response;
+      try {
+        response = await logout();
+      } catch (e) {
+        // Only a failed sign-out reaches here: logout() rejects on a network
+        // error or a non-ok response, and nothing else runs inside the try. The
+        // session is still live either way, so say so instead of reloading with
+        // no sign that the sign-out failed.
+        console.error('Sign out failed', e);
+        Sentry.captureException(e, { user: sentryUser(user) });
         setLoading(false);
-        setError(e);
-      });
-  }, [user?.impersonating]);
+        setLogoutInFlight(false);
+        setLogoutFailed(true);
+        return;
+      }
+
+      // The server ended the session, so nothing that goes wrong below is a
+      // failed sign-out: read what we can and reload either way. The 'jwt'
+      // logout answers with JSON carrying a redirect_url to the IdP end-session
+      // endpoint; the Devise/Okta logout may answer with an empty body.
+      try {
+        const contentType = response.headers.get('content-type') || '';
+        // A 204 carries no body for the Devise/Okta
+        if (
+          response.status !== 204 &&
+          contentType.includes('application/json')
+        ) {
+          const data: { redirect_url?: string } = await response.json();
+          if (data.redirect_url) {
+            window.location.href = data.redirect_url;
+            return;
+          }
+        }
+      } catch (e) {
+        console.error('Could not read the sign-out response', e);
+      }
+      reloadWindow();
+    },
+    [user]
+  );
+
+  const logoutUser = useCallback(() => {
+    attemptLogout(true);
+  }, [attemptLogout]);
+
+  const retryLogout = useCallback(() => {
+    attemptLogout(false);
+  }, [attemptLogout]);
+
+  // A sign-out can fail for a transient reason, and the session it failed to end
+  // is still usable, so dismissing and going back to work is a legitimate choice.
+  // Sign out stays in the user menu for a later attempt.
+  const dismissLogoutFailure = useCallback(() => setLogoutFailed(false), []);
+
+  const dismissStopImpersonatingFailure = useCallback(
+    () => setStopImpersonatingFailed(false),
+    []
+  );
 
   const impersonateUser = useCallback((userId: string) => {
     setLoading(true);
@@ -102,7 +209,6 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
   // fetch data from remote
   useEffect(() => {
     const cachedUser = getValidCachedUser();
-    const promises: Array<Promise<any>> = [];
 
     // Pre-warm the backend cache with the logo image
     const prefetchLogo = (logoPath?: string) => {
@@ -116,33 +222,35 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
       });
     };
 
-    const saveSettings = (value: HmisAppSettings): Promise<void> => {
-      setAppSettings(value);
-      storage.setAppSettings(value);
-      return prefetchLogo(value.logoPath);
+    const loadSettings = async (): Promise<void> => {
+      const cached = cachedUser ? storage.getAppSettings() : undefined;
+      const settings = cached ?? (await fetchHmisAppSettings());
+      setAppSettings(settings);
+      if (!cached) storage.setAppSettings(settings);
+      await prefetchLogo(settings.logoPath);
     };
 
-    if (cachedUser) {
-      setUser(cachedUser);
-      const cachedAppSettings = storage.getAppSettings();
-      if (cachedAppSettings) {
-        setAppSettings(cachedAppSettings);
-        promises.push(prefetchLogo(cachedAppSettings.logoPath));
-      } else {
-        promises.push(fetchHmisAppSettings().then(saveSettings));
-      }
-    } else {
-      promises.push(fetchCurrentUser().then(setUser));
-      promises.push(fetchHmisAppSettings().then(saveSettings));
-    }
+    (async () => {
+      try {
+        // Start this fetch before awaiting loadSettings, so the two requests
+        // overlap instead of costing two serial round-trips.
+        const userPromise: Promise<CurrentUserResult> = cachedUser
+          ? Promise.resolve({ user: cachedUser })
+          : fetchCurrentUser();
 
-    if (promises.length) {
-      Promise.all(promises)
-        .catch(setError)
-        .finally(() => setLoading(false));
-    } else {
-      setLoading(false);
-    }
+        await loadSettings();
+
+        // accountError does not go through `error`: that dialog offers only a
+        // reload, and every reload fetches the same accountError back.
+        const { user: fetchedUser, accountError } = await userPromise;
+        if (fetchedUser) setUser(fetchedUser);
+        else if (accountError) setAccountError(accountError);
+      } catch (err) {
+        setError(err as Error);
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, []);
 
   // handle side-effects
@@ -167,7 +275,50 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
     reloadWindow();
   }, []);
 
+  const logoutFailureDialogs = (
+    <>
+      {logoutFailed && (
+        <LogoutFailedDialog
+          loading={logoutInFlight}
+          onRetry={retryLogout}
+          onDismiss={dismissLogoutFailure}
+          authMethod={resolveAuthMethod(appSettings?.authMethod)}
+        />
+      )}
+      {stopImpersonatingFailed && (
+        <StopImpersonatingFailedDialog
+          loading={logoutInFlight}
+          onRetry={retryLogout}
+          onDismiss={dismissStopImpersonatingFailure}
+          impersonatedUserName={user?.name}
+        />
+      )}
+    </>
+  );
+
   if (loading) return <Loading />;
+  if (accountError) {
+    const { title, message } = TERMINAL_ACCOUNT_ERROR_COPY[accountError];
+    return (
+      <>
+        <ConfirmationDialog
+          open={true}
+          confirmText='Sign out'
+          title={title}
+          loading={logoutInFlight}
+          hideCancelButton
+          // Not logoutUser: its full-page loading state unmounts this dialog
+          // (see logoutInFlight).
+          onConfirm={retryLogout}
+          maxWidth='sm'
+          fullWidth
+        >
+          <Typography>{message}</Typography>
+        </ConfirmationDialog>
+        {logoutFailureDialogs}
+      </>
+    );
+  }
   if (error) {
     return (
       <ConfirmationDialog
@@ -183,11 +334,14 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
     );
   }
 
+  // GET /hmis/app_settings is public, so it answers for an unauthenticated
+  // JWT/SSO visitor too, and loadSettings has already run by this point.
   if (!appSettings) throw new Error(); // shouldn't get here
   return (
     <HmisAppSettingsContext.Provider value={appSettings}>
       <HmisAuthContext.Provider value={authState}>
         {children}
+        {logoutFailureDialogs}
       </HmisAuthContext.Provider>
     </HmisAppSettingsContext.Provider>
   );
