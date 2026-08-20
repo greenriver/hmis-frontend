@@ -772,6 +772,8 @@ export type CeEligibleUnitGroupsPaginated = {
 /** Field metadata for CE Match Rule expressions */
 export type CeMatchField = {
   __typename?: 'CeMatchField';
+  /** Additional detail about what this field represents and how its value is resolved */
+  description?: Maybe<Scalars['String']['output']>;
   /**
    * The full-length identifier used in CE Match Rule expressions, such as
    * "current_age" or "cde.custom_assessment.my_field_key".
@@ -23252,6 +23254,7 @@ export type CeMatchFieldDetailsFragment = {
   id: string;
   key: string;
   label: string;
+  description?: string | null;
   itemType: ItemType;
   multiple: boolean;
   expressionField: string;
@@ -23652,6 +23655,7 @@ export type GetCeMatchFieldsQuery = {
     id: string;
     key: string;
     label: string;
+    description?: string | null;
     itemType: ItemType;
     multiple: boolean;
     expressionField: string;
@@ -23696,6 +23700,7 @@ export type GetCeMatchCustomAssessmentFieldsQuery = {
     id: string;
     key: string;
     label: string;
+    description?: string | null;
     itemType: ItemType;
     multiple: boolean;
     expressionField: string;
@@ -53708,6 +53713,7 @@ export const CeMatchFieldDetailsFragmentDoc = gql`
     id
     key
     label
+    description
     itemType
     multiple
     expressionField
