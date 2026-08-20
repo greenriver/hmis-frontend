@@ -21,7 +21,6 @@ import StopImpersonatingFailedDialog from '@/modules/auth/components/StopImperso
 import { TerminalAccountErrorType } from '@/modules/auth/events';
 import { useSessionTrackingObserver } from '@/modules/auth/hooks/useSessionTrackingObserver';
 import { fetchHmisAppSettings } from '@/modules/hmisAppSettings/api';
-import { resolveAuthMethod } from '@/modules/hmisAppSettings/authMethod';
 import { HmisAppSettingsContext } from '@/modules/hmisAppSettings/Context';
 import { HmisAppSettings } from '@/modules/hmisAppSettings/types';
 import { HttpError } from '@/utils/HttpError';
@@ -170,10 +169,15 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
     attemptLogout(false);
   }, [attemptLogout]);
 
-  // A sign-out can fail for a transient reason, and the session it failed to end
-  // is still usable, so dismissing and going back to work is a legitimate choice.
-  // Sign out stays in the user menu for a later attempt.
-  const dismissLogoutFailure = useCallback(() => setLogoutFailed(false), []);
+  // Reload rather than just hide the dialog: a failed logout() has already run
+  // resetLocalSession, which clears stored app settings and clears the Apollo
+  // cache without refetching it. Dismissing would leave the app mounted against
+  // that emptied state; reloading re-bootstraps settings, user, and cache against
+  // the still-live session.
+  const dismissLogoutFailure = useCallback(() => {
+    setLoading(true);
+    reloadWindow();
+  }, []);
 
   const dismissStopImpersonatingFailure = useCallback(
     () => setStopImpersonatingFailed(false),
@@ -282,7 +286,6 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
           loading={logoutInFlight}
           onRetry={retryLogout}
           onDismiss={dismissLogoutFailure}
-          authMethod={resolveAuthMethod(appSettings?.authMethod)}
         />
       )}
       {stopImpersonatingFailed && (

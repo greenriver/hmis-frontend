@@ -33,6 +33,7 @@ fragment ClientFields on Client {
   dateCreated
   dateDeleted
   dateUpdated
+  restricted
   ...ClientName
   externalIds {
     ...ClientIdentifierFields

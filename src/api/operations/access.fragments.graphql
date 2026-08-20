@@ -57,6 +57,7 @@ fragment ClientAccessFields on ClientAccess {
   canManageScanCards
   canMergeClients
   canIndexFiles
+  canMarkRestricted
 
   # Referral-related root permissions, resolved on Client for convenience
   canViewReferrals

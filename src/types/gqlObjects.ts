@@ -2067,6 +2067,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
           },
         },
       },
+      {
+        name: 'restricted',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
       { name: 'sex', type: { kind: 'ENUM', name: 'Sex', ofType: null } },
       { name: 'ssn', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       {
@@ -2151,14 +2159,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canManageAnyClientFiles',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'canManageClientAlerts',
         type: {
           kind: 'NON_NULL',
@@ -2167,7 +2167,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canManageOwnClientFiles',
+        name: 'canManageScanCards',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -2175,7 +2175,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canManageScanCards',
+        name: 'canMarkRestricted',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -2200,14 +2200,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canUploadClientFiles',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'canViewAnyFiles',
         type: {
           kind: 'NON_NULL',
           name: null,
