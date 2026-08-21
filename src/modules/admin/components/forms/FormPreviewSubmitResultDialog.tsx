@@ -7,7 +7,6 @@ import {
 import React from 'react';
 import CodeTextBlock from '@/components/elements/CodeTextBlock';
 import CommonDialog from '@/components/elements/CommonDialog';
-import { stringifyJson } from '@/modules/formBuilder/formBuilderUtil';
 
 interface Props {
   value?: object;
@@ -25,7 +24,7 @@ const FormPreviewSubmitResultDialog: React.FC<Props> = ({
       <DialogTitle>Submitted Values</DialogTitle>
       <DialogContent>
         <CodeTextBlock sx={{ mt: 2 }}>
-          {value ? stringifyJson(value) : ''}
+          {JSON.stringify(value, null, 2)}
         </CodeTextBlock>
       </DialogContent>
       <DialogActions>
