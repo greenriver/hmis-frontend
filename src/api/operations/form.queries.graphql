@@ -178,7 +178,14 @@ query GetFormDefinitionFieldsForEditor($id: ID!) {
   }
 }
 
-# Live-parse raw JSON while editing a form definition
+# Used for JSON editor
+query GetFormDefinitionFieldsForJsonEditor($id: ID!) {
+  formDefinition(id: $id) {
+    ...FormDefinitionFieldsForJsonEditor
+  }
+}
+
+# used for JSON editor
 query GetParsedFormDefinition($input: String!) {
   parsedFormDefinition(input: $input) {
     definition {

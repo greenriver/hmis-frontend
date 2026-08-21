@@ -3,8 +3,6 @@ import { Stack } from '@mui/system';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { generatePath } from 'react-router-dom';
 import FormJsonDrawer from './FormJsonDrawer';
-import FormPreviewPowerTools from './FormPreviewPowerTools';
-import FormPreviewSubmitResultDialog from './FormPreviewSubmitResultDialog';
 import { usePublishForm } from './usePublishForm';
 import ButtonLink from '@/components/elements/ButtonLink';
 import CommonToggle, { ToggleItem } from '@/components/elements/CommonToggle';
@@ -35,7 +33,6 @@ import {
   getItemMap,
 } from '@/modules/form/util/formUtil';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   FormRole,
@@ -72,22 +69,6 @@ const FormPreview = () => {
   });
 
   const formRef = useRef<DynamicFormRef>(null);
-  const [canAdministrateConfig] = useHasRootPermissions([
-    'canAdministrateConfig',
-  ]);
-  const [userLocalConstants, setUserLocalConstants] = useState<object>({});
-  const [userInitialValues, setUserInitialValues] = useState<object>({});
-  const [formSubmitResult, setFormSubmitResult] = useState<object>();
-
-  // Force re-render of the form preview when the user-provided local constants or initial values change
-  const previewKey = useMemo(
-    () =>
-      JSON.stringify({
-        userLocalConstants,
-        userInitialValues,
-      }),
-    [userLocalConstants, userInitialValues]
-  );
 
   const localConstants = useMemo(() => {
     // Add the always-present local constants
@@ -100,20 +81,16 @@ const FormPreview = () => {
       localConstants.clientId = DUMMY_CLIENT_ID;
     }
 
-    // Add the user-specified local constants
-    return { ...localConstants, ...userLocalConstants };
-  }, [formDefinition?.role, userLocalConstants]);
+    return localConstants;
+  }, [formDefinition?.role]);
 
   useScrollToHash(loading, STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT);
 
-  // Initial values based on item.initial properties, plus optional user overrides
+  // Initial values based on item.initial properties
   const initialValues = useMemo(() => {
     if (!formDefinition?.definition) return {};
-    return {
-      ...getInitialValues(formDefinition.definition, localConstants),
-      ...userInitialValues,
-    };
-  }, [formDefinition?.definition, localConstants, userInitialValues]);
+    return getInitialValues(formDefinition.definition, localConstants);
+  }, [formDefinition?.definition, localConstants]);
 
   // Current form state, which updates when user toggles away from "input view" mode
   // This has the same shape as WIP Values when saved (e.g. a map keyed by Link ID)
@@ -154,38 +131,30 @@ const FormPreview = () => {
       formDefinition &&
       (toggleValue === 'readOnly' ? (
         <DynamicView
-          key={previewKey}
           definition={formDefinition.definition}
           localConstants={localConstants}
           values={formState}
         />
       ) : (
         <DynamicForm
-          key={previewKey}
           definition={formDefinition.definition}
-          onSubmit={({ rawValues }) => setFormSubmitResult(rawValues)}
+          onSubmit={() => {}}
           onSaveDraft={onSaveFormValues}
           errors={{ errors: [], warnings: [] }}
           localConstants={localConstants}
           initialValues={formState}
-          hideSubmit={!canAdministrateConfig}
-          FormActionProps={{
-            submitButtonText: 'Test Submit Form',
-            noDiscard: true,
-          }}
+          hideSubmit
           ref={formRef}
         />
       ))
     );
   }, [
-    canAdministrateConfig,
     formDefinition,
     formValues,
     itemMap,
     localConstants,
     onSaveFormValues,
     toggleValue,
-    previewKey,
   ]);
 
   const rawDefinitionString = useMemo(
@@ -276,45 +245,11 @@ const FormPreview = () => {
         )}
       </Stack>
 
-      {canAdministrateConfig && (
-        <FormPreviewPowerTools
-          key={previewKey}
-          localConstants={userLocalConstants}
-          initialValues={userInitialValues}
-          onLocalConstantsChange={(value) => {
-            setUserLocalConstants(value);
-            setFormValues({
-              ...getInitialValues(formDefinition.definition, {
-                ...localConstants,
-                ...value,
-              }),
-              ...userInitialValues,
-            });
-          }}
-          onInitialValuesChange={(value) => {
-            setUserInitialValues(value);
-            setFormValues({
-              ...getInitialValues(formDefinition.definition, localConstants),
-              ...value,
-            });
-          }}
-        />
-      )}
-
       <SentryErrorBoundary>
         <FormNavigationContainer navItems={formStepperItems}>
           {form}
         </FormNavigationContainer>
       </SentryErrorBoundary>
-
-      <FormPreviewSubmitResultDialog
-        value={formSubmitResult}
-        onClose={() => setFormSubmitResult(undefined)}
-        onSaveToInitialValues={(value) => {
-          setUserInitialValues(value);
-          setFormValues(value);
-        }}
-      />
     </>
   );
 };

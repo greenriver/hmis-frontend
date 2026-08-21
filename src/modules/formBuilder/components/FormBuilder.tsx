@@ -3,7 +3,7 @@ import { LoadingButton } from '@mui/lab';
 import { Button, Divider, Paper, Typography } from '@mui/material';
 
 import { Box, Stack } from '@mui/system';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { generatePath, useNavigate } from 'react-router-dom';
 
@@ -11,7 +11,6 @@ import { v4 } from 'uuid';
 import { useUpdateForm } from './useUpdateForm';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import useMaxPageWidth from '@/hooks/useMaxPageWidth';
-import FormJsonEditorDrawer from '@/modules/admin/components/forms/FormJsonEditorDrawer';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import SaveSlide from '@/modules/form/components/SaveSlide';
 import FormBuilderHeader from '@/modules/formBuilder/components/FormBuilderHeader';
@@ -91,43 +90,6 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
     }
   }, [setBlockedActionFunction, isDirty, goToPreview]);
 
-  // todo @martha - these could be moved to either a hook or a separate component?
-  const [jsonDrawerOpen, setJsonDrawerOpen] = useState(false);
-  const [jsonDirty, setJsonDirty] = useState(false);
-  const jsonWorkingDefinitionRef = useRef<object>(
-    formDefinition.rawDefinition || {}
-  );
-
-  const openJsonDrawer = useCallback(() => setJsonDrawerOpen(true), []);
-  const closeJsonDrawer = useCallback(() => {
-    setJsonDrawerOpen(false);
-    setJsonDirty(false);
-  }, []);
-
-  const onClickEditJson = useCallback(() => {
-    if (isDirty) {
-      setBlockedActionFunction(() => openJsonDrawer);
-    } else {
-      openJsonDrawer();
-    }
-  }, [isDirty, openJsonDrawer]);
-
-  const onCloseJsonDrawer = useCallback(() => {
-    if (jsonDirty) {
-      setBlockedActionFunction(() => closeJsonDrawer);
-    } else {
-      closeJsonDrawer();
-    }
-  }, [jsonDirty, closeJsonDrawer]);
-
-  const onConfirmUnsavedChanges = useCallback(() => {
-    if (jsonDrawerOpen) {
-      updateForm(jsonWorkingDefinitionRef.current);
-    } else {
-      rhfMethods.handleSubmit(updateForm)();
-    }
-  }, [jsonDrawerOpen, rhfMethods, updateForm]);
-
   return (
     // This FormProvider provides the form context for the Form Tree,
     // which is modified by clicking up an down arrows to reorder items.
@@ -139,7 +101,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
         confirmText='Save changes'
         cancelText='Continue editing'
         title='Unsaved changes'
-        onConfirm={onConfirmUnsavedChanges}
+        onConfirm={rhfMethods.handleSubmit(updateForm)}
         onCancel={() => setBlockedActionFunction(undefined)}
         maxWidth='sm'
         fullWidth
@@ -158,18 +120,6 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
         onSuccess={onSuccess}
         // Form can be closed without any changes made
         onClose={() => setSelectedItem(undefined)}
-      />
-      <FormJsonEditorDrawer
-        open={jsonDrawerOpen}
-        rawDefinition={formDefinition.rawDefinition || {}}
-        onClose={onCloseJsonDrawer}
-        onSave={updateForm}
-        saveLoading={saveLoading}
-        saveErrorState={errorState}
-        onDirtyChange={setJsonDirty}
-        onWorkingDefinitionChange={(definition) => {
-          jsonWorkingDefinitionRef.current = definition;
-        }}
       />
       <Box
         display='flex'
@@ -201,7 +151,6 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
                 <FormBuilderHeader
                   formDefinition={formDefinition}
                   onClickPreview={onClickPreview}
-                  onClickEditJson={onClickEditJson}
                 />
               </Box>
               <Divider />
