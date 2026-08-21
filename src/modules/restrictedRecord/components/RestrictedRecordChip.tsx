@@ -9,7 +9,11 @@ const RestrictedRecordChip: React.FC<Props> = ({ iconOnly = false }) => {
   if (iconOnly) {
     return (
       <Tooltip title='Restricted Record' arrow placement='right' describeChild>
-        <RestrictedRecordIcon fontSize='small' color='warning' />
+        <RestrictedRecordIcon
+          fontSize='small'
+          color='warning'
+          titleAccess='Restricted Record'
+        />
       </Tooltip>
     );
   }
