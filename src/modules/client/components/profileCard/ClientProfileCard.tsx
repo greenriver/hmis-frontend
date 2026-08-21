@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import ClientProfileCardAccordion from './ClientProfileCardAccordion';
 import ClientProfileCardImage from './ClientProfileCardImage';
 import ClientProfileCardTextTable from './ClientProfileCardTextTable';
-import ClientRestrictedChip from './ClientRestrictedChip';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import ClientForceRefetchButton from '@/modules/client/components/ClientForceRefetchButton';
@@ -18,10 +17,11 @@ import {
   pronouns,
 } from '@/modules/hmis/hmisUtil';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import RestrictClientRecordButton from '@/modules/restrictedRecord/components/RestrictClientRecordButton';
+import RestrictedRecordChip from '@/modules/restrictedRecord/components/RestrictedRecordChip';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import { ClientFieldsFragment, useGetClientImageQuery } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
-
 interface Props {
   client: ClientFieldsFragment;
 }
@@ -77,11 +77,7 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
               <Typography component='h1' variant='h4'>
                 {clientName}
               </Typography>
-              <ClientRestrictedChip
-                clientId={client.id}
-                restricted={client.restricted}
-                canMarkRestricted={client.access.canMarkRestricted}
-              />
+              {client.restricted && <RestrictedRecordChip />}
             </Stack>
           </Grid>
           <Grid
@@ -149,6 +145,15 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
                   >
                     Update Client Details
                   </ClientForceRefetchButton>
+                </ClientPermissionsFilter>
+                <ClientPermissionsFilter
+                  id={client.id}
+                  permissions='canMarkRestricted'
+                >
+                  <RestrictClientRecordButton
+                    clientId={client.id}
+                    restricted={client.restricted}
+                  />
                 </ClientPermissionsFilter>
                 {client.dateUpdated && (
                   <Typography

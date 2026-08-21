@@ -15,9 +15,18 @@ export default {
   parameters: {
     apolloClient: {
       mocks: [
-        getRootPermissionsMock,
-        getClientPermissionMocks,
         clientImageLookupMock,
+        clientImageLookupMock,
+        clientImageLookupMock,
+        clientImageLookupMock,
+        getClientPermissionMocks,
+        getClientPermissionMocks,
+        getClientPermissionMocks,
+        getClientPermissionMocks,
+        getRootPermissionsMock,
+        getRootPermissionsMock,
+        getRootPermissionsMock,
+        getRootPermissionsMock,
       ],
     },
   },
@@ -36,6 +45,15 @@ export const WithFewerDetails: Story = {
       pronouns: [],
       ssn: null,
       dob: null,
+    } as ClientFieldsFragment,
+  },
+};
+
+export const WithRestrictedAccess: Story = {
+  args: {
+    client: {
+      ...RITA_ACKROYD,
+      restricted: true,
     } as ClientFieldsFragment,
   },
 };

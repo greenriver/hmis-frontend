@@ -50,6 +50,8 @@ import LayersRounded from '@mui/icons-material/LayersRounded';
 import LineStyleIcon from '@mui/icons-material/LineStyle';
 import ListRounded from '@mui/icons-material/ListRounded';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import LockIcon from '@mui/icons-material/Lock';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
 import MediationRoundedIcon from '@mui/icons-material/MediationRounded';
 import MergeTypeRounded from '@mui/icons-material/MergeTypeRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
@@ -73,6 +75,7 @@ import SwapVertRoundedIcon from '@mui/icons-material/SwapVertRounded';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
 import WrapTextIcon from '@mui/icons-material/WrapText';
+
 import { styled, SvgIconProps } from '@mui/material';
 
 const IntakeAssessmentIcon = styled(ExitToAppRoundedIcon)<SvgIconProps>(() => ({
@@ -160,4 +163,6 @@ export {
   DateRangeRounded as DateRangeIcon,
   SendIcon as SendIcon,
   PublicIcon as GlobalIcon,
+  LockIcon as RestrictedRecordIcon,
+  LockOpenIcon as UnrestrictedRecordIcon,
 };
