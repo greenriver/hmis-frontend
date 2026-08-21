@@ -1,9 +1,11 @@
-import LockIcon from '@mui/icons-material/Lock';
-import LockOpenIcon from '@mui/icons-material/LockOpen';
-import { Chip, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { useCallback, useState } from 'react';
 
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
+import {
+  RestrictedRecordIcon,
+  UnrestrictedRecordIcon,
+} from '@/components/elements/SemanticIcons';
 import {
   emptyErrorState,
   ErrorState,
@@ -14,13 +16,11 @@ import { useSetClientRestrictedMutation } from '@/types/gqlTypes';
 interface Props {
   clientId: string;
   restricted: boolean;
-  canMarkRestricted: boolean;
 }
 
-const ClientRestrictedChip: React.FC<Props> = ({
+const RestrictClientRecordButton: React.FC<Props> = ({
   clientId,
   restricted,
-  canMarkRestricted,
 }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
@@ -49,28 +49,30 @@ const ClientRestrictedChip: React.FC<Props> = ({
     });
   }, [clientId, handleClose, restricted, setClientRestricted]);
 
-  // If the client is not restricted and the user does not have permission to mark restricted,
-  // don't show the chip at all.
-  if (!restricted && !canMarkRestricted) return null;
-
-  const clickable = canMarkRestricted;
-  const Icon = restricted ? LockIcon : LockOpenIcon;
   return (
     <>
-      <Chip
-        label={restricted ? 'Restricted Record' : 'Unrestricted Record'}
-        icon={<Icon fontSize='small' />}
-        color={restricted ? 'warning' : 'grayscale'}
-        clickable={clickable}
-        onClick={clickable ? () => setDialogOpen(true) : undefined}
-        data-testid='clientRestrictedChip'
-        sx={{ flexShrink: 0 }}
-        variant='status'
-      />
+      <Button
+        onClick={() => setDialogOpen(true)}
+        data-testid='restrictClientRecordButton'
+        startIcon={
+          restricted ? <UnrestrictedRecordIcon /> : <RestrictedRecordIcon />
+        }
+        variant='outlined'
+        color='primary'
+        fullWidth
+      >
+        {restricted
+          ? 'Remove Client Record Restriction'
+          : 'Restrict Client Record'}
+      </Button>
       <ConfirmationDialog
         id='setClientRestricted'
         open={dialogOpen}
-        title={restricted ? 'Remove Restriction' : 'Restrict Record'}
+        title={
+          restricted
+            ? 'Remove Client Record Restriction'
+            : 'Restrict Client Record'
+        }
         confirmText={restricted ? 'Remove Restriction' : 'Restrict'}
         onConfirm={handleConfirm}
         onCancel={handleClose}
@@ -81,24 +83,18 @@ const ClientRestrictedChip: React.FC<Props> = ({
           <>
             <Typography>Remove restriction for this client record?</Typography>
             <Typography sx={{ mt: 2 }}>
-              Users who can view clients will be able to find and open this
-              record again, even if they do not have permission to view
-              restricted client records.
-            </Typography>
-            <Typography sx={{ mt: 2 }}>
-              You can restrict them again later.
+              Users who can view clients will be able to search for this client
+              and view their details, even if they do not have permission to
+              view restricted client records.
             </Typography>
           </>
         ) : (
           <>
             <Typography>Restrict this client?</Typography>
             <Typography sx={{ mt: 2 }}>
-              This client record will only be visible to users who have
+              This client record will only be searchable by users who have
               permission to view restricted clients at one of the client's
               projects.
-            </Typography>
-            <Typography sx={{ mt: 2 }}>
-              This can be updated or changed again later.
             </Typography>
           </>
         )}
@@ -107,4 +103,4 @@ const ClientRestrictedChip: React.FC<Props> = ({
   );
 };
 
-export default ClientRestrictedChip;
+export default RestrictClientRecordButton;

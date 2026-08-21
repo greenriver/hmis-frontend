@@ -36,6 +36,7 @@ import {
  */
 
 const clientAccessMock = {
+  __typename: 'ClientAccess',
   ...Object.fromEntries(
     HmisObjectSchemas.find((obj) => obj.name === 'ClientAccess')?.fields.map(
       (f) => [f.name, true]
@@ -526,10 +527,7 @@ export const clientImageLookupMock = {
           contentType: 'image/jpeg',
           base64: MOCK_IMAGE,
         },
-        access: {
-          canEditClient: true,
-          canViewClientPhoto: true,
-        },
+        access: clientAccessMock,
       },
     },
   },
