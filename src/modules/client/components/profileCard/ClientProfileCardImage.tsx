@@ -30,7 +30,8 @@ const ClientProfileCardImage: React.FC<Props> = ({
   const handleOpen = useCallback(() => setOpen(true), []);
 
   if (!client) return <ClientCardImageElement />;
-  if (client.access && !client.access.canViewClientPhoto) return;
+
+  if (!client.access.canViewClientPhoto) return;
 
   const overlaySx: SxProps = {
     opacity: 0,
@@ -53,7 +54,7 @@ const ClientProfileCardImage: React.FC<Props> = ({
         clientId={client.id}
         baseImageAltText={clientImageAltText}
       />
-      {client.access?.canEditClient ? (
+      {client.access.canEditClient ? (
         <Link
           component='button'
           underline='none'
