@@ -1,13 +1,27 @@
 import CloseIcon from '@mui/icons-material/Close';
 import DataObjectIcon from '@mui/icons-material/DataObject';
-import { Box, Button, Drawer, IconButton, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Drawer,
+  IconButton,
+  Stack,
+  Typography,
+} from '@mui/material';
 import React, { useState } from 'react';
+import FormJsonCopyButton from './FormJsonCopyButton';
 import FormJsonPanel from './FormJsonPanel';
 
 interface Props {
   jsonString: string;
 }
 
+/**
+ * Renders a drawer with the form JSON as read-only.
+ * Enables copying the JSON to the clipboard with custom options.
+ *
+ * Intended for "super-admin" use only.
+ */
 const FormJsonDrawer: React.FC<Props> = ({ jsonString }) => {
   const [open, setOpen] = useState(false);
 
@@ -20,6 +34,7 @@ const FormJsonDrawer: React.FC<Props> = ({ jsonString }) => {
       >
         View JSON
       </Button>
+
       <Drawer
         anchor='right'
         open={open}
@@ -45,9 +60,12 @@ const FormJsonDrawer: React.FC<Props> = ({ jsonString }) => {
             borderBottom: `1px solid ${theme.palette.divider}`,
           })}
         >
-          <Typography component='h2' variant='h5'>
-            Form JSON
-          </Typography>
+          <Stack direction='row' alignItems='center' spacing={3}>
+            <Typography component='h2' variant='h5'>
+              Form JSON
+            </Typography>
+            <FormJsonCopyButton jsonString={jsonString} />
+          </Stack>
           <IconButton
             aria-label='close'
             onClick={() => setOpen(false)}
