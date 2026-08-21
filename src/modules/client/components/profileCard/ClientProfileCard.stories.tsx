@@ -39,3 +39,12 @@ export const WithFewerDetails: Story = {
     } as ClientFieldsFragment,
   },
 };
+
+export const WithRestrictedAccess: Story = {
+  args: {
+    client: {
+      ...RITA_ACKROYD,
+      restricted: true,
+    } as ClientFieldsFragment,
+  },
+};

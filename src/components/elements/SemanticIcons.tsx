@@ -50,6 +50,8 @@ import LayersRounded from '@mui/icons-material/LayersRounded';
 import LineStyleIcon from '@mui/icons-material/LineStyle';
 import ListRounded from '@mui/icons-material/ListRounded';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import LockIcon from '@mui/icons-material/Lock';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
 import MediationRoundedIcon from '@mui/icons-material/MediationRounded';
 import MergeTypeRounded from '@mui/icons-material/MergeTypeRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
@@ -160,4 +162,6 @@ export {
   DateRangeRounded as DateRangeIcon,
   SendIcon as SendIcon,
   PublicIcon as GlobalIcon,
+  LockIcon as RestrictedRecordIcon,
+  LockOpenIcon as UnrestrictedRecordIcon,
 };
