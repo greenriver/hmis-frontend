@@ -15,9 +15,9 @@ export default {
   parameters: {
     apolloClient: {
       mocks: [
-        clientImageLookupMock,
-        getClientPermissionMocks,
         getRootPermissionsMock,
+        getClientPermissionMocks,
+        clientImageLookupMock,
       ],
     },
   },
