@@ -2,6 +2,7 @@ import { Button } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { generatePath } from 'react-router-dom';
+import FormJsonDrawer from './FormJsonDrawer';
 import { usePublishForm } from './usePublishForm';
 import ButtonLink from '@/components/elements/ButtonLink';
 import CommonToggle, { ToggleItem } from '@/components/elements/CommonToggle';
@@ -31,6 +32,7 @@ import {
   getInitialValues,
   getItemMap,
 } from '@/modules/form/util/formUtil';
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   FormRole,
@@ -155,6 +157,14 @@ const FormPreview = () => {
     toggleValue,
   ]);
 
+  const rawDefinitionString = useMemo(
+    () =>
+      formDefinition?.rawDefinition
+        ? JSON.stringify(formDefinition.rawDefinition, null, 2)
+        : '',
+    [formDefinition?.rawDefinition]
+  );
+
   const [confirmOpen, setConfirmOpen] = useState(false);
   const { publishLoading, onPublishForm, publishErrorState } = usePublishForm({
     formId: formDefinition?.id,
@@ -179,22 +189,27 @@ const FormPreview = () => {
         }
       />
       <Stack direction='row' justifyContent='space-between' sx={{ mb: 4 }}>
-        <CommonToggle
-          value={toggleValue}
-          onChange={(value: PreviewMode) => {
-            setToggleValue(value);
-            // Trigger save to update `formValues` state when toggling away from Edit-mode
-            if (value === 'readOnly') {
-              formRef.current?.SaveDraftForm();
-            }
-          }}
-          items={toggleItems}
-          size='small'
-          variant='gray'
-        />
+        <Stack direction='row' spacing={2} alignItems='center'>
+          <CommonToggle
+            value={toggleValue}
+            onChange={(value: PreviewMode) => {
+              setToggleValue(value);
+              // Trigger save to update `formValues` state when toggling away from Edit-mode
+              if (value === 'readOnly') {
+                formRef.current?.SaveDraftForm();
+              }
+            }}
+            items={toggleItems}
+            size='small'
+            variant='gray'
+          />
+          <RootPermissionsFilter permissions='canAdministrateConfig'>
+            <FormJsonDrawer jsonString={rawDefinitionString} />
+          </RootPermissionsFilter>
+        </Stack>
 
         {formDefinition.status === FormStatus.Draft && (
-          <Stack direction='row' spacing={4}>
+          <Stack direction='row' gap={2}>
             {canManageForm && (
               <ButtonLink
                 onClick={() => setConfirmOpen(true)}
