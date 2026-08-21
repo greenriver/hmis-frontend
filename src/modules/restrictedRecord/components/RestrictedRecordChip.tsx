@@ -8,12 +8,8 @@ interface Props {
 const RestrictedRecordChip: React.FC<Props> = ({ iconOnly = false }) => {
   if (iconOnly) {
     return (
-      <Tooltip title='Restricted Record' arrow placement='right'>
-        <RestrictedRecordIcon
-          fontSize='small'
-          color='warning'
-          aria-label='Restricted Record'
-        />
+      <Tooltip title='Restricted Record' arrow placement='right' describeChild>
+        <RestrictedRecordIcon fontSize='small' color='warning' />
       </Tooltip>
     );
   }
@@ -22,7 +18,6 @@ const RestrictedRecordChip: React.FC<Props> = ({ iconOnly = false }) => {
       label='Restricted Record'
       icon={<RestrictedRecordIcon fontSize='small' />}
       color='warning'
-      data-testid='restrictedRecordChip'
       sx={{ flexShrink: 0 }}
       variant='status'
     />
