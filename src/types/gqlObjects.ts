@@ -841,6 +841,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'CeMatchField',
     fields: [
       {
+        name: 'description',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'expressionField',
         type: {
           kind: 'NON_NULL',
