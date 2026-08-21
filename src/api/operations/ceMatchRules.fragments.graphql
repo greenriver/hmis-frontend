@@ -2,6 +2,7 @@ fragment CeMatchFieldDetails on CeMatchField {
   id
   key
   label
+  description
   itemType
   multiple
   expressionField
