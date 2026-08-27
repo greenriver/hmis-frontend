@@ -1,7 +1,7 @@
 import ClearIcon from '@mui/icons-material/Clear';
 import SearchIcon from '@mui/icons-material/Search';
 import { ButtonProps, Button, InputAdornment } from '@mui/material';
-import { Dispatch, SetStateAction, useCallback } from 'react';
+import { useCallback } from 'react';
 import TextInput, {
   TextInputProps,
 } from '@/components/elements/input/TextInput';
@@ -27,7 +27,7 @@ export interface CommonSearchInputProps extends Omit<
   'onChange' | 'value'
 > {
   value?: string;
-  onChange: Dispatch<SetStateAction<string>>;
+  onChange: (value: string) => void;
   size?: 'small' | 'medium';
   searchAdornment?: boolean;
   clearAdornment?: boolean;

@@ -160,6 +160,7 @@ query GetCeReferrals(
     offset
     limit
     nodesCount
+    searchQueryId
     nodes {
       ...CeReferralTableFields
     }
@@ -176,6 +177,7 @@ query GetCeClients(
     offset
     limit
     nodesCount
+    searchQueryId
     nodes {
       ...CeClientFields
     }
