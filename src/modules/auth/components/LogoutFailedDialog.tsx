@@ -6,17 +6,12 @@ interface Props {
   loading: boolean;
   onRetry: VoidFunction;
   onDismiss: VoidFunction;
-  // Selects the copy: a 'jwt' sign-out also ends the IdP session, so its failure
-  // leaves that session live and the user has to be told. A Devise/Okta sign-out
-  // never ends the IdP session, so naming one there would be noise.
-  authMethod: 'devise' | 'jwt';
 }
 
 const LogoutFailedDialog: React.FC<Props> = ({
   loading,
   onRetry,
   onDismiss,
-  authMethod,
 }) => (
   <ConfirmationDialog
     open={true}
@@ -28,15 +23,13 @@ const LogoutFailedDialog: React.FC<Props> = ({
     onCancel={onDismiss}
   >
     <Typography>
-      Signing out did not complete.{' '}
-      {authMethod === 'jwt'
-        ? 'You are still signed in here and with your identity provider, so anyone using this computer next could still reach your account.'
-        : 'You are still signed in, so anyone using this computer next could still reach your account.'}
+      Signing out did not finish, so you are still signed in. Anyone using this
+      computer next could still get into your account.
     </Typography>
     <Typography sx={{ mt: 2 }}>
-      Try signing out again. If it keeps failing, quitting your browser
-      completely will usually end the session. Let your administrator know if it
-      persists.
+      Try signing out again. If that does not work, close all of your browser
+      windows to make sure you are fully signed out. Let your administrator know
+      if it keeps happening.
     </Typography>
   </ConfirmationDialog>
 );

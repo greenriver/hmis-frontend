@@ -36,6 +36,7 @@ import {
  */
 
 const clientAccessMock = {
+  __typename: 'ClientAccess',
   ...Object.fromEntries(
     HmisObjectSchemas.find((obj) => obj.name === 'ClientAccess')?.fields.map(
       (f) => [f.name, true]
@@ -132,6 +133,7 @@ export const RITA_ACKROYD = {
   dateUpdated: '2022-07-27T15:14:29.062',
   dateCreated: '2022-07-27T15:14:29.062',
   pronouns: ['she/hers'],
+  restricted: false,
   enabledFeatures: Object.keys(HmisEnums.ClientDashboardFeature),
   externalIds: [
     {
@@ -525,10 +527,7 @@ export const clientImageLookupMock = {
           contentType: 'image/jpeg',
           base64: MOCK_IMAGE,
         },
-        access: {
-          canEditClient: true,
-          canViewClientPhoto: true,
-        },
+        access: clientAccessMock,
       },
     },
   },

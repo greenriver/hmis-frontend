@@ -17,10 +17,11 @@ import {
   pronouns,
 } from '@/modules/hmis/hmisUtil';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import RestrictClientRecordButton from '@/modules/restrictedRecord/components/RestrictClientRecordButton';
+import RestrictedRecordChip from '@/modules/restrictedRecord/components/RestrictedRecordChip';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import { ClientFieldsFragment, useGetClientImageQuery } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
-
 interface Props {
   client: ClientFieldsFragment;
 }
@@ -67,9 +68,17 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
       >
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography component='h1' variant='h4'>
-              {clientName}
-            </Typography>
+            <Stack
+              direction='row'
+              alignItems='flex-start'
+              justifyContent='space-between'
+              gap={2}
+            >
+              <Typography component='h1' variant='h4'>
+                {clientName}
+              </Typography>
+              {client.restricted && <RestrictedRecordChip />}
+            </Stack>
           </Grid>
           <Grid
             item
@@ -136,6 +145,15 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
                   >
                     Update Client Details
                   </ClientForceRefetchButton>
+                </ClientPermissionsFilter>
+                <ClientPermissionsFilter
+                  id={client.id}
+                  permissions='canMarkRestricted'
+                >
+                  <RestrictClientRecordButton
+                    clientId={client.id}
+                    restricted={client.restricted}
+                  />
                 </ClientPermissionsFilter>
                 {client.dateUpdated && (
                   <Typography

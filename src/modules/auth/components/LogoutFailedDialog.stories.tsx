@@ -13,40 +13,23 @@ const args = {
   loading: false,
   onRetry: fn(),
   onDismiss: fn(),
-  authMethod: 'jwt' as const,
 };
 
 // The dialog renders in a portal, so queries go through document.body rather
 // than the story canvas.
 const dialog = () => within(document.body);
 
-export const JwtSso: Story = {
+export const Default: Story = {
   args,
   play: async () => {
     await expect(
       dialog().getByText('You are still signed in')
     ).toBeInTheDocument();
     await expect(
-      dialog().getByText(/still signed in here and with your identity provider/)
+      dialog().getByText(/you are still signed in\. Anyone using this computer/)
     ).toBeInTheDocument();
     await expect(
-      dialog().getByText(/close every browser window/)
-    ).toBeInTheDocument();
-  },
-};
-
-export const DeviseOkta: Story = {
-  args: { ...args, authMethod: 'devise' },
-  play: async () => {
-    // A Devise/Okta sign-out never ends the IdP session, so the copy must not
-    // mention one.
-    await expect(
-      dialog().queryByText(/identity provider/)
-    ).not.toBeInTheDocument();
-    await expect(
-      dialog().getByText(
-        /You are still signed in, so anyone using this computer/
-      )
+      dialog().getByText(/close all of your browser windows to make sure/)
     ).toBeInTheDocument();
   },
 };

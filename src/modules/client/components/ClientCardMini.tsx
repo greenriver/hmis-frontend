@@ -1,6 +1,5 @@
 import { Stack, Typography } from '@mui/material';
 import { isNil } from 'lodash-es';
-
 import ClientImage from './ClientImage';
 
 import {
@@ -9,6 +8,7 @@ import {
   age,
   getClientImageAltText,
 } from '@/modules/hmis/hmisUtil';
+import RestrictedRecordChip from '@/modules/restrictedRecord/components/RestrictedRecordChip';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 
 interface Props {
@@ -23,9 +23,12 @@ const ClientCardMini = ({ client, hideImage = false }: Props) => {
 
   return (
     <Stack gap={0.5}>
-      <Typography component='p' variant='h5'>
-        {clientName}
-      </Typography>
+      <Stack direction='row' gap={1} alignItems='center'>
+        <Typography component='p' variant='h5'>
+          {clientName}
+        </Typography>
+        {client.restricted && <RestrictedRecordChip iconOnly />}
+      </Stack>
       <Stack direction='row' gap={1} sx={{ mt: 1 }}>
         {!hideImage && (
           <ClientImage
@@ -36,6 +39,9 @@ const ClientCardMini = ({ client, hideImage = false }: Props) => {
           />
         )}
         <Stack gap={0.5}>
+          <Typography variant='body2'>
+            <b>Client ID:</b> {client.id}
+          </Typography>
           {!isNil(clientAge) && (
             <Typography variant='body2'>
               <b>Age:</b> {clientAge}
