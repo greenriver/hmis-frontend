@@ -209,11 +209,18 @@ const ReferralDetailContent: React.FC<Props> = ({
       value: (
         <Stack gap={1}>
           {referral.sourceEnrollment.householdMembers.map(
-            ({ id, clientId, clientName, relationshipToHoH, access }) => {
-              const nameAndRelationship = `${clientName} (${relationshipToHohForDisplay(
+            ({
+              id,
+              clientId,
+              clientName,
+              relationshipToHoH,
+              exitDate,
+              access,
+            }) => {
+              const nameRelationshipAndStatus = `${clientName} (${relationshipToHohForDisplay(
                 relationshipToHoH,
                 true
-              )})`;
+              )})${exitDate ? ' - Exited' : ''}`;
               if (access.canViewClients) {
                 return (
                   <RouterLink
@@ -223,11 +230,11 @@ const ReferralDetailContent: React.FC<Props> = ({
                     })}
                     openInNew
                   >
-                    {nameAndRelationship}
+                    {nameRelationshipAndStatus}
                   </RouterLink>
                 );
               }
-              return <span>{nameAndRelationship}</span>;
+              return <span>{nameRelationshipAndStatus}</span>;
             }
           )}
         </Stack>

@@ -1259,6 +1259,7 @@ export type CeReferralSourceHouseholdMember = {
   clientId: Scalars['ID']['output'];
   /** The name of the client. Returns masked name if the user does not have permission to view the client name. */
   clientName: Scalars['String']['output'];
+  exitDate?: Maybe<Scalars['ISO8601Date']['output']>;
   id: Scalars['ID']['output'];
   relationshipToHoH: RelationshipToHoH;
 };
@@ -18246,6 +18247,7 @@ export type CeReferralDetailFieldsFragment = {
       clientId: string;
       clientName: string;
       relationshipToHoH: RelationshipToHoH;
+      exitDate?: string | null;
       access: {
         __typename?: 'CeReferralSourceHouseholdMemberAccess';
         canViewClients: boolean;
@@ -18515,6 +18517,7 @@ export type CeReferralFieldsFragment = {
       clientId: string;
       clientName: string;
       relationshipToHoH: RelationshipToHoH;
+      exitDate?: string | null;
       access: {
         __typename?: 'CeReferralSourceHouseholdMemberAccess';
         canViewClients: boolean;
@@ -21233,6 +21236,7 @@ export type SubmitCeReferralStepMutation = {
           clientId: string;
           clientName: string;
           relationshipToHoH: RelationshipToHoH;
+          exitDate?: string | null;
           access: {
             __typename?: 'CeReferralSourceHouseholdMemberAccess';
             canViewClients: boolean;
@@ -22204,6 +22208,7 @@ export type GetCeReferralQuery = {
         clientId: string;
         clientName: string;
         relationshipToHoH: RelationshipToHoH;
+        exitDate?: string | null;
         access: {
           __typename?: 'CeReferralSourceHouseholdMemberAccess';
           canViewClients: boolean;
@@ -53350,6 +53355,7 @@ export const CeReferralDetailFieldsFragmentDoc = gql`
         clientId
         clientName
         relationshipToHoH
+        exitDate
         access {
           canViewClients
         }
