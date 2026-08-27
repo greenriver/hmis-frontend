@@ -129,7 +129,8 @@ const CeMatchClause: React.FC<Props> = ({
       fieldSelectDisabled
     )
       return 'Choose an assessment first.';
-  }, [source, fieldSelectDisabled]);
+    return selectedField?.description || undefined;
+  }, [source, fieldSelectDisabled, selectedField]);
 
   return (
     <Stack gap={2}>
