@@ -241,6 +241,9 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
         const userPromise: Promise<CurrentUserResult> = cachedUser
           ? Promise.resolve({ user: cachedUser })
           : fetchCurrentUser();
+        // If loadSettings rejects first, the await below never runs and this
+        // rejection would go unhandled. The await still gets it if reached.
+        userPromise.catch(() => {});
 
         await loadSettings();
 
