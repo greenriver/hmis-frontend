@@ -1141,8 +1141,7 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.CE_RULES_ROOT,
             element: (
               <RootPermissionsFilter
-                // TODO(#7544): swap to canAdministrateCoordinatedEntry
-                permissions='canAdministrateConfig'
+                permissions='canManageCeMatchRules'
                 otherwise={<NotFound />}
               >
                 <Navigate to={AdminDashboardRoutes.CE_RULES} replace />
@@ -1153,8 +1152,7 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.CE_RULES,
             element: (
               <RootPermissionsFilter
-                // TODO(#7544): swap to canAdministrateCoordinatedEntry
-                permissions='canAdministrateConfig'
+                permissions='canManageCeMatchRules'
                 otherwise={<NotFound />}
               >
                 <CeMatchRulesPage ownerLevel='global' />
@@ -1165,8 +1163,7 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.CE_RULE_ORGANIZATIONS,
             element: (
               <RootPermissionsFilter
-                // TODO(#7544): swap to canAdministrateCoordinatedEntry
-                permissions='canAdministrateConfig'
+                permissions='canManageCeMatchRules'
                 otherwise={<NotFound />}
               >
                 <CeMatchRulesPage ownerLevel='organization' />
@@ -1177,8 +1174,7 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.CE_RULE_PROJECTS,
             element: (
               <RootPermissionsFilter
-                // TODO(#7544): swap to canAdministrateCoordinatedEntry
-                permissions='canAdministrateConfig'
+                permissions='canManageCeMatchRules'
                 otherwise={<NotFound />}
               >
                 <CeMatchRulesPage ownerLevel='project' />
@@ -1189,8 +1185,7 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.CE_RULE_UNIT_GROUPS,
             element: (
               <RootPermissionsFilter
-                // TODO(#7544): swap to canAdministrateCoordinatedEntry
-                permissions='canAdministrateConfig'
+                permissions='canManageCeMatchRules'
                 otherwise={<NotFound />}
               >
                 <CeMatchRulesPage ownerLevel='unit-group' />
@@ -1201,8 +1196,7 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.CE_RULE_GLOBAL_NEW,
             element: (
               <RootPermissionsFilter
-                // TODO(#7544): swap to canAdministrateCoordinatedEntry
-                permissions='canAdministrateConfig'
+                permissions='canManageCeMatchRules'
                 otherwise={<NotFound />}
               >
                 <CeMatchRuleGlobalEditorPage />
@@ -1213,8 +1207,7 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.CE_RULE_GLOBAL_DETAIL,
             element: (
               <RootPermissionsFilter
-                // TODO(#7544): swap to canAdministrateCoordinatedEntry
-                permissions='canAdministrateConfig'
+                permissions='canManageCeMatchRules'
                 otherwise={<NotFound />}
               >
                 <CeMatchRuleDetailPage />
@@ -1225,8 +1218,7 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.CE_RULE_ORGANIZATION_NEW,
             element: (
               <RootPermissionsFilter
-                // TODO(#7544): swap to canAdministrateCoordinatedEntry
-                permissions='canAdministrateConfig'
+                permissions='canManageCeMatchRules'
                 otherwise={<NotFound />}
               >
                 <CeMatchRuleOrganizationEditorPage />
@@ -1237,8 +1229,7 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.CE_RULE_ORGANIZATION_DETAIL,
             element: (
               <RootPermissionsFilter
-                // TODO(#7544): swap to canAdministrateCoordinatedEntry
-                permissions='canAdministrateConfig'
+                permissions='canManageCeMatchRules'
                 otherwise={<NotFound />}
               >
                 <CeMatchRuleDetailPage />
@@ -1249,8 +1240,7 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.CE_RULE_PROJECT_NEW,
             element: (
               <RootPermissionsFilter
-                // TODO(#7544): swap to canAdministrateCoordinatedEntry
-                permissions='canAdministrateConfig'
+                permissions='canManageCeMatchRules'
                 otherwise={<NotFound />}
               >
                 <CeMatchRuleProjectEditorPage />
@@ -1261,8 +1251,7 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.CE_RULE_PROJECT_DETAIL,
             element: (
               <RootPermissionsFilter
-                // TODO(#7544): swap to canAdministrateCoordinatedEntry
-                permissions='canAdministrateConfig'
+                permissions='canManageCeMatchRules'
                 otherwise={<NotFound />}
               >
                 <CeMatchRuleDetailPage />
@@ -1273,8 +1262,7 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.CE_RULE_UNIT_GROUP_NEW,
             element: (
               <RootPermissionsFilter
-                // TODO(#7544): swap to canAdministrateCoordinatedEntry
-                permissions='canAdministrateConfig'
+                permissions='canManageCeMatchRules'
                 otherwise={<NotFound />}
               >
                 <CeMatchRuleUnitGroupEditorPage />
@@ -1285,8 +1273,7 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.CE_RULE_UNIT_GROUP_DETAIL,
             element: (
               <RootPermissionsFilter
-                // TODO(#7544): swap to canAdministrateCoordinatedEntry
-                permissions='canAdministrateConfig'
+                permissions='canManageCeMatchRules'
                 otherwise={<NotFound />}
               >
                 <CeMatchRuleDetailPage />
@@ -1297,8 +1284,7 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.CE_RULE_ORGANIZATION,
             element: (
               <RootPermissionsFilter
-                // TODO(#7544): swap to canAdministrateCoordinatedEntry
-                permissions='canAdministrateConfig'
+                permissions='canManageCeMatchRules'
                 otherwise={<NotFound />}
               >
                 <CeMatchOrganizationRulesPage />
@@ -1309,8 +1295,7 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.CE_RULE_UNIT_GROUP,
             element: (
               <RootPermissionsFilter
-                // TODO(#7544): swap to canAdministrateCoordinatedEntry
-                permissions='canAdministrateConfig'
+                permissions='canManageCeMatchRules'
                 otherwise={<NotFound />}
               >
                 <CeMatchUnitGroupRulesPage />
@@ -1321,8 +1306,7 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.CE_RULE_PROJECT,
             element: (
               <RootPermissionsFilter
-                // TODO(#7544): swap to canAdministrateCoordinatedEntry
-                permissions='canAdministrateConfig'
+                permissions='canManageCeMatchRules'
                 otherwise={<NotFound />}
               >
                 <CeMatchProjectRulesPage />

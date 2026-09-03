@@ -236,17 +236,20 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
 
     (async () => {
       try {
-        // Start this fetch before awaiting loadSettings, so the two requests
-        // overlap instead of costing two serial round-trips.
         const userPromise: Promise<CurrentUserResult> = cachedUser
           ? Promise.resolve({ user: cachedUser })
           : fetchCurrentUser();
 
-        await loadSettings();
+        // Awaited together so the requests overlap instead of costing two
+        // serial round-trips, and so neither rejection is left unhandled when
+        // the other loses the race.
+        const [, { user: fetchedUser, accountError }] = await Promise.all([
+          loadSettings(),
+          userPromise,
+        ]);
 
         // accountError does not go through `error`: that dialog offers only a
         // reload, and every reload fetches the same accountError back.
-        const { user: fetchedUser, accountError } = await userPromise;
         if (fetchedUser) setUser(fetchedUser);
         else if (accountError) setAccountError(accountError);
       } catch (err) {
