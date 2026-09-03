@@ -77,15 +77,40 @@ const NewAssessmentMenu: React.FC<
     [clientId, enrollmentId]
   );
 
-  const items: CommonMenuItem[] = useMemo(
-    () =>
-      assessmentEligibilities.map(({ id, title, role, formDefinitionId }) => ({
+  const items: CommonMenuItem[] = useMemo(() => {
+    const toMenuItem = ({
+      id,
+      title,
+      role,
+      formDefinitionId,
+    }: AssessmentEligibilityType): CommonMenuItem => {
+      const prefix = role === AssessmentRole.CustomAssessment ? '' : 'HUD ';
+
+      return {
         key: id,
         to: getPath(role, formDefinitionId),
-        title: title,
-      })),
-    [assessmentEligibilities, getPath]
-  );
+        title: `${prefix}${title}`,
+      };
+    };
+
+    const hudItems = assessmentEligibilities
+      .filter(({ role }) => role !== AssessmentRole.CustomAssessment)
+      .map(toMenuItem);
+    const customItems = assessmentEligibilities
+      .filter(({ role }) => role === AssessmentRole.CustomAssessment)
+      .map(toMenuItem);
+
+    if (hudItems.length === 0 || customItems.length === 0) {
+      return [...hudItems, ...customItems];
+    }
+
+    // If there are both HUD and custom assessments, add a divider between them
+    return [
+      ...hudItems,
+      { key: 'divider-custom-assessments', title: 'divider', divider: true },
+      ...customItems,
+    ];
+  }, [assessmentEligibilities, getPath]);
 
   if (items.length === 0) {
     // Assessment eligibilities will have length 0 for an exited enrollment where no post-exit assessments are enabled.

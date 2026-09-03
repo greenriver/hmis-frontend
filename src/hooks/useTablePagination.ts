@@ -69,13 +69,18 @@ const useTablePagination = ({
 
   const setPage = useCallback(
     (newPage: number) => {
+      // No-op when the page isn't actually changing (e.g. GenericTableWithData resets
+      // to page 0 on every filter/search change). Writing it anyway pushes a redundant
+      // history entry that competes with other URL writers on the same interaction.
+      if (newPage === page) return;
+
       // Table controls provide 0-indexed pages; store 1-indexed pages in the URL.
       setPaginationParams((currentParams) => ({
         ...currentParams,
         [pageParam]: Math.max(newPage + 1, 1),
       }));
     },
-    [pageParam, setPaginationParams]
+    [page, pageParam, setPaginationParams]
   );
 
   const setRowsPerPage = useCallback(

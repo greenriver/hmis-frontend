@@ -199,6 +199,7 @@ fragment CeReferralDetailFields on CeReferral {
       clientId
       clientName
       relationshipToHoH
+      exitDate
       access {
         canViewClients
       }

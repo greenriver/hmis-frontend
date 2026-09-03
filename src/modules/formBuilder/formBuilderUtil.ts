@@ -1,5 +1,5 @@
 import { cloneDeep, get, kebabCase, set, startCase } from 'lodash-es';
-import { ItemMap } from '@/modules/form/types';
+import { isQuestionItem, ItemMap } from '@/modules/form/types';
 import {
   buildAutofillDependencyMap,
   buildBoundsDependencyMap,
@@ -115,6 +115,39 @@ export const determineInitialValueField = (itemType: ItemType) => {
       return 'valueNumber';
     default:
       return;
+  }
+};
+
+// Compatible source types for AutofillValue.valueQuestion
+export const isCompatibleAutofillValueQuestion = (
+  source: FormItem,
+  targetType: ItemType
+): boolean => {
+  if (!isQuestionItem(source)) return false;
+
+  switch (targetType) {
+    case ItemType.Boolean:
+      // Can only autofill from another boolean question
+      return source.type === ItemType.Boolean;
+    case ItemType.Choice:
+    case ItemType.OpenChoice:
+      // Can only autofill from other choice questions. Choice values are { code, label } objects at runtime.
+      return [ItemType.Choice, ItemType.OpenChoice].includes(source.type);
+    case ItemType.String:
+    case ItemType.Text:
+      // Most flexible: Can autofill from string/text as well as numeric questions
+      return [
+        ItemType.String,
+        ItemType.Text,
+        ItemType.Integer,
+        ItemType.Currency,
+      ].includes(source.type);
+    case ItemType.Integer:
+    case ItemType.Currency:
+      // Can only autofill from other numeric questions
+      return [ItemType.Integer, ItemType.Currency].includes(source.type);
+    default:
+      return false;
   }
 };
 

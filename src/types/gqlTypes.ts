@@ -699,6 +699,7 @@ export type CeClientsPaginated = {
   nodesCount: Scalars['Int']['output'];
   offset: Scalars['Int']['output'];
   pagesCount: Scalars['Int']['output'];
+  searchQueryId?: Maybe<Scalars['String']['output']>;
 };
 
 export type CeCustomReferralStatus = {
@@ -772,6 +773,8 @@ export type CeEligibleUnitGroupsPaginated = {
 /** Field metadata for CE Match Rule expressions */
 export type CeMatchField = {
   __typename?: 'CeMatchField';
+  /** Additional detail about what this field represents and how its value is resolved */
+  description?: Maybe<Scalars['String']['output']>;
   /**
    * The full-length identifier used in CE Match Rule expressions, such as
    * "current_age" or "cde.custom_assessment.my_field_key".
@@ -1257,6 +1260,7 @@ export type CeReferralSourceHouseholdMember = {
   clientId: Scalars['ID']['output'];
   /** The name of the client. Returns masked name if the user does not have permission to view the client name. */
   clientName: Scalars['String']['output'];
+  exitDate?: Maybe<Scalars['ISO8601Date']['output']>;
   id: Scalars['ID']['output'];
   relationshipToHoH: RelationshipToHoH;
 };
@@ -1348,6 +1352,7 @@ export type CeReferralsPaginated = {
   nodesCount: Scalars['Int']['output'];
   offset: Scalars['Int']['output'];
   pagesCount: Scalars['Int']['output'];
+  searchQueryId?: Maybe<Scalars['String']['output']>;
 };
 
 export type CeSwimlane = {
@@ -18244,6 +18249,7 @@ export type CeReferralDetailFieldsFragment = {
       clientId: string;
       clientName: string;
       relationshipToHoH: RelationshipToHoH;
+      exitDate?: string | null;
       access: {
         __typename?: 'CeReferralSourceHouseholdMemberAccess';
         canViewClients: boolean;
@@ -18513,6 +18519,7 @@ export type CeReferralFieldsFragment = {
       clientId: string;
       clientName: string;
       relationshipToHoH: RelationshipToHoH;
+      exitDate?: string | null;
       access: {
         __typename?: 'CeReferralSourceHouseholdMemberAccess';
         canViewClients: boolean;
@@ -21231,6 +21238,7 @@ export type SubmitCeReferralStepMutation = {
           clientId: string;
           clientName: string;
           relationshipToHoH: RelationshipToHoH;
+          exitDate?: string | null;
           access: {
             __typename?: 'CeReferralSourceHouseholdMemberAccess';
             canViewClients: boolean;
@@ -22202,6 +22210,7 @@ export type GetCeReferralQuery = {
         clientId: string;
         clientName: string;
         relationshipToHoH: RelationshipToHoH;
+        exitDate?: string | null;
         access: {
           __typename?: 'CeReferralSourceHouseholdMemberAccess';
           canViewClients: boolean;
@@ -23104,6 +23113,7 @@ export type GetCeReferralsQuery = {
     offset: number;
     limit: number;
     nodesCount: number;
+    searchQueryId?: string | null;
     nodes: Array<{
       __typename?: 'CeReferral';
       targetOrganizationName: string;
@@ -23186,6 +23196,7 @@ export type GetCeClientsQuery = {
     offset: number;
     limit: number;
     nodesCount: number;
+    searchQueryId?: string | null;
     nodes: Array<{
       __typename?: 'CeClient';
       id: string;
@@ -23252,6 +23263,7 @@ export type CeMatchFieldDetailsFragment = {
   id: string;
   key: string;
   label: string;
+  description?: string | null;
   itemType: ItemType;
   multiple: boolean;
   expressionField: string;
@@ -23652,6 +23664,7 @@ export type GetCeMatchFieldsQuery = {
     id: string;
     key: string;
     label: string;
+    description?: string | null;
     itemType: ItemType;
     multiple: boolean;
     expressionField: string;
@@ -23696,6 +23709,7 @@ export type GetCeMatchCustomAssessmentFieldsQuery = {
     id: string;
     key: string;
     label: string;
+    description?: string | null;
     itemType: ItemType;
     multiple: boolean;
     expressionField: string;
@@ -35675,6 +35689,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
 export type FormDefinitionFieldsForEditorFragment = {
   __typename?: 'FormDefinition';
   version: string;
+  rawDefinition: any;
   id: string;
   role: FormRole;
   title: string;
@@ -36258,6 +36273,7 @@ export type UpdateFormDefinitionMutation = {
     formDefinition?: {
       __typename?: 'FormDefinition';
       version: string;
+      rawDefinition: any;
       id: string;
       role: FormRole;
       title: string;
@@ -41711,6 +41727,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
   formDefinition?: {
     __typename?: 'FormDefinition';
     version: string;
+    rawDefinition: any;
     id: string;
     role: FormRole;
     title: string;
@@ -53342,6 +53359,7 @@ export const CeReferralDetailFieldsFragmentDoc = gql`
         clientId
         clientName
         relationshipToHoH
+        exitDate
         access {
           canViewClients
         }
@@ -53708,6 +53726,7 @@ export const CeMatchFieldDetailsFragmentDoc = gql`
     id
     key
     label
+    description
     itemType
     multiple
     expressionField
@@ -54564,6 +54583,7 @@ export const FormDefinitionFieldsForEditorFragmentDoc = gql`
   fragment FormDefinitionFieldsForEditor on FormDefinition {
     ...FormDefinitionFields
     version
+    rawDefinition
   }
   ${FormDefinitionFieldsFragmentDoc}
 `;
@@ -59445,6 +59465,7 @@ export const GetCeReferralsDocument = gql`
       offset
       limit
       nodesCount
+      searchQueryId
       nodes {
         ...CeReferralTableFields
       }
@@ -59558,6 +59579,7 @@ export const GetCeClientsDocument = gql`
       offset
       limit
       nodesCount
+      searchQueryId
       nodes {
         ...CeClientFields
       }
