@@ -28,7 +28,7 @@
       "eslint --fix --ignore-path .gitignore"
     ],
     "*": [
-      "prettier --write"
+      "prettier --write --no-error-on-unmatched-pattern"
     ]
   },
   "browserslist": {
