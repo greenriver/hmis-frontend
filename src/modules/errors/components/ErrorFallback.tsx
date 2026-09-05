@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import { FallbackRender } from '@sentry/react';
 
+import { isEqual } from 'lodash-es';
 import React, { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { NotFoundError, UNKNOWN_ERROR_HEADING } from '../util';
@@ -37,15 +38,20 @@ export const FullPageError: React.FC<{
 
 interface Props extends Omit<Parameters<FallbackRender>[0], 'error'> {
   error?: any;
+  // Values that clear the error and re-render the children when they change, so the user can
+  // recover from a failed request by changing its inputs instead of reloading the page.
+  resetKeys?: unknown[];
 }
 
 export const AlertErrorFallback: React.FC<Props> = ({
   error,
   componentStack,
   resetError,
+  resetKeys,
 }) => {
   const { pathname } = useLocation();
   const originalPathname = useRef(pathname);
+  const originalResetKeys = useRef(resetKeys);
 
   // Reset error boundary when navigated away
   useEffect(() => {
@@ -53,6 +59,14 @@ export const AlertErrorFallback: React.FC<Props> = ({
       resetError();
     }
   }, [pathname, resetError]);
+
+  // Reset error boundary when the reset keys change
+  useEffect(() => {
+    if (!isEqual(resetKeys, originalResetKeys.current)) {
+      originalResetKeys.current = resetKeys;
+      resetError();
+    }
+  }, [resetKeys, resetError]);
 
   if (error && isApolloError(error)) {
     return (

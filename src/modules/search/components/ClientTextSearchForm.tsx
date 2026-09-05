@@ -14,6 +14,8 @@ interface Props extends Omit<ClientTextSearchInputProps, 'onChange' | 'value'> {
   onSearch: (value: string) => void;
   hideSearchButton?: boolean;
   minChars?: number;
+  // Must match MAX_STRING_LENGTH in ClientSearchQueryShared on the server, which rejects the search
+  maxChars?: number;
   onClearSearch?: VoidFunction;
   hideClearButton?: boolean;
   ClearButtonProps?: ButtonProps;
@@ -26,12 +28,14 @@ const ClientTextSearchForm: React.FC<Props> = ({
   onClearSearch,
   hideClearButton,
   minChars = 3,
+  maxChars = 100,
   ClearButtonProps,
   ...props
 }) => {
   const { t } = useTranslation();
   const [value, setValue] = useState<string>(initialValue || '');
   const [tooShort, setTooShort] = useState(false);
+  const [tooLong, setTooLong] = useState(false);
 
   useEffect(() => {
     if (initialValue) setValue(initialValue);
@@ -42,13 +46,21 @@ const ClientTextSearchForm: React.FC<Props> = ({
     if (value && value.trim().length >= minChars) setTooShort(false);
   }, [minChars, value, tooShort]);
 
+  useEffect(() => {
+    if (!maxChars || !tooLong) return;
+    if (value.trim().length <= maxChars) setTooLong(false);
+  }, [maxChars, value, tooLong]);
+
   const handleSearch = useCallback(() => {
-    if (minChars && (value || '').trim().length < minChars) {
+    const trimmed = (value || '').trim();
+    if (minChars && trimmed.length < minChars) {
       setTooShort(true);
+    } else if (maxChars && trimmed.length > maxChars) {
+      setTooLong(true);
     } else {
       onSearch(value);
     }
-  }, [minChars, onSearch, value]);
+  }, [minChars, maxChars, onSearch, value]);
 
   const handleClear = useCallback(() => {
     setValue('');
@@ -77,8 +89,12 @@ const ClientTextSearchForm: React.FC<Props> = ({
         value={value}
         onChange={setValue}
         onKeyUp={(e) => e.key === 'Enter' && handleSearch()}
-        error={tooShort}
-        errorMessage={tooShort ? t('clientSearch.inputTooShort') : undefined}
+        error={tooShort || tooLong}
+        errorMessage={
+          (tooShort && t('clientSearch.inputTooShort')) ||
+          (tooLong && t('clientSearch.inputTooLong')) ||
+          undefined
+        }
         onClearSearch={onClearSearch}
         {...props}
       />

@@ -483,7 +483,9 @@ const GenericTableWithData = <
 
 const WrappedGenericTableWithData: typeof GenericTableWithData = (props) => (
   <Box sx={props.fullHeight ? { height: '100%' } : undefined}>
-    <SentryErrorBoundary>
+    {/* Reset on new query variables, so a user can recover from a query error (for example, an
+        invalid search term) by changing the inputs rather than reloading the page. */}
+    <SentryErrorBoundary resetKeys={[props.queryVariables]}>
       <GenericTableWithData {...props} />
     </SentryErrorBoundary>
   </Box>

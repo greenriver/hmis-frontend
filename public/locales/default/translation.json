@@ -4,6 +4,7 @@
     "addClientPrompt": "Don't see the client you're looking for?",
     "missingCriteria": "Please enter a search term or advanced search criteria",
     "inputTooShort": "Please enter at least 3 characters.",
+    "inputTooLong": "Please enter no more than 100 characters.",
     "inputTooShortAllowAdvanced": "Please enter more than three characters or add advanced search criteria"
   }
 }
