@@ -8,12 +8,17 @@ import ClientTextSearchInput, {
   ClientTextSearchInputProps,
 } from './ClientTextSearchInput';
 import { useIsMobile } from '@/hooks/useIsMobile';
+import {
+  MAX_CLIENT_SEARCH_LENGTH,
+  MIN_CLIENT_SEARCH_LENGTH,
+} from '@/modules/search/searchUtil';
 
 interface Props extends Omit<ClientTextSearchInputProps, 'onChange' | 'value'> {
   initialValue?: string;
   onSearch: (value: string) => void;
   hideSearchButton?: boolean;
   minChars?: number;
+  maxChars?: number;
   onClearSearch?: VoidFunction;
   hideClearButton?: boolean;
   ClearButtonProps?: ButtonProps;
@@ -25,13 +30,15 @@ const ClientTextSearchForm: React.FC<Props> = ({
   hideSearchButton,
   onClearSearch,
   hideClearButton,
-  minChars = 3,
+  minChars = MIN_CLIENT_SEARCH_LENGTH,
+  maxChars = MAX_CLIENT_SEARCH_LENGTH,
   ClearButtonProps,
   ...props
 }) => {
   const { t } = useTranslation();
   const [value, setValue] = useState<string>(initialValue || '');
   const [tooShort, setTooShort] = useState(false);
+  const [tooLong, setTooLong] = useState(false);
 
   useEffect(() => {
     if (initialValue) setValue(initialValue);
@@ -42,13 +49,22 @@ const ClientTextSearchForm: React.FC<Props> = ({
     if (value && value.trim().length >= minChars) setTooShort(false);
   }, [minChars, value, tooShort]);
 
+  useEffect(() => {
+    if (!maxChars || !tooLong) return;
+    if (value.trim().length <= maxChars) setTooLong(false);
+  }, [maxChars, value, tooLong]);
+
   const handleSearch = useCallback(() => {
-    if (minChars && (value || '').trim().length < minChars) {
+    const trimmed = (value || '').trim();
+    if (minChars && trimmed.length < minChars) {
       setTooShort(true);
+    } else if (maxChars && trimmed.length > maxChars) {
+      setTooLong(true);
     } else {
-      onSearch(value);
+      // Search the trimmed value, since that's what was length-checked above
+      onSearch(trimmed);
     }
-  }, [minChars, onSearch, value]);
+  }, [minChars, maxChars, onSearch, value]);
 
   const handleClear = useCallback(() => {
     setValue('');
@@ -77,8 +93,12 @@ const ClientTextSearchForm: React.FC<Props> = ({
         value={value}
         onChange={setValue}
         onKeyUp={(e) => e.key === 'Enter' && handleSearch()}
-        error={tooShort}
-        errorMessage={tooShort ? t('clientSearch.inputTooShort') : undefined}
+        error={tooShort || tooLong}
+        errorMessage={
+          (tooShort && t('clientSearch.inputTooShort', { min: minChars })) ||
+          (tooLong && t('clientSearch.inputTooLong', { max: maxChars })) ||
+          undefined
+        }
         onClearSearch={onClearSearch}
         {...props}
       />
