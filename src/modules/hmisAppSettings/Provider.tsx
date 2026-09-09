@@ -1,9 +1,10 @@
-import { Typography } from '@mui/material';
+import { ThemeProvider, Typography } from '@mui/material';
 import * as Sentry from '@sentry/react';
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import Loading from '@/components/elements/Loading';
+import { createFullTheme } from '@/config/theme';
 import { HMIS_ACCOUNT_ERROR_EVENT } from '@/modules/auth/api/constants';
 import {
   CurrentUserResult,
@@ -329,8 +330,10 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
   if (loading) return <Loading />;
   if (accountError) {
     const { title, message } = TERMINAL_ACCOUNT_ERROR_COPY[accountError];
+    // These dialogs render before MergedThemeProvider (a child of this provider), and
+    // ConfirmationDialog uses palette colors that only the full theme defines.
     return (
-      <>
+      <ThemeProvider theme={createFullTheme(appSettings?.theme)}>
         <ConfirmationDialog
           open={true}
           confirmText='Sign out'
@@ -346,21 +349,23 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
           <Typography>{message}</Typography>
         </ConfirmationDialog>
         {logoutFailureDialogs}
-      </>
+      </ThemeProvider>
     );
   }
   if (error) {
     return (
-      <ConfirmationDialog
-        open={true}
-        confirmText='Try again'
-        title='An error occurred'
-        loading={loading}
-        hideCancelButton
-        onConfirm={handleManualReload}
-      >
-        <Typography>Failed to connect to the server.</Typography>
-      </ConfirmationDialog>
+      <ThemeProvider theme={createFullTheme(appSettings?.theme)}>
+        <ConfirmationDialog
+          open={true}
+          confirmText='Try again'
+          title='An error occurred'
+          loading={loading}
+          hideCancelButton
+          onConfirm={handleManualReload}
+        >
+          <Typography>Failed to connect to the server.</Typography>
+        </ConfirmationDialog>
+      </ThemeProvider>
     );
   }
 
