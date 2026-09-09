@@ -4,6 +4,7 @@ import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import Loading from '@/components/elements/Loading';
+import { HMIS_ACCOUNT_ERROR_EVENT } from '@/modules/auth/api/constants';
 import {
   CurrentUserResult,
   fetchCurrentUser,
@@ -18,7 +19,10 @@ import * as storage from '@/modules/auth/api/storage';
 import { HmisAuthContext, HmisAuthState } from '@/modules/auth/AuthContext';
 import LogoutFailedDialog from '@/modules/auth/components/LogoutFailedDialog';
 import StopImpersonatingFailedDialog from '@/modules/auth/components/StopImpersonatingFailedDialog';
-import { TerminalAccountErrorType } from '@/modules/auth/events';
+import {
+  isTerminalAccountErrorType,
+  TerminalAccountErrorType,
+} from '@/modules/auth/events';
 import { useSessionTrackingObserver } from '@/modules/auth/hooks/useSessionTrackingObserver';
 import { fetchHmisAppSettings } from '@/modules/hmisAppSettings/api';
 import { HmisAppSettingsContext } from '@/modules/hmisAppSettings/Context';
@@ -41,6 +45,11 @@ const TERMINAL_ACCOUNT_ERROR_COPY: Record<
     title: "You don't have access to this application",
     message:
       'There is no account associated with your sign-in. Please contact your administrator for assistance.',
+  },
+  no_hmis_access: {
+    title: "You don't have access to this application",
+    message:
+      'Your account does not have access to this HMIS. Please contact your administrator for assistance.',
   },
 };
 
@@ -209,6 +218,21 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
 
   // tracking needs to be in place before we start making API calls
   useSessionTrackingObserver();
+
+  // A login refusal or a guarded-route 403 carrying a terminal type replaces the app
+  // with the terminal page, the same way the bootstrap accountError does. The cached
+  // user is cleared so a reload does not revive it via getValidCachedUser.
+  useEffect(() => {
+    const handler = (event: Event) => {
+      const type = (event as CustomEvent).detail;
+      if (!isTerminalAccountErrorType(type)) return;
+      storage.clearUser();
+      setAccountError(type);
+    };
+    document.addEventListener(HMIS_ACCOUNT_ERROR_EVENT, handler);
+    return () =>
+      document.removeEventListener(HMIS_ACCOUNT_ERROR_EVENT, handler);
+  }, []);
 
   // fetch data from remote
   useEffect(() => {

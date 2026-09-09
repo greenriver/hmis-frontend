@@ -5,7 +5,12 @@ import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import React, { FormEvent, useCallback, useState } from 'react';
 
-import { HmisUser, login } from '../api/sessions';
+import { HmisUser, isHmisResponseError, login } from '../api/sessions';
+
+import {
+  dispatchAccountErrorEvent,
+  isTerminalAccountErrorType,
+} from '@/modules/auth/events';
 
 interface Props {
   onSuccess: (user: HmisUser) => void;
@@ -22,8 +27,17 @@ const OneTimePassword: React.FC<Props> = ({ onSuccess }) => {
       login({ otpAttempt: otpAttempt })
         .then((user) => onSuccess(user))
         .catch((error: Error) => {
-          setError(error);
           setLoading(false);
+          // The backend can refuse HMIS access after a valid code; that is not a
+          // code problem, so hand it to the terminal page instead of this form.
+          if (
+            isHmisResponseError(error) &&
+            isTerminalAccountErrorType(error.type)
+          ) {
+            dispatchAccountErrorEvent(error.type);
+            return;
+          }
+          setError(error);
         });
     },
     [onSuccess, otpAttempt]
