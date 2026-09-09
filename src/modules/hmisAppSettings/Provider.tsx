@@ -220,6 +220,14 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
   // tracking needs to be in place before we start making API calls
   useSessionTrackingObserver();
 
+  // The terminal and error dialogs render before MergedThemeProvider (a child of
+  // this provider), and ConfirmationDialog uses palette colors that only the full
+  // theme defines.
+  const standaloneTheme = useMemo(
+    () => createFullTheme(appSettings?.theme),
+    [appSettings?.theme]
+  );
+
   // A login refusal or a guarded-route 403 carrying a terminal type replaces the app
   // with the terminal page, the same way the bootstrap accountError does. The cached
   // user is cleared so a reload does not revive it via getValidCachedUser.
@@ -330,10 +338,8 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
   if (loading) return <Loading />;
   if (accountError) {
     const { title, message } = TERMINAL_ACCOUNT_ERROR_COPY[accountError];
-    // These dialogs render before MergedThemeProvider (a child of this provider), and
-    // ConfirmationDialog uses palette colors that only the full theme defines.
     return (
-      <ThemeProvider theme={createFullTheme(appSettings?.theme)}>
+      <ThemeProvider theme={standaloneTheme}>
         <ConfirmationDialog
           open={true}
           confirmText='Sign out'
@@ -354,7 +360,7 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
   }
   if (error) {
     return (
-      <ThemeProvider theme={createFullTheme(appSettings?.theme)}>
+      <ThemeProvider theme={standaloneTheme}>
         <ConfirmationDialog
           open={true}
           confirmText='Try again'
