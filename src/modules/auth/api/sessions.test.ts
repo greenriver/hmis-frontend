@@ -16,6 +16,7 @@ vi.mock('@/modules/auth/api/storage', () => ({
 import {
   fetchCurrentUser,
   HmisResponseError,
+  login,
   logout,
   sendSessionKeepalive,
 } from './sessions';
@@ -89,7 +90,7 @@ describe('session transport by auth method', () => {
       expect(storage.setLastConnectorId).toHaveBeenCalledWith('keycloak');
     });
 
-    it.each(['account_deactivated', 'no_warehouse_account'])(
+    it.each(['account_deactivated', 'no_warehouse_account', 'no_hmis_access'])(
       'reports %s from the 200 payload, with no user',
       async (accountError) => {
         fetchMock.mockResolvedValue(
@@ -131,6 +132,25 @@ describe('session transport by auth method', () => {
 
       const err = await fetchCurrentUser().catch((e) => e);
       expect(err.status).toBe(500);
+    });
+  });
+
+  describe('login', () => {
+    it('surfaces a 403 no_hmis_access refusal as an HmisResponseError carrying that type', async () => {
+      fetchMock.mockResolvedValue(
+        errorResponse(() =>
+          Promise.resolve({ error: { type: 'no_hmis_access' } })
+        )
+      );
+
+      const err = await login({
+        email: 'user@example.com',
+        password: 'pw',
+      }).catch((e) => e);
+
+      expect(err).toBeInstanceOf(HmisResponseError);
+      expect(err.type).toBe('no_hmis_access');
+      expect(storage.setUser).not.toHaveBeenCalled();
     });
   });
 

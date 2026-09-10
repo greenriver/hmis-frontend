@@ -3,6 +3,7 @@ import { SearchFormDefinition } from '@/modules/form/data';
 import {
   ClientSearchInput,
   ClientSearchParamsFieldsFragment,
+  FormItem,
 } from '@/types/gqlTypes';
 
 /**
@@ -75,3 +76,15 @@ export const keySearchParamsByLinkId = (
   });
   return mapped;
 };
+
+// Mirrors the server's client search limit (MAX_STRING_LENGTH in ClientSearchQueryShared), which
+// rejects longer terms.
+export const MAX_CLIENT_SEARCH_LENGTH = 100;
+
+export const MIN_CLIENT_SEARCH_LENGTH = 3;
+
+export const tooLongSearchFields = (values: FormValues): FormItem[] =>
+  SearchFormDefinition.item.filter((item) => {
+    const value = values[item.linkId];
+    return typeof value === 'string' && value.length > MAX_CLIENT_SEARCH_LENGTH;
+  });

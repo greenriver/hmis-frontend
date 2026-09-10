@@ -75,10 +75,12 @@ flowchart TD
 
 1. **Initialization** - `HmisAppSettingsProvider` initializes session tracking and validates browser storage
 
-2. **Event Propagation** - Three custom events control session state:
+2. **Event Propagation** - Custom events control session state:
    - `HMIS_SESSION_UID_HEADER`: Server header containing session userId
    - `HMIS_REMOTE_SESSION_UID_EVENT`: Dispatched when receiving server response
    - `HMIS_APP_SESSION_UID_EVENT`: Dispatched to update UI components
+   - `HMIS_ACCOUNT_ERROR_EVENT`: Dispatched when a login refusal or a guarded-route
+     `403` carries a terminal account error type (see below)
 
 3. **Cross-Tab Coordination**:
    - When a tab changes session state, it updates localStorage via `setSessionTracking`
@@ -92,12 +94,15 @@ flowchart TD
 
 ## Terminal account errors vs. re-authentication
 
-Two states are terminal — re-authenticating cannot clear them — so they must not
+Three states are terminal — re-authenticating cannot clear them — so they must not
 take the "session ended" re-auth path above:
 
 * **Account deactivated** — the warehouse account exists but has been disabled.
 * **No warehouse account** — the IdP authenticated the person, but no warehouse
   account is provisioned for that identity.
+* **No HMIS access** — the account exists but may not use this HMIS: the data
+  source is not yet live (`hmis_go_live_at` in the future) and the person cannot
+  administer HMIS there.
 
 How each `authMethod` signals them, and what the SPA does:
 
@@ -106,6 +111,7 @@ How each `authMethod` signals them, and what the SPA does:
 | Session ended / signed out elsewhere | `401` (`custom_auth_failure.rb`, type `unauthenticated`/`inactive`) | `401` (proxy-level, or a tokenless race) | Session-ended dialog → reload → login |
 | Account deactivated | `401` (goes through the re-auth path) | `accountError` on the bootstrap payload | Terminal page (see below) |
 | No warehouse account | `401` | `accountError` on the bootstrap payload | Terminal page |
+| No HMIS access | `403` on `POST /hmis/login` (type `no_hmis_access`), or `accountError` on the bootstrap payload | `accountError` on the bootstrap payload | Terminal page |
 
 Under `jwt` these are read at **bootstrap, not from a failed request**.
 `GET /hmis/user.json` skips authentication — it is an oauth2-proxy
@@ -117,13 +123,19 @@ no such field and stays the ordinary signed-out case. `fetchCurrentUser` returns
 `accountError` alongside the user, and `HmisAppSettingsProvider` replaces the app
 with a terminal dialog whose only action is to sign out.
 
-A failed request could not carry these states instead. The SPA mounts its
-authenticated routes only once it has a user, so a deactivated or no-account user
+A failed request could not carry the deactivated and no-account states instead.
+The SPA mounts its authenticated routes only once it has a user, so such a user
 never issues a request that could fail — they land on the sign-in page, sign in,
-and the proxy returns them to the same userless payload, with no exit. Guarded
-routes do still answer `403` with these types when the account changes
-mid-session; nothing in the SPA reads those, and the next reload picks the state
-up from the bootstrap payload.
+and the proxy returns them to the same userless payload, with no exit.
+
+Guarded routes do answer `403` with a terminal type when the account changes
+mid-session (for example, an HMIS whose go-live time moves into the future while
+someone is using it). `apolloErrorLink` reads the type off such a `403` and
+dispatches `HMIS_ACCOUNT_ERROR_EVENT`; under `devise`, `LoginForm` and
+`OneTimePassword` do the same for a `403` from `POST /hmis/login`.
+`HmisAppSettingsProvider` listens for the event, clears the cached user, and
+replaces the app with the terminal page, so the next reload also lands there via
+the bootstrap payload.
 
 `DELETE /hmis/logout` is the exception. Sign-out is the terminal dialog's only
 action, and neither state has a `current_hmis_user`, so under `jwt` that route

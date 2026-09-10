@@ -3,7 +3,8 @@
     "instruction": "Search by name, D.O.B. (mm/dd/yyyy), SSN (xxx-yy-zzzz), Warehouse ID, or PersonalID. It is often most efficient to search using the first few characters of the first name and last name, e.g. to find Jane Smith you might search for ja sm.",
     "addClientPrompt": "Don't see the client you're looking for?",
     "missingCriteria": "Please enter a search term or advanced search criteria",
-    "inputTooShort": "Please enter at least 3 characters.",
+    "inputTooShort": "Please enter at least {{min}} characters.",
+    "inputTooLong": "Please enter no more than {{max}} characters.",
     "inputTooShortAllowAdvanced": "Please enter more than three characters or add advanced search criteria"
   }
 }
