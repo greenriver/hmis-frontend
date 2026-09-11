@@ -17162,6 +17162,135 @@ export type EnrollmentFieldsFromAssessmentFragment = {
     id: string;
     user?: { __typename?: 'ApplicationUser'; name: string } | null;
   } | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    fieldType: CustomDataElementType;
+    repeats: boolean;
+    displayHooks: Array<DisplayHook>;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        email: string;
+      } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        email: string;
+      } | null;
+    }> | null;
+  }>;
 };
 
 export type IncomeBenefitValuesFragment = {
@@ -30863,6 +30992,135 @@ export type EnrollmentValuesFragment = {
   preferredLanguage?: PreferredLanguage | null;
   preferredLanguageDifferent?: string | null;
   mentalHealthConsultation?: MentalHealthConsultation | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    fieldType: CustomDataElementType;
+    repeats: boolean;
+    displayHooks: Array<DisplayHook>;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        email: string;
+      } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        email: string;
+      } | null;
+    }> | null;
+  }>;
 };
 
 export type SubmittedEnrollmentResultFieldsFragment = {
@@ -31339,6 +31597,135 @@ export type GetEnrollmentQuery = {
       canViewEnrollmentLocationMap: boolean;
     };
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      fieldType: CustomDataElementType;
+      repeats: boolean;
+      displayHooks: Array<DisplayHook>;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      }> | null;
+    }>;
   } | null;
 };
 
@@ -52495,79 +52882,6 @@ export const AssessmentFieldsFragmentDoc = gql`
   }
   ${UserFieldsFragmentDoc}
 `;
-export const EnrollmentValuesFragmentDoc = gql`
-  fragment EnrollmentValues on Enrollment {
-    id
-    lockVersion
-    entryDate
-    exitDate
-    disablingCondition
-    dateOfEngagement
-    moveInDate
-    livingSituation
-    rentalSubsidyType
-    lengthOfStay
-    losUnderThreshold
-    previousStreetEssh
-    dateToStreetEssh
-    timesHomelessPastThreeYears
-    monthsHomelessPastThreeYears
-    enrollmentCoc
-    dateOfPathStatus
-    clientEnrolledInPath
-    reasonNotEnrolled
-    percentAmi
-    referralSource
-    countOutreachReferralApproaches
-    dateOfBcpStatus
-    eligibleForRhy
-    reasonNoServices
-    runawayYouth
-    sexualOrientation
-    sexualOrientationOther
-    formerWardChildWelfare
-    childWelfareYears
-    childWelfareMonths
-    formerWardJuvenileJustice
-    juvenileJusticeYears
-    juvenileJusticeMonths
-    unemploymentFam
-    mentalHealthDisorderFam
-    physicalDisabilityFam
-    alcoholDrugUseDisorderFam
-    unemploymentFam
-    mentalHealthDisorderFam
-    physicalDisabilityFam
-    alcoholDrugUseDisorderFam
-    insufficientIncome
-    incarceratedParent
-    targetScreenReqd
-    timeToHousingLoss
-    annualPercentAmi
-    literalHomelessHistory
-    clientLeaseholder
-    hohLeaseholder
-    subsidyAtRisk
-    evictionHistory
-    criminalRecord
-    incarceratedAdult
-    prisonDischarge
-    sexOffender
-    disabledHoh
-    currentPregnant
-    singleParent
-    dependentUnder6
-    hh5Plus
-    cocPrioritized
-    hpScreeningScore
-    thresholdScore
-    vamcStation
-    translationNeeded
-    preferredLanguage
-    preferredLanguageDifferent
-    mentalHealthConsultation
-  }
-`;
 export const FileFieldsFragmentDoc = gql`
   fragment FileFields on File {
     confidential
@@ -52641,6 +52955,83 @@ export const CustomDataElementFieldsFragmentDoc = gql`
     }
   }
   ${CustomDataElementValueFieldsFragmentDoc}
+`;
+export const EnrollmentValuesFragmentDoc = gql`
+  fragment EnrollmentValues on Enrollment {
+    id
+    lockVersion
+    entryDate
+    exitDate
+    disablingCondition
+    dateOfEngagement
+    moveInDate
+    livingSituation
+    rentalSubsidyType
+    lengthOfStay
+    losUnderThreshold
+    previousStreetEssh
+    dateToStreetEssh
+    timesHomelessPastThreeYears
+    monthsHomelessPastThreeYears
+    enrollmentCoc
+    dateOfPathStatus
+    clientEnrolledInPath
+    reasonNotEnrolled
+    percentAmi
+    referralSource
+    countOutreachReferralApproaches
+    dateOfBcpStatus
+    eligibleForRhy
+    reasonNoServices
+    runawayYouth
+    sexualOrientation
+    sexualOrientationOther
+    formerWardChildWelfare
+    childWelfareYears
+    childWelfareMonths
+    formerWardJuvenileJustice
+    juvenileJusticeYears
+    juvenileJusticeMonths
+    unemploymentFam
+    mentalHealthDisorderFam
+    physicalDisabilityFam
+    alcoholDrugUseDisorderFam
+    unemploymentFam
+    mentalHealthDisorderFam
+    physicalDisabilityFam
+    alcoholDrugUseDisorderFam
+    insufficientIncome
+    incarceratedParent
+    targetScreenReqd
+    timeToHousingLoss
+    annualPercentAmi
+    literalHomelessHistory
+    clientLeaseholder
+    hohLeaseholder
+    subsidyAtRisk
+    evictionHistory
+    criminalRecord
+    incarceratedAdult
+    prisonDischarge
+    sexOffender
+    disabledHoh
+    currentPregnant
+    singleParent
+    dependentUnder6
+    hh5Plus
+    cocPrioritized
+    hpScreeningScore
+    thresholdScore
+    vamcStation
+    translationNeeded
+    preferredLanguage
+    preferredLanguageDifferent
+    mentalHealthConsultation
+    customDataElements {
+      ...CustomDataElementFields
+    }
+  }
+  ${CustomDataElementFieldsFragmentDoc}
 `;
 export const CeAssessmentFieldsFragmentDoc = gql`
   fragment CeAssessmentFields on CeAssessment {
