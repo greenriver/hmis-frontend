@@ -23,12 +23,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
       <SentryErrorBoundary>
         <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={en}>
           <ApolloProvider client={apolloClient}>
-            <BrowserRouter
-              future={{
-                v7_relativeSplatPath: true,
-                v7_startTransition: true,
-              }}
-            >
+            <BrowserRouter>
               <HmisAppSettingsProvider>
                 <MergedThemeProvider>{children}</MergedThemeProvider>
               </HmisAppSettingsProvider>
