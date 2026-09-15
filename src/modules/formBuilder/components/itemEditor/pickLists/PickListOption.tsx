@@ -1,5 +1,5 @@
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
-import { Box, Collapse, IconButton, Stack, Tooltip } from '@mui/material';
+import { Button, Collapse, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import ControlledCheckbox from '@/modules/form/components/rhf/ControlledCheckbox';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
@@ -24,45 +24,36 @@ const PickListOption: React.FC<PickListOptionProps> = ({
   const [advancedOpen, setAdvancedOpen] = useState(false);
 
   return (
-    <>
-      <Stack direction='row' sx={{ justifyContent: 'space-between' }}>
+    <Stack gap={2}>
+      <Typography variant='h6'>Option {index + 1}</Typography>
+      <Stack direction='row' justifyContent='space-between' alignItems='center'>
         <ControlledTextInput
           control={control}
           name={`pickListOptions.${index}.code`}
-          label={`Choice ${index + 1}`}
+          label={`Value`}
           helperText='Must be unique'
           required={true}
           rules={{ validate: (input) => isCodeUnique(input) }}
         />
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Tooltip title='Advanced' arrow placement='top'>
-            <IconButton
-              onClick={() => setAdvancedOpen(!advancedOpen)}
-              size='small'
-            >
-              {advancedOpen ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-            </IconButton>
-          </Tooltip>
-        </Box>
+        <Button
+          size='small'
+          variant='text'
+          color='secondary'
+          onClick={() => setAdvancedOpen(!advancedOpen)}
+          endIcon={advancedOpen ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+          sx={{ width: 'fit-content' }}
+        >
+          {advancedOpen ? 'Hide Advanced' : 'Show Advanced'}
+        </Button>
       </Stack>
-
-      <Collapse in={advancedOpen} sx={{ mt: 2 }}>
+      <Collapse in={advancedOpen}>
         <Stack gap={2}>
           <ControlledTextInput
             control={control}
             name={`pickListOptions.${index}.label`}
             label='Label'
-            helperText='If Label is not provided, Code will be displayed'
+            helperText='If Label is not provided, Value will be displayed'
           />
-
-          <ControlledCheckbox
-            name={`pickListOptions.${index}.initialSelected`}
-            control={control}
-            label='Initially selected'
-            helperText='Whether this choice is selected by default. Only one choice may be initially selected.'
-            rules={{ validate: (input) => isInitialSelectedUnique(input) }}
-          />
-
           {formItemComponent !== Component.Dropdown && (
             // Helper text is only supported for radio/checkbox, not dropdown options
             <ControlledTextInput
@@ -70,6 +61,7 @@ const PickListOption: React.FC<PickListOptionProps> = ({
               name={`pickListOptions.${index}.helperText`}
               label='Helper text'
               helperText='Helper text (may contain HTML)'
+              multiline
             />
           )}
 
@@ -107,9 +99,16 @@ const PickListOption: React.FC<PickListOptionProps> = ({
             helperText='Numeric value, such as a score, used for comparison in conditional logic'
             type='number'
           />
+          <ControlledCheckbox
+            name={`pickListOptions.${index}.initialSelected`}
+            control={control}
+            label='Initially selected'
+            helperText='Whether this choice is selected by default. Only one choice may be initially selected.'
+            rules={{ validate: (input) => isInitialSelectedUnique(input) }}
+          />
         </Stack>
       </Collapse>
-    </>
+    </Stack>
   );
 };
 
