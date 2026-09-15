@@ -2,6 +2,7 @@ import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 import { Box, Collapse, IconButton, Stack, Tooltip } from '@mui/material';
 import React, { useState } from 'react';
 import ControlledCheckbox from '@/modules/form/components/rhf/ControlledCheckbox';
+import ControlledNumberInput from '@/modules/form/components/rhf/ControlledNumberInput';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import { FormItemControl } from '@/modules/formBuilder/components/itemEditor/types';
 import { Component } from '@/types/gqlTypes';
@@ -100,12 +101,11 @@ const PickListOption: React.FC<PickListOptionProps> = ({
             </>
           )}
 
-          <ControlledTextInput
+          <ControlledNumberInput
             control={control}
             name={`pickListOptions.${index}.numericValue`}
             label='Numeric value'
             helperText='Numeric value, such as a score, used for comparison in conditional logic'
-            type='number'
           />
         </Stack>
       </Collapse>
