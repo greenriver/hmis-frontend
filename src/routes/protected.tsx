@@ -234,7 +234,8 @@ export const protectedRoutes: RouteNode[] = [
                 element: <ReferralStep />,
               },
               { path: '', element: <ReferralSteps /> },
-              { path: '*', element: <Navigate to='' replace /> },
+              // `..` skips the splat and resolves to the parent route.
+              { path: '*', element: <Navigate to='..' replace /> },
             ],
           },
         ],
@@ -558,7 +559,8 @@ export const protectedRoutes: RouteNode[] = [
                 element: <ReferralStep />,
               },
               { path: '', element: <ReferralSteps /> },
-              { path: '*', element: <Navigate to='' replace /> },
+              // `..` skips the splat and resolves to the parent route.
+              { path: '*', element: <Navigate to='..' replace /> },
             ],
           },
         ],
@@ -713,7 +715,8 @@ export const protectedRoutes: RouteNode[] = [
               </EnrollmentRoute>
             ),
           },
-          { path: '*', element: <Navigate to='overview' replace /> },
+          // `..` skips the splat and resolves to the parent route.
+          { path: '*', element: <Navigate to='../overview' replace /> },
         ],
       },
       {
@@ -888,7 +891,8 @@ export const protectedRoutes: RouteNode[] = [
               </ClientRoute>
             ),
           },
-          { path: '*', element: <Navigate to='profile' replace /> },
+          // `..` skips the splat and resolves to the parent route.
+          { path: '*', element: <Navigate to='../profile' replace /> },
         ],
       },
       {
