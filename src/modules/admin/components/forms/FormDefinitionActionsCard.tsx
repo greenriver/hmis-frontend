@@ -1,7 +1,7 @@
 import { Divider, Stack, Typography } from '@mui/material';
 
 import React from 'react';
-import { generatePath } from 'react-router-dom';
+import { generatePath } from 'react-router';
 import ButtonLink from '@/components/elements/ButtonLink';
 import CommonCard from '@/components/elements/CommonCard';
 

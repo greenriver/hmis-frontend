@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router';
 
 // The single route is a placeholder because it can't be empty. Not used for routing.
 // At some point we can migrate to using the createBrowserRouter approach (new in 6.4).

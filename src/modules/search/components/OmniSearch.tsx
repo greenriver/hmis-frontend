@@ -16,7 +16,7 @@ import {
 import { flatten, isEmpty } from 'lodash-es';
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 
 import { MAX_CLIENT_SEARCH_LENGTH } from '../searchUtil';
 

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
 import MobileMenuItem from '@/components/layout/nav/MobileMenuItem';

@@ -8,7 +8,7 @@ import {
   Stack,
 } from '@mui/material';
 import { useMemo } from 'react';
-import { generatePath } from 'react-router-dom';
+import { generatePath } from 'react-router';
 import ButtonLink from '@/components/elements/ButtonLink';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';

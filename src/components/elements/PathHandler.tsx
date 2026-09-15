@@ -1,5 +1,5 @@
 import { ReactNode, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 
 const PathHandler = ({ children }: { children: ReactNode }) => {
   const location = useLocation();

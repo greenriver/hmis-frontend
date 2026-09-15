@@ -2,7 +2,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import { Box, Grid } from '@mui/material';
 import React, { useCallback } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import ProjectClientEnrollmentsTable from './ProjectClientEnrollmentsTable';
 import ProjectHouseholdsTable from './ProjectHouseholdsTable';
 

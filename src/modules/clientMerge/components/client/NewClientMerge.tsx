@@ -1,7 +1,7 @@
 import { Button, Grid, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import { useCallback, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import ClientMergeDetailsTable from '../ClientMergeDetailsTable';
 import BackButtonLink from '@/components/elements/BackButtonLink';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';

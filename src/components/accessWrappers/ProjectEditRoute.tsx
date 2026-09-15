@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router';
 
 import Loading from '../elements/Loading';
 import NotFound from '../pages/NotFound';
