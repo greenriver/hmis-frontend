@@ -8,6 +8,7 @@ import { useItemPickList } from './useItemPickList';
 import RadioGroupInput from '@/components/elements/input/RadioGroupInput';
 import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import ControlledCheckbox from '@/modules/form/components/rhf/ControlledCheckbox';
+import ControlledNumberInput from '@/modules/form/components/rhf/ControlledNumberInput';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import { usePickList } from '@/modules/form/hooks/usePickList';
@@ -173,11 +174,10 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
               />
             )}
             {fieldType === 'valueNumber' && (
-              <ControlledTextInput
+              <ControlledNumberInput
                 name={`autofillValues.${index}.valueNumber`}
                 control={control}
                 label='Value (Numeric)'
-                type='number'
                 required
               />
             )}
