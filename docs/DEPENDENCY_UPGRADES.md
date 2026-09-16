@@ -21,6 +21,7 @@ These are the main dependency areas for this app. Use this list when scoping mai
 | **Forms**            | `react-hook-form`, `imask` / `react-imask`, `react-number-format`.                                                                                                                                                                                                |
 | **i18n**             | `i18next`, `react-i18next`, `i18next-http-backend`.                                                                                                                                                                                                               |
 | **Maps & editors**   | `leaflet`, `react-leaflet`, `ace-builds`, `react-ace`, `react-pdf`. Upgrade with their feature areas in mind.                                                                                                                                                     |
+| **Monitoring**       | `@sentry/react`. Majors are gated by `apollo-link-sentry` (Apollo row), whose 4.4.0 is the last release supporting Apollo Client 3. Tracing is off, so an SDK upgrade risks error reporting only; verify on staging, not locally.                                 |
 | **Utilities**        | `date-fns`, `lodash-es`, `uuid`, `dompurify`, `cross-fetch`, etc.                                                                                                                                                                                                 |
 
 ## Do we need to upgrade this?
