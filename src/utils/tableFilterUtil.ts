@@ -20,6 +20,7 @@ const FILTER_NAME_TO_PICK_LIST = {
   organization: PickListType.Organization,
   assessmentName: PickListType.AssessmentNames,
   serviceType: PickListType.AllServiceTypes,
+  serviceCategory: PickListType.AllServiceCategories,
   user: PickListType.Users,
   clientRecordType: PickListType.ClientAuditEventRecordTypes,
   enrollmentRecordType: PickListType.EnrollmentAuditEventRecordTypes,

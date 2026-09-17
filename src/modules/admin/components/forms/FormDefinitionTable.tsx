@@ -4,6 +4,7 @@ import React, { useMemo } from 'react';
 import { generatePath } from 'react-router-dom';
 import FormTypeChip from './FormTypeChip';
 import { ColumnDef } from '@/components/elements/table/types';
+import useTableFilters from '@/hooks/useTableFilters';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
@@ -47,7 +48,7 @@ const FormDefinitionTable: React.FC<Props> = ({ queryVariables }) => {
       },
       {
         key: 'system',
-        header: 'Form Tags',
+        header: 'Tags',
         render: ({ managedInVersionControl }) =>
           managedInVersionControl && (
             <Chip
@@ -64,6 +65,10 @@ const FormDefinitionTable: React.FC<Props> = ({ queryVariables }) => {
     []
   );
 
+  const { filters, filterValues, setFilterValues } = useTableFilters({
+    type: 'FormIdentifierFilterOptions',
+  });
+
   return (
     <GenericTableWithData<
       GetFormIdentifiersQuery,
@@ -75,7 +80,9 @@ const FormDefinitionTable: React.FC<Props> = ({ queryVariables }) => {
       columns={columns}
       pagePath='formIdentifiers'
       recordType='FormIdentifier'
-      // TODO: add filter/sort capabilities
+      filters={filters}
+      filterValues={filterValues}
+      onFilterChange={setFilterValues}
       paginationItemName='form'
       rowLinkTo={(row) =>
         generatePath(AdminDashboardRoutes.VIEW_FORM, {

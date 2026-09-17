@@ -1758,6 +1758,7 @@ export const HmisEnums = {
       'VA vocational and rehabilitation counseling',
     INVALID: 'Invalid Value',
   },
+  ServiceTypeFilterOptionSupportsBulkAssignment: { YES: 'Yes', NO: 'No' },
   ServiceTypeProvided: {
     INVALID: 'Invalid Value',
     HOPWA_FINANCIAL_ASSISTANCE__RENTAL_ASSISTANCE: 'Rental assistance',
