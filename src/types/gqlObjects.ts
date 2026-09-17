@@ -9502,7 +9502,11 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           ofType: {
             kind: 'NON_NULL',
             name: null,
-            ofType: { kind: 'ENUM', name: 'FormRole', ofType: null },
+            ofType: {
+              kind: 'ENUM',
+              name: 'ConfigurableFormRole',
+              ofType: null,
+            },
           },
         },
       },

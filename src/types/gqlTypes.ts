@@ -1992,6 +1992,59 @@ export enum Component {
   Visionlink = 'VISIONLINK',
 }
 
+export enum ConfigurableFormRole {
+  /** Annual */
+  Annual = 'ANNUAL',
+  /** Case note */
+  CaseNote = 'CASE_NOTE',
+  /** CE assessment */
+  CeAssessment = 'CE_ASSESSMENT',
+  /** CE event */
+  CeEvent = 'CE_EVENT',
+  /** CE participation */
+  CeParticipation = 'CE_PARTICIPATION',
+  /** Client */
+  Client = 'CLIENT',
+  /** Client detail */
+  ClientDetail = 'CLIENT_DETAIL',
+  /** Current living situation */
+  CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
+  /** Custom assessment */
+  CustomAssessment = 'CUSTOM_ASSESSMENT',
+  /** Enrollment */
+  Enrollment = 'ENROLLMENT',
+  /** Exit */
+  Exit = 'EXIT',
+  /** External form */
+  ExternalForm = 'EXTERNAL_FORM',
+  /** File */
+  File = 'FILE',
+  /** Funder */
+  Funder = 'FUNDER',
+  /** HMIS participation */
+  HmisParticipation = 'HMIS_PARTICIPATION',
+  /** Intake */
+  Intake = 'INTAKE',
+  /** Inventory */
+  Inventory = 'INVENTORY',
+  /** New client enrollment */
+  NewClientEnrollment = 'NEW_CLIENT_ENROLLMENT',
+  /** Occurrence point */
+  OccurrencePoint = 'OCCURRENCE_POINT',
+  /** Organization */
+  Organization = 'ORGANIZATION',
+  /** Post exit */
+  PostExit = 'POST_EXIT',
+  /** Project */
+  Project = 'PROJECT',
+  /** Project CoC */
+  ProjectCoc = 'PROJECT_COC',
+  /** Service */
+  Service = 'SERVICE',
+  /** Update */
+  Update = 'UPDATE',
+}
+
 export enum CounselingMethod {
   /** Family */
   Family = 'FAMILY',
@@ -3856,7 +3909,7 @@ export type FormIdentifierAccess = {
 };
 
 export type FormIdentifierFilterOptions = {
-  formType?: InputMaybe<Array<FormRole>>;
+  formType?: InputMaybe<Array<ConfigurableFormRole>>;
   searchTerm?: InputMaybe<Scalars['String']['input']>;
 };
 
