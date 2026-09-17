@@ -19,6 +19,7 @@ const FILTER_NAME_TO_PICK_LIST = {
   appliedToProject: PickListType.Project,
   organization: PickListType.Organization,
   assessmentName: PickListType.AssessmentNames,
+  formType: PickListType.FormTypes,
   serviceType: PickListType.AllServiceTypes,
   serviceCategory: PickListType.AllServiceCategories,
   user: PickListType.Users,
@@ -69,7 +70,7 @@ const getFilterForType = (
 
   const remotePickList = remotePickListForFilterName(fieldName);
   if (remotePickList) {
-    filter = {
+    return {
       ...baseFields,
       type: 'remote_picklist',
       pickListReference: remotePickList,

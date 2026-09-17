@@ -1992,59 +1992,6 @@ export enum Component {
   Visionlink = 'VISIONLINK',
 }
 
-export enum ConfigurableFormRole {
-  /** Annual */
-  Annual = 'ANNUAL',
-  /** Case note */
-  CaseNote = 'CASE_NOTE',
-  /** CE assessment */
-  CeAssessment = 'CE_ASSESSMENT',
-  /** CE event */
-  CeEvent = 'CE_EVENT',
-  /** CE participation */
-  CeParticipation = 'CE_PARTICIPATION',
-  /** Client */
-  Client = 'CLIENT',
-  /** Client detail */
-  ClientDetail = 'CLIENT_DETAIL',
-  /** Current living situation */
-  CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
-  /** Custom assessment */
-  CustomAssessment = 'CUSTOM_ASSESSMENT',
-  /** Enrollment */
-  Enrollment = 'ENROLLMENT',
-  /** Exit */
-  Exit = 'EXIT',
-  /** External form */
-  ExternalForm = 'EXTERNAL_FORM',
-  /** File */
-  File = 'FILE',
-  /** Funder */
-  Funder = 'FUNDER',
-  /** HMIS participation */
-  HmisParticipation = 'HMIS_PARTICIPATION',
-  /** Intake */
-  Intake = 'INTAKE',
-  /** Inventory */
-  Inventory = 'INVENTORY',
-  /** New client enrollment */
-  NewClientEnrollment = 'NEW_CLIENT_ENROLLMENT',
-  /** Occurrence point */
-  OccurrencePoint = 'OCCURRENCE_POINT',
-  /** Organization */
-  Organization = 'ORGANIZATION',
-  /** Post exit */
-  PostExit = 'POST_EXIT',
-  /** Project */
-  Project = 'PROJECT',
-  /** Project CoC */
-  ProjectCoc = 'PROJECT_COC',
-  /** Service */
-  Service = 'SERVICE',
-  /** Update */
-  Update = 'UPDATE',
-}
-
 export enum CounselingMethod {
   /** Family */
   Family = 'FAMILY',
@@ -3909,7 +3856,7 @@ export type FormIdentifierAccess = {
 };
 
 export type FormIdentifierFilterOptions = {
-  formType?: InputMaybe<Array<ConfigurableFormRole>>;
+  formType?: InputMaybe<Array<FormRole>>;
   searchTerm?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -5817,6 +5764,8 @@ export enum PickListType {
   Coc = 'COC',
   /** Continuum Projects */
   ContinuumProjects = 'CONTINUUM_PROJECTS',
+  /** Form types that the user can create */
+  CreatableFormTypes = 'CREATABLE_FORM_TYPES',
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
   CustomServiceCategories = 'CUSTOM_SERVICE_CATEGORIES',
   CustomServiceTypes = 'CUSTOM_SERVICE_TYPES',
@@ -5832,7 +5781,7 @@ export enum PickListType {
   EnrollmentAuditEventRecordTypes = 'ENROLLMENT_AUDIT_EVENT_RECORD_TYPES',
   /** External form types for the project. */
   ExternalFormTypesForProject = 'EXTERNAL_FORM_TYPES_FOR_PROJECT',
-  /** Form Types */
+  /** Form types visible in the Forms admin tool */
   FormTypes = 'FORM_TYPES',
   Geocode = 'GEOCODE',
   HudServiceCategories = 'HUD_SERVICE_CATEGORIES',

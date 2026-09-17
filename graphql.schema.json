@@ -15337,168 +15337,6 @@
       },
       {
         "kind": "ENUM",
-        "name": "ConfigurableFormRole",
-        "description": null,
-        "isOneOf": null,
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "ANNUAL",
-            "description": "Annual",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CASE_NOTE",
-            "description": "Case note",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CE_ASSESSMENT",
-            "description": "CE assessment",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CE_EVENT",
-            "description": "CE event",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CE_PARTICIPATION",
-            "description": "CE participation",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CLIENT",
-            "description": "Client",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CLIENT_DETAIL",
-            "description": "Client detail",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CURRENT_LIVING_SITUATION",
-            "description": "Current living situation",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CUSTOM_ASSESSMENT",
-            "description": "Custom assessment",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "ENROLLMENT",
-            "description": "Enrollment",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "EXIT",
-            "description": "Exit",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "EXTERNAL_FORM",
-            "description": "External form",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "FILE",
-            "description": "File",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "FUNDER",
-            "description": "Funder",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "HMIS_PARTICIPATION",
-            "description": "HMIS participation",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "INTAKE",
-            "description": "Intake",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "INVENTORY",
-            "description": "Inventory",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "NEW_CLIENT_ENROLLMENT",
-            "description": "New client enrollment",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "OCCURRENCE_POINT",
-            "description": "Occurrence point",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "ORGANIZATION",
-            "description": "Organization",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "POST_EXIT",
-            "description": "Post exit",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "PROJECT",
-            "description": "Project",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "PROJECT_COC",
-            "description": "Project CoC",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SERVICE",
-            "description": "Service",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "UPDATE",
-            "description": "Update",
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
-        "kind": "ENUM",
         "name": "CounselingMethod",
         "description": null,
         "isOneOf": null,
@@ -28912,7 +28750,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "ENUM",
-                  "name": "ConfigurableFormRole",
+                  "name": "FormRole",
                   "ofType": null
                 }
               }
@@ -41001,6 +40839,12 @@
             "deprecationReason": null
           },
           {
+            "name": "CREATABLE_FORM_TYPES",
+            "description": "Form types that the user can create",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "CURRENT_LIVING_SITUATION",
             "description": null,
             "isDeprecated": false,
@@ -41062,7 +40906,7 @@
           },
           {
             "name": "FORM_TYPES",
-            "description": "Form Types",
+            "description": "Form types visible in the Forms admin tool",
             "isDeprecated": false,
             "deprecationReason": null
           },
