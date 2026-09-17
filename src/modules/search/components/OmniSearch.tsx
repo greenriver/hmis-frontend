@@ -15,7 +15,10 @@ import {
 } from '@mui/material';
 import { flatten, isEmpty } from 'lodash-es';
 import React, { useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
+
+import { MAX_CLIENT_SEARCH_LENGTH } from '../searchUtil';
 
 import TextInput from '@/components/elements/input/TextInput';
 import Loading from '@/components/elements/Loading';
@@ -44,10 +47,16 @@ const OmniSearch: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const isMobile = useIsMobile();
+  const { t } = useTranslation();
 
   const [value, setValue, debouncedSearch] = useDebouncedState<
     string | undefined
   >(undefined, 300);
+
+  const searchTerm = debouncedSearch?.trim() || '';
+
+  // No submit button to validate on, so the message takes the place of the results in the dropdown
+  const searchTooLong = searchTerm.length > MAX_CLIENT_SEARCH_LENGTH;
 
   const {
     data: clientsData,
@@ -55,18 +64,18 @@ const OmniSearch: React.FC = () => {
     error,
   } = useOmniSearchClientsQuery({
     variables: {
-      textSearch: debouncedSearch || '',
+      textSearch: searchTerm,
       limit: MAX_CLIENT_RESULTS,
     },
-    skip: !debouncedSearch,
+    skip: !searchTerm || searchTooLong,
   });
   const { data: projectsData, loading: projectsLoading } =
     useOmniSearchProjectsQuery({
       variables: {
-        searchTerm: debouncedSearch as string,
+        searchTerm,
         limit: MAX_PROJECT_RESULTS,
       },
-      skip: !debouncedSearch,
+      skip: !searchTerm || searchTooLong,
     });
   const { data: recentItemsData, loading: recentItemsLoading } =
     useGetRecentItemsQuery();
@@ -107,17 +116,23 @@ const OmniSearch: React.FC = () => {
   const options = useMemo(() => {
     const { recentItems, clients, seeMoreOptions, projects } = optionsBase;
     return [
-      ...(debouncedSearch ? [] : recentItems),
+      ...(searchTerm ? [] : recentItems),
       ...clients,
-      ...(debouncedSearch &&
-      debouncedSearch.length >= MIN_CHAR_LENGTH_FOR_SEE_MORE
+      ...(searchTerm.length >= MIN_CHAR_LENGTH_FOR_SEE_MORE
         ? seeMoreOptions
         : []),
       ...projects,
     ];
-  }, [optionsBase, debouncedSearch]);
+  }, [optionsBase, searchTerm]);
 
   const loading = clientsLoading || projectsLoading || recentItemsLoading;
+
+  const emptyResultsMessage = useMemo(() => {
+    if (searchTooLong)
+      return t('clientSearch.inputTooLong', { max: MAX_CLIENT_SEARCH_LENGTH });
+    if (value) return 'No Results found';
+    return 'Search for clients or projects';
+  }, [searchTooLong, value, t]);
 
   type Option = NonNullable<typeof options>[number];
 
@@ -144,7 +159,7 @@ const OmniSearch: React.FC = () => {
       }
       if (option.__typename === 'SeeMore') {
         const search =
-          debouncedSearch && typeof option.searchQueryId === 'string'
+          searchTerm && typeof option.searchQueryId === 'string'
             ? new URLSearchParams({ searchQueryId: option.searchQueryId })
             : undefined;
         targetPath =
@@ -152,7 +167,7 @@ const OmniSearch: React.FC = () => {
       }
       return targetPath;
     },
-    [debouncedSearch]
+    [searchTerm]
   );
 
   const getOptionLabel = useCallback(
@@ -274,9 +289,7 @@ const OmniSearch: React.FC = () => {
                 {isEmpty(options) ? (
                   <Grid item xs={12}>
                     <Typography color='grayscale.main'>
-                      {value
-                        ? 'No Results found'
-                        : 'Search for clients or projects'}
+                      {emptyResultsMessage}
                     </Typography>
                   </Grid>
                 ) : (

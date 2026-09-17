@@ -1,7 +1,13 @@
+import { IconButton } from '@mui/material';
 import React, { useCallback, useMemo } from 'react';
 import { useFieldArray, UseFormSetValue, useWatch } from 'react-hook-form';
 import PickListOption from './PickListOption';
+import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import CardGroup, { RemovableCard } from '@/components/elements/CardGroup';
+import {
+  ExpandLessIcon,
+  ExpandMoreIcon,
+} from '@/components/elements/SemanticIcons';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import { chooseSelectComponentType } from '@/modules/form/util/formUtil';
 import {
@@ -52,7 +58,7 @@ const ManagePickListOptions: React.FC<ManagePickListOptionsProps> = ({
     pickListReferenceValue,
   ]);
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, move } = useFieldArray({
     control,
     name: 'pickListOptions',
   });
@@ -95,13 +101,37 @@ const ManagePickListOptions: React.FC<ManagePickListOptionsProps> = ({
           append({});
           setValue('pickListReference', null);
         }}
-        addItemText='Add Choice'
+        addItemText='Add Option'
       >
         {fields.map((option, index) => (
           <RemovableCard
             key={option.id}
             onRemove={() => remove(index)}
-            removeTooltip={'Remove Choice'}
+            removeTooltip={'Remove Option'}
+            additionalActions={
+              <>
+                <ButtonTooltipContainer title='Move up'>
+                  <IconButton
+                    onClick={() => move(index, index - 1)}
+                    size='small'
+                    disabled={index === 0}
+                    aria-label={`Option ${index + 1} move up`}
+                  >
+                    <ExpandLessIcon fontSize='small' />
+                  </IconButton>
+                </ButtonTooltipContainer>
+                <ButtonTooltipContainer title='Move down'>
+                  <IconButton
+                    onClick={() => move(index, index + 1)}
+                    size='small'
+                    disabled={index === fields.length - 1}
+                    aria-label={`Option ${index + 1} move down`}
+                  >
+                    <ExpandMoreIcon fontSize='small' />
+                  </IconButton>
+                </ButtonTooltipContainer>
+              </>
+            }
           >
             <PickListOption
               control={control}
@@ -116,7 +146,7 @@ const ManagePickListOptions: React.FC<ManagePickListOptionsProps> = ({
       <ControlledSelect
         name='pickListReference'
         control={control}
-        label='Or, use a reference list for choices'
+        label='Or, use a reference list for options'
         placeholder='Select list'
         options={supportedPickListReferencesOptions}
         rules={{

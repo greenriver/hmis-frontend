@@ -9,13 +9,18 @@ interface RemovableCardProps {
   // If onRemove is not provided, disable removal. Used e.g. when parent wants to disable removal if only one card remains
   onRemove?: VoidFunction;
   removeTooltip?: string;
+  additionalActions?: ReactNode; // Extra action elements rendered to the left of the Remove button
   sx?: SxProps;
 }
 
+/**
+ * A card that can be removed from a CardGroup. Optionally allows extra actions to be rendered to the left of the Remove button.
+ */
 export const RemovableCard: React.FC<RemovableCardProps> = ({
   children,
   onRemove,
   removeTooltip,
+  additionalActions,
   sx,
 }) => {
   return (
@@ -31,18 +36,25 @@ export const RemovableCard: React.FC<RemovableCardProps> = ({
       p={2}
     >
       {children}
-      {onRemove && (
-        <Box component='span' sx={{ position: 'absolute', right: 4, top: 4 }}>
-          <ButtonTooltipContainer title={removeTooltip}>
-            <IconButton
-              onClick={onRemove}
-              size='small'
-              aria-label={removeTooltip || 'Remove'}
-            >
-              <CloseIcon fontSize='small' />
-            </IconButton>
-          </ButtonTooltipContainer>
-        </Box>
+      {(onRemove || additionalActions) && (
+        <Stack
+          direction='row'
+          alignItems='center'
+          sx={{ position: 'absolute', right: 4, top: 4 }}
+        >
+          {additionalActions}
+          {onRemove && (
+            <ButtonTooltipContainer title={removeTooltip}>
+              <IconButton
+                onClick={onRemove}
+                size='small'
+                aria-label={removeTooltip || 'Remove'}
+              >
+                <CloseIcon fontSize='small' />
+              </IconButton>
+            </ButtonTooltipContainer>
+          )}
+        </Stack>
       )}
     </Box>
   );
@@ -56,6 +68,9 @@ interface CardGroupProps {
   disableAdd?: boolean;
 }
 
+/**
+ * A group of cards that can be added to and removed from.
+ */
 const CardGroup: React.FC<CardGroupProps> = ({
   children,
   onAddItem,

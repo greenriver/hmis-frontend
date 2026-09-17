@@ -4,3 +4,5 @@ export const HMIS_SESSION_UID_HEADER = 'X-app-user-id';
 export const HMIS_REMOTE_SESSION_UID_EVENT = 'HmisRemoteSessionUserId';
 // event fired to update the application
 export const HMIS_APP_SESSION_UID_EVENT = 'HmisAppSessionUserId';
+// event fired when a response carries a terminal account error (accountError / 403 type)
+export const HMIS_ACCOUNT_ERROR_EVENT = 'HmisAccountError';
