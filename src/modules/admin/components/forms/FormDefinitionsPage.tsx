@@ -1,6 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button, Grid, Paper } from '@mui/material';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router';
 import FormDefinitionTable from './FormDefinitionTable';
 import PageTitle from '@/components/layout/PageTitle';
 import useDebouncedState from '@/hooks/useDebouncedState';

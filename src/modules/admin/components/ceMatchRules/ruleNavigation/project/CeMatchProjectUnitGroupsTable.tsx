@@ -1,5 +1,5 @@
 import { Divider, Paper, Stack, Typography } from '@mui/material';
-import { generatePath } from 'react-router-dom';
+import { generatePath } from 'react-router';
 
 import RuleCountSummary from '../RuleCountSummary';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';

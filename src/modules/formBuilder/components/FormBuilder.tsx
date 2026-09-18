@@ -5,7 +5,7 @@ import { Button, Divider, Paper, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import React, { useCallback, useState } from 'react';
 import { FormProvider, useForm, useFormState } from 'react-hook-form';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router';
 
 import { v4 } from 'uuid';
 import { useUpdateForm } from './useUpdateForm';

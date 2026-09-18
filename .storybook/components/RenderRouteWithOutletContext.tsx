@@ -1,6 +1,6 @@
 import React from 'react';
 import { ReactNode } from 'react';
-import { MemoryRouter, Outlet, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Outlet, Route, Routes } from 'react-router';
 
 interface RenderRouteWithOutletContextProps<T = any> {
   context: T;

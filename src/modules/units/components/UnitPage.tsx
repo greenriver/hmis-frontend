@@ -1,6 +1,6 @@
 import { Alert } from '@mui/material';
 import React, { useEffect, useMemo } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router';
 import CommonTabs from '@/components/elements/CommonTabs';
 import Loading from '@/components/elements/Loading';
 import PageTitle from '@/components/layout/PageTitle';

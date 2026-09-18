@@ -4,7 +4,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import type {} from '@mui/x-date-pickers/themeAugmentation';
 import en from 'date-fns/locale/en-US';
 import * as React from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 
 import apolloClient from './apolloClient';
 

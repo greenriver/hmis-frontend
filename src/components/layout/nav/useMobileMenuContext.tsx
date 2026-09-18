@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext } from 'react-router';
 
 export type MobileMenuContext = {
   mobileNavIsOpen: boolean;

@@ -1,4 +1,4 @@
-import { matchRoutes } from 'react-router-dom';
+import { matchRoutes } from 'react-router';
 import { describe, expect, it } from 'vitest';
 
 import {

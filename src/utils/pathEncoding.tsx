@@ -1,4 +1,4 @@
-import { generatePath } from 'react-router-dom';
+import { generatePath } from 'react-router';
 
 import { NotFoundError } from '@/modules/errors/util';
 import IdEncoder from '@/modules/hmis/IdEncoder';
@@ -36,7 +36,7 @@ export const decodeParams = (params: Record<string, string | undefined>) => {
 };
 
 /**
- * Generate a safe path. Should ALWAYS be used in place of "generatePath" from react-router-dom.
+ * Generate a safe path. Should ALWAYS be used in place of "generatePath" from react-router.
  *
  * @param basePath /client/:clientId
  * @param params { client: 1 }
