@@ -43,7 +43,7 @@ export const decodeParams = (params: Record<string, string | undefined>) => {
  * @returns /client/<encoded id>
  */
 export const generateSafePath: typeof generatePath = (basePath, params) => {
-  const safeParams: { [x: string]: string | undefined } = { ...params };
+  const safeParams: { [x: string]: string | null | undefined } = { ...params };
   type Key = keyof NonNullable<typeof params>;
 
   for (const key in params) {
