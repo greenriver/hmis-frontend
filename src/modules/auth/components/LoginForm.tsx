@@ -16,6 +16,10 @@ import {
   isHmisResponseError,
   login,
 } from '@/modules/auth/api/sessions';
+import {
+  dispatchAccountErrorEvent,
+  isTerminalAccountErrorType,
+} from '@/modules/auth/events';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { reloadWindow } from '@/utils/location';
 
@@ -65,6 +69,13 @@ const LoginForm = () => {
 
       const handleHmisError = (error: any): boolean => {
         if (!isHmisResponseError(error)) return false;
+
+        // Not a form error: the provider replaces this form with the terminal page.
+        if (isTerminalAccountErrorType(error.type)) {
+          setLoading(false);
+          dispatchAccountErrorEvent(error.type);
+          return true;
+        }
 
         if (error.type === 'mfa_required') {
           setError(undefined);

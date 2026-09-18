@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router';
 
 import Loading from '../elements/Loading';
 import NotFound from '../pages/NotFound';
@@ -13,7 +13,9 @@ const ProjectEditRoute: React.FC<
     param?: string;
     permissions?: ProjectPermissions[];
     redirectRoute?: string;
-    getRouteParams?: (params: { projectId?: string }) => object;
+    getRouteParams?: (params: {
+      projectId?: string;
+    }) => Record<string, string | null | undefined>;
   }>
 > = ({
   param = 'projectId',

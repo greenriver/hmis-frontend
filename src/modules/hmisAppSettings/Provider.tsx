@@ -1,9 +1,11 @@
-import { Typography } from '@mui/material';
+import { ThemeProvider, Typography } from '@mui/material';
 import * as Sentry from '@sentry/react';
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import Loading from '@/components/elements/Loading';
+import { createFullTheme } from '@/config/theme';
+import { HMIS_ACCOUNT_ERROR_EVENT } from '@/modules/auth/api/constants';
 import {
   CurrentUserResult,
   fetchCurrentUser,
@@ -18,7 +20,10 @@ import * as storage from '@/modules/auth/api/storage';
 import { HmisAuthContext, HmisAuthState } from '@/modules/auth/AuthContext';
 import LogoutFailedDialog from '@/modules/auth/components/LogoutFailedDialog';
 import StopImpersonatingFailedDialog from '@/modules/auth/components/StopImpersonatingFailedDialog';
-import { TerminalAccountErrorType } from '@/modules/auth/events';
+import {
+  isTerminalAccountErrorType,
+  TerminalAccountErrorType,
+} from '@/modules/auth/events';
 import { useSessionTrackingObserver } from '@/modules/auth/hooks/useSessionTrackingObserver';
 import { fetchHmisAppSettings } from '@/modules/hmisAppSettings/api';
 import { HmisAppSettingsContext } from '@/modules/hmisAppSettings/Context';
@@ -41,6 +46,11 @@ const TERMINAL_ACCOUNT_ERROR_COPY: Record<
     title: "You don't have access to this application",
     message:
       'There is no account associated with your sign-in. Please contact your administrator for assistance.',
+  },
+  no_hmis_access: {
+    title: "You don't have access to this application",
+    message:
+      'Your account does not have access to this HMIS. Please contact your administrator for assistance.',
   },
 };
 
@@ -210,6 +220,29 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
   // tracking needs to be in place before we start making API calls
   useSessionTrackingObserver();
 
+  // The terminal and error dialogs render before MergedThemeProvider (a child of
+  // this provider), and ConfirmationDialog uses palette colors that only the full
+  // theme defines.
+  const standaloneTheme = useMemo(
+    () => createFullTheme(appSettings?.theme),
+    [appSettings?.theme]
+  );
+
+  // A login refusal or a guarded-route 403 carrying a terminal type replaces the app
+  // with the terminal page, the same way the bootstrap accountError does. The cached
+  // user is cleared so a reload does not revive it via getValidCachedUser.
+  useEffect(() => {
+    const handler = (event: Event) => {
+      const type = (event as CustomEvent).detail;
+      if (!isTerminalAccountErrorType(type)) return;
+      storage.clearUser();
+      setAccountError(type);
+    };
+    document.addEventListener(HMIS_ACCOUNT_ERROR_EVENT, handler);
+    return () =>
+      document.removeEventListener(HMIS_ACCOUNT_ERROR_EVENT, handler);
+  }, []);
+
   // fetch data from remote
   useEffect(() => {
     const cachedUser = getValidCachedUser();
@@ -236,17 +269,20 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
 
     (async () => {
       try {
-        // Start this fetch before awaiting loadSettings, so the two requests
-        // overlap instead of costing two serial round-trips.
         const userPromise: Promise<CurrentUserResult> = cachedUser
           ? Promise.resolve({ user: cachedUser })
           : fetchCurrentUser();
 
-        await loadSettings();
+        // Awaited together so the requests overlap instead of costing two
+        // serial round-trips, and so neither rejection is left unhandled when
+        // the other loses the race.
+        const [, { user: fetchedUser, accountError }] = await Promise.all([
+          loadSettings(),
+          userPromise,
+        ]);
 
         // accountError does not go through `error`: that dialog offers only a
         // reload, and every reload fetches the same accountError back.
-        const { user: fetchedUser, accountError } = await userPromise;
         if (fetchedUser) setUser(fetchedUser);
         else if (accountError) setAccountError(accountError);
       } catch (err) {
@@ -303,7 +339,7 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
   if (accountError) {
     const { title, message } = TERMINAL_ACCOUNT_ERROR_COPY[accountError];
     return (
-      <>
+      <ThemeProvider theme={standaloneTheme}>
         <ConfirmationDialog
           open={true}
           confirmText='Sign out'
@@ -319,21 +355,23 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
           <Typography>{message}</Typography>
         </ConfirmationDialog>
         {logoutFailureDialogs}
-      </>
+      </ThemeProvider>
     );
   }
   if (error) {
     return (
-      <ConfirmationDialog
-        open={true}
-        confirmText='Try again'
-        title='An error occurred'
-        loading={loading}
-        hideCancelButton
-        onConfirm={handleManualReload}
-      >
-        <Typography>Failed to connect to the server.</Typography>
-      </ConfirmationDialog>
+      <ThemeProvider theme={standaloneTheme}>
+        <ConfirmationDialog
+          open={true}
+          confirmText='Try again'
+          title='An error occurred'
+          loading={loading}
+          hideCancelButton
+          onConfirm={handleManualReload}
+        >
+          <Typography>Failed to connect to the server.</Typography>
+        </ConfirmationDialog>
+      </ThemeProvider>
     );
   }
 

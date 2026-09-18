@@ -253,6 +253,10 @@ fragment EnrollmentValues on Enrollment {
   preferredLanguage
   preferredLanguageDifferent
   mentalHealthConsultation
+  # need to resolve custom data elements here so that they can be populated into Assessment forms
+  customDataElements {
+    ...CustomDataElementFields
+  }
 }
 
 # Fields that need to be returned from SubmitForm. This should include anything

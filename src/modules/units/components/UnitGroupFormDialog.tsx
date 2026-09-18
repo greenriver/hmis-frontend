@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import TextInput from '@/components/elements/input/TextInput';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';

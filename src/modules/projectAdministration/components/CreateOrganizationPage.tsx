@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 import { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { ALL_PROJECTS_CRUMB } from '../hooks/useOrganizationCrumbs';
 import BasicBreadcrumbPageLayout from '@/components/layout/BasicBreadcrumbPageLayout';

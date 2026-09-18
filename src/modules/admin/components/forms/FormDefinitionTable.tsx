@@ -1,7 +1,7 @@
 import { Chip } from '@mui/material';
 import { startCase } from 'lodash-es';
 import React, { useMemo } from 'react';
-import { generatePath } from 'react-router-dom';
+import { generatePath } from 'react-router';
 import FormTypeChip from './FormTypeChip';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';

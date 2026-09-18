@@ -1,5 +1,5 @@
 import { LoadingButton } from '@mui/lab';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   FormIdentifierDetailsFragment,

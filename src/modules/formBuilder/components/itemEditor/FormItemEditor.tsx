@@ -348,8 +348,7 @@ const FormItemEditor: React.FC<Props> = ({
               name='text'
               label={textLabel(itemCategory)}
               onBlur={onLabelBlur}
-              // FIXME doesnt correctly support multi-line display text. Newlines need to be inserted.
-              multiline={isDisplayItem}
+              multiline
               minRows={isDisplayItem ? 2 : undefined}
             />
             {isQuestionItem && (

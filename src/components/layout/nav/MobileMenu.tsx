@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import React, { ReactNode, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import MobileUserMenu from '@/components/layout/nav/MobileUserMenu';
 import ToolbarMenu from '@/components/layout/nav/ToolbarMenu';
 import { scrollToElement } from '@/hooks/useScrollToHash';

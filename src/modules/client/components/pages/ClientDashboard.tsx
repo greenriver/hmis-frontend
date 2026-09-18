@@ -1,7 +1,7 @@
 import { Container } from '@mui/material';
 import { isNil } from 'lodash-es';
 import { useMemo, useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 
 import { useClientDashboardNavItems } from '../../hooks/useClientDashboardNavItems';
 import Loading from '@/components/elements/Loading';

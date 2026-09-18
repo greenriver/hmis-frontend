@@ -1,7 +1,7 @@
 import { Paper } from '@mui/material';
 
 import { useEffect, useMemo } from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router';
 import CommonTabs from '@/components/elements/CommonTabs';
 import Loading from '@/components/elements/Loading';
 import PageTitle from '@/components/layout/PageTitle';

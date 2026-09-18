@@ -2,8 +2,12 @@ import { onError } from '@apollo/client/link/error';
 import * as Sentry from '@sentry/react';
 
 import { sentryUser } from '@/modules/auth/api/sessions';
-import { dispatchSessionTrackingEvent } from '@/modules/auth/events';
-import { hasStatusCode } from '@/modules/errors/util';
+import {
+  dispatchAccountErrorEvent,
+  dispatchSessionTrackingEvent,
+  terminalAccountErrorFromResponseBody,
+} from '@/modules/auth/events';
+import { hasStatusCode, isServerError } from '@/modules/errors/util';
 
 /**
  * Handle errors on GraphQL chain.
@@ -65,6 +69,18 @@ const apolloErrorLink = onError(
           if (networkError.statusCode === 401) {
             dispatchSessionTrackingEvent(undefined);
             return;
+          }
+          // A 403 whose body names a terminal account state (Hmis::BaseController
+          // attach_data_source_id) means the account may no longer use this HMIS.
+          // Not a session problem, so the terminal page rather than the sign-in loop.
+          if (networkError.statusCode === 403) {
+            const terminalType = terminalAccountErrorFromResponseBody(
+              isServerError(networkError) ? networkError.result : undefined
+            );
+            if (terminalType) {
+              dispatchAccountErrorEvent(terminalType);
+              return;
+            }
           }
         }
 
