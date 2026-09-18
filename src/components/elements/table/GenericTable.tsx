@@ -20,7 +20,7 @@ import {
 import { SystemStyleObject } from '@mui/system';
 import { compact, get, includes, isNil } from 'lodash-es';
 import { ComponentType, ReactNode, SyntheticEvent, useMemo } from 'react';
-import { To } from 'react-router-dom';
+import { To } from 'react-router';
 
 import Loading from '../Loading';
 

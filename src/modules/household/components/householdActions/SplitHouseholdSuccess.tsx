@@ -1,5 +1,5 @@
 import React from 'react';
-import { generatePath } from 'react-router-dom';
+import { generatePath } from 'react-router';
 import Wayfinder from '@/components/elements/navigation/Wayfinder';
 import {
   clientBriefName,

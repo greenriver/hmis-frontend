@@ -1,7 +1,7 @@
 import { Box, Grid, Paper, Stack } from '@mui/material';
 import pluralize from 'pluralize';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import BulkServiceSearchToggle from './BulkServiceSearchToggle';
 import BulkServicesTable from './BulkServicesTable';

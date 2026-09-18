@@ -1,7 +1,7 @@
 import { SvgIconComponent } from '@mui/icons-material';
 import { merge, startCase } from 'lodash-es';
 import { useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 
 import useCurrentPath from '@/hooks/useCurrentPath';
 import { ClientDashboardContext } from '@/modules/client/components/pages/ClientDashboard';

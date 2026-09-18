@@ -1,4 +1,4 @@
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext } from 'react-router';
 import { ClientDashboardContext } from '@/modules/client/components/pages/ClientDashboard';
 
 export default function useClientDashboardContext() {

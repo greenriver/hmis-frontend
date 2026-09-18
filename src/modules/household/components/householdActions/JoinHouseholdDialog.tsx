@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { generatePath } from 'react-router-dom';
+import { generatePath } from 'react-router';
 import Loading from '@/components/elements/Loading';
 import Wayfinder from '@/components/elements/navigation/Wayfinder';
 import { JoinIcon } from '@/components/elements/SemanticIcons';

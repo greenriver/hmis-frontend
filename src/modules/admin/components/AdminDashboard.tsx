@@ -1,6 +1,6 @@
 import { Container } from '@mui/material';
 import { useMemo, useState } from 'react';
-import { Navigate, Outlet, useOutletContext } from 'react-router-dom';
+import { Navigate, Outlet, useOutletContext } from 'react-router';
 
 import Loading from '@/components/elements/Loading';
 import ContextHeaderContent from '@/components/layout/dashboard/contextHeader/ContextHeaderContent';
