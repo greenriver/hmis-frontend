@@ -7,12 +7,12 @@ import { parseAndFormatDate, serviceDetails } from '@/modules/hmis/hmisUtil';
 import {
   ServiceBasicFieldsFragment,
   ServiceFieldsFragment,
-  ServiceTypeConfigFieldsFragment,
+  ServiceTypeFieldsFragment,
 } from '@/types/gqlTypes';
 
 export const getServiceTypeForDisplay = (
   serviceType?: Pick<
-    ServiceTypeConfigFieldsFragment,
+    ServiceTypeFieldsFragment,
     'name' | 'serviceCategory'
   > | null
 ) => {
