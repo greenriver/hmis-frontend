@@ -74,7 +74,7 @@
     "@mui/x-date-pickers": "6.19.4",
     "@mui/x-tree-view": "^7.11.1",
     "@rails/activestorage": "7.0.8-4",
-    "@sentry/react": "^8.20.0",
+    "@sentry/react": "^8.55.2",
     "@types/crypto-js": "^4.2.2",
     "@types/dompurify": "^3.0.5",
     "@types/node": "^20.14.12",
