@@ -1,4 +1,5 @@
-import { Chip } from '@mui/material';
+import { Chip, Stack } from '@mui/material';
+import React from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import useTableFilters from '@/hooks/useTableFilters';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -8,11 +9,11 @@ import {
   GetServiceTypesDocument,
   GetServiceTypesQuery,
   GetServiceTypesQueryVariables,
-  ServiceTypeConfigFieldsFragment,
+  ServiceTypeFieldsFragment,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const COLUMNS: ColumnDef<ServiceTypeConfigFieldsFragment>[] = [
+const COLUMNS: ColumnDef<ServiceTypeFieldsFragment>[] = [
   {
     header: 'Service Name',
     render: 'name',
@@ -24,29 +25,24 @@ const COLUMNS: ColumnDef<ServiceTypeConfigFieldsFragment>[] = [
     key: 'category',
   },
   {
-    header: 'HUD or Custom',
-    key: 'hudOrCustom',
-    render: ({ hud }) => (
-      <Chip
-        label={hud ? 'HUD' : 'Custom'}
-        size='small'
-        color={hud ? undefined : 'primary'}
-        variant='outlined'
-        sx={{ width: 'fit-content' }}
-      />
-    ),
-  },
-  {
     header: 'Tags',
     key: 'tags',
-    render: ({ supportsBulkAssignment }) =>
-      supportsBulkAssignment ? (
-        <Chip size='small' label='Supports Bulk Assignment' />
-      ) : null,
+    render: ({ supportsBulkAssignment, hud }) => (
+      <Stack direction='row' spacing={1}>
+        {supportsBulkAssignment ? (
+          <Chip size='small' label='Supports Bulk Assignment' />
+        ) : null}
+        {hud ? <Chip size='small' label='HUD Service' /> : null}
+      </Stack>
+    ),
   },
 ];
 
-const ServiceTypeTable = () => {
+interface Props {
+  searchTerm?: string;
+}
+
+const ServiceTypeTable: React.FC<Props> = ({ searchTerm }) => {
   const { filters, filterValues, setFilterValues } = useTableFilters({
     type: 'ServiceTypeFilterOptions',
   });
@@ -56,9 +52,9 @@ const ServiceTypeTable = () => {
       <GenericTableWithData<
         GetServiceTypesQuery,
         GetServiceTypesQueryVariables,
-        ServiceTypeConfigFieldsFragment
+        ServiceTypeFieldsFragment
       >
-        queryVariables={{}}
+        queryVariables={{ filters: { searchTerm } }}
         queryDocument={GetServiceTypesDocument}
         columns={COLUMNS}
         rowLinkTo={(row) =>

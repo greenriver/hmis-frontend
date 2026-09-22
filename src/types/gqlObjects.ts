@@ -7286,14 +7286,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'ServiceType',
     fields: [
       {
-        name: 'category',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
-      {
         name: 'dateCreated',
         type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
@@ -9503,6 +9495,18 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'FormIdentifierFilterOptions',
     args: [
       {
+        name: 'formType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'FormRole', ofType: null },
+          },
+        },
+      },
+      {
         name: 'searchTerm',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
@@ -10210,6 +10214,26 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'searchTerm',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'serviceCategory',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'supportsBulkAssignment',
+        type: {
+          kind: 'ENUM',
+          name: 'ServiceTypeFilterOptionSupportsBulkAssignment',
+          ofType: null,
+        },
       },
     ],
   },
