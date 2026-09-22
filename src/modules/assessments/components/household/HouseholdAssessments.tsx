@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { findIndex } from 'lodash-es';
 import { useCallback, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 
 import { useHouseholdAssessments } from '../../hooks/useHouseholdAssessments';
 

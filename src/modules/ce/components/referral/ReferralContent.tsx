@@ -2,7 +2,7 @@ import FolderRoundedIcon from '@mui/icons-material/FolderRounded';
 import { Badge, Container, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useMemo } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 
 import ReferralDetailContent from './ReferralDetailContent';
 import { ReferralContext } from './referralOutletContext';

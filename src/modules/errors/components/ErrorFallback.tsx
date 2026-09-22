@@ -11,7 +11,7 @@ import { FallbackRender } from '@sentry/react';
 
 import { isEqual } from 'lodash-es';
 import React, { useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { NotFoundError, UNKNOWN_ERROR_HEADING } from '../util';
 
 import ApolloErrorAlert from './ApolloErrorAlert';

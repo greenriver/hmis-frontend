@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router';
 
 import NotFound from '../pages/NotFound';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';

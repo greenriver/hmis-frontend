@@ -1,6 +1,6 @@
 import { Button, ButtonProps, SvgIconProps } from '@mui/material';
 import { ComponentType, forwardRef, Ref } from 'react';
-import { Link, LinkProps } from 'react-router-dom';
+import { Link, LinkProps } from 'react-router';
 
 export type ButtonLinkProps = Omit<
   ButtonProps,
