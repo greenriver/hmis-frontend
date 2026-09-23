@@ -1,6 +1,6 @@
 import { InputAdornment } from '@mui/material';
 import { isFinite, isNil } from 'lodash-es';
-import { ChangeEventHandler, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
   NumberFormatValues,
@@ -8,6 +8,7 @@ import {
   OnValueChange,
 } from 'react-number-format';
 import TextInput, { TextInputProps } from './TextInput';
+import { ChangeType } from '@/modules/form/types';
 import { preventImplicitSubmission } from '@/utils/forms';
 
 // protect from integer overflows
@@ -20,8 +21,15 @@ const withValueLimit = ({ floatValue }: NumberFormatValues) => {
   return true;
 };
 
-interface Props extends TextInputProps {
-  onChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+interface Props extends Omit<TextInputProps, 'onChange'> {
+  onChange: (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    // Optional eventType argument indicates whether the change was
+    // triggered by a user or system event (e.g. autofill).
+    // This is necessary for NumericInput specifically, because NumericFormat
+    // triggers onChange whenever the value changes, not just when the user types.
+    eventType?: ChangeType
+  ) => void;
   currency?: boolean;
 }
 
@@ -80,7 +88,7 @@ const NumberInput: React.FC<Props> = ({
   const decimalScale = currency ? 2 : 0;
   const prefix = currency ? '$' : undefined;
 
-  const handleChange: OnValueChange = (v) => {
+  const handleChange: OnValueChange = (v, sourceInfo) => {
     const syntheticEvent = {
       target: {
         value: v.value,
@@ -91,7 +99,12 @@ const NumberInput: React.FC<Props> = ({
       stopPropagation: () => {},
     } as React.ChangeEvent<HTMLInputElement>;
 
-    onChange(syntheticEvent);
+    // NumericFormat provides sourceInfo.source to indicate whether the change was triggered by:
+    // - 'event' - user typing in *this* input field
+    // - 'prop' - value changed from props, e.g. due to autofill
+    const eventType =
+      sourceInfo.source === 'event' ? ChangeType.User : ChangeType.System;
+    onChange(syntheticEvent, eventType);
   };
 
   return (
