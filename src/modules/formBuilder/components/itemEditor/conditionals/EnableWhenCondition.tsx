@@ -7,6 +7,7 @@ import { useLocalConstantsPickList } from '../useLocalConstantsPickList';
 import DatePicker from '@/components/elements/input/DatePicker';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import { FALSE_OPT, TRUE_OPT } from '@/components/elements/input/YesNoRadio';
+import ControlledNumberInput from '@/modules/form/components/rhf/ControlledNumberInput';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import { usePickList } from '@/modules/form/hooks/usePickList';
@@ -297,11 +298,10 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
               />
             )}
             {answerInputType === 'answerNumber' && (
-              <ControlledTextInput
+              <ControlledNumberInput
                 name={`${enableWhenPath}.${index}.answerNumber`}
                 control={control}
                 label='Response Value (Numeric)'
-                type='number'
                 helperText={answerHelperText}
                 required
               />
