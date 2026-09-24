@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'; // eslint-disable-line no-restricted-imports
+import { useParams } from 'react-router'; // eslint-disable-line no-restricted-imports
 
 import { decodeParams } from '@/utils/pathEncoding';
 

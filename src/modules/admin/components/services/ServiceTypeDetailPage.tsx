@@ -1,6 +1,6 @@
 import { Alert, Paper, Stack } from '@mui/material';
 import { useState } from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router';
 import { CommonUnstyledList } from '@/components/CommonUnstyledList';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import EditIconButton from '@/components/elements/EditIconButton';

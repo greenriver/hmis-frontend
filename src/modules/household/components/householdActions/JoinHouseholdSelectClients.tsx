@@ -2,7 +2,7 @@ import { InfoOutlined } from '@mui/icons-material';
 import { Alert, AlertTitle, Typography } from '@mui/material';
 
 import { useCallback, useMemo } from 'react';
-import { generatePath } from 'react-router-dom';
+import { generatePath } from 'react-router';
 import ButtonLink from '@/components/elements/ButtonLink';
 import ClientAlertStack from '@/modules/clientAlerts/components/ClientAlertStack';
 import useClientAlerts from '@/modules/clientAlerts/hooks/useClientAlerts';

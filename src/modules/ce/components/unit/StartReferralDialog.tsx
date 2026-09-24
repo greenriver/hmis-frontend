@@ -1,6 +1,6 @@
 import { Stack } from '@mui/system';
 import React, { useCallback, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import StepDialog, { StepDefinition } from '@/components/elements/StepDialog';
 import useSafeParams from '@/hooks/useSafeParams';
 import SourceEnrollmentSelector from '@/modules/ce/components/unit/SourceEnrollmentSelector';

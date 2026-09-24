@@ -2,7 +2,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import { Box, Card, Grid, Skeleton, Stack, Typography } from '@mui/material';
 import { useCallback } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import ClientProfileCardAccordion from './ClientProfileCardAccordion';
 import ClientProfileCardImage from './ClientProfileCardImage';
 import ClientProfileCardTextTable from './ClientProfileCardTextTable';
