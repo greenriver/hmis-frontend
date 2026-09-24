@@ -61,17 +61,13 @@ const RestrictClientRecordButton: React.FC<Props> = ({
         color='primary'
         fullWidth
       >
-        {restricted
-          ? 'Remove Client Record Restriction'
-          : 'Restrict Client Record'}
+        {restricted ? 'Unrestrict Client Record' : 'Restrict Client Record'}
       </Button>
       <ConfirmationDialog
         id='setClientRestricted'
         open={dialogOpen}
         title={
-          restricted
-            ? 'Remove Client Record Restriction'
-            : 'Restrict Client Record'
+          restricted ? 'Unrestrict Client Record' : 'Restrict Client Record'
         }
         confirmText={restricted ? 'Remove Restriction' : 'Restrict'}
         onConfirm={handleConfirm}
