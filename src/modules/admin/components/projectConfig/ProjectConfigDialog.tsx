@@ -46,6 +46,10 @@ const ProjectConfigDialog: React.FC<ProjectDialogProps> = ({
                 lengthOfAbsenceDays: configOptions.length_of_absence_days,
                 receivesDirectReferrals:
                   configOptions.receives_direct_referrals,
+                // Stored as numeric project ids, but pick list codes are strings, so the
+                // options would never match. Numbers also throw in getOptionValue.
+                receivesDirectReferralsFrom:
+                  configOptions.receives_direct_referrals_from?.map(String),
                 supportsWaitlistReferrals:
                   configOptions.supports_waitlist_referrals,
                 ...config,
