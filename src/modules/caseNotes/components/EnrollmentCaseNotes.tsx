@@ -1,7 +1,7 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Box, Button, TableCell, TableRow } from '@mui/material';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { useViewEditRecordDialogs } from '../../form/hooks/useViewEditRecordDialogs';
 import CommonTableDisplayToggle, {
@@ -106,6 +106,14 @@ const EnrollmentCaseNotes = () => {
     });
   }, [enrollmentId]);
 
+  const localConstants = useMemo(
+    () => ({
+      entryDate: enrollment?.entryDate,
+      exitDate: enrollment?.exitDate,
+    }),
+    [enrollment]
+  );
+
   const { onSelectRecord, viewRecordDialog, editRecordDialog, openFormDialog } =
     useViewEditRecordDialogs({
       variant: canEdit ? 'view_and_edit' : 'view_only',
@@ -116,6 +124,7 @@ const EnrollmentCaseNotes = () => {
       maxWidth: 'sm',
       deleteRecordDocument: DeleteCustomCaseNoteDocument,
       deleteRecordIdPath: 'deleteCustomCaseNote.customCaseNote.id',
+      localConstants,
       projectId: enrollment?.project.id,
     });
 
