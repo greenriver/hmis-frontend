@@ -73,12 +73,20 @@ const ReferralStepForm: React.FC<Props> = ({ step }) => {
     [formDefinition]
   );
 
+  const localConstants = useMemo(
+    () => ({
+      ...AlwaysPresentLocalConstants,
+      projectId: referral.opportunity?.projectId,
+    }),
+    [referral.opportunity?.projectId]
+  );
+
   // Display form values based on the Step record (CustomDataElements) rather than the submittedValues field, to be consistent with other form behavior throughout the application.
   const initialValues = useInitialFormValues({
     record: step,
     itemMap,
     definition: formDefinition?.definition,
-    localConstants: { projectId: referral.opportunity?.projectId },
+    localConstants,
   });
 
   const editable =
@@ -104,7 +112,7 @@ const ReferralStepForm: React.FC<Props> = ({ step }) => {
           }}
           errors={errors}
           loading={submitLoading}
-          localConstants={AlwaysPresentLocalConstants}
+          localConstants={localConstants}
           FormActionProps={{
             config: [
               {
@@ -122,7 +130,7 @@ const ReferralStepForm: React.FC<Props> = ({ step }) => {
           definition={formDefinition.definition}
           values={initialValues}
           variant={'without_top_level_cards'}
-          localConstants={AlwaysPresentLocalConstants}
+          localConstants={localConstants}
         />
       )}
     </>
