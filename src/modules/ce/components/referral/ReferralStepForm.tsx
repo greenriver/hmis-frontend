@@ -11,7 +11,10 @@ import DynamicForm from '@/modules/form/components/DynamicForm';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import useInitialFormValues from '@/modules/form/hooks/useInitialFormValues';
 import { FormActionTypes } from '@/modules/form/types';
-import { getItemMap } from '@/modules/form/util/formUtil';
+import {
+  AlwaysPresentLocalConstants,
+  getItemMap,
+} from '@/modules/form/util/formUtil';
 import {
   CeReferralStatus,
   CeReferralStepFieldsFragment,
@@ -101,6 +104,7 @@ const ReferralStepForm: React.FC<Props> = ({ step }) => {
           }}
           errors={errors}
           loading={submitLoading}
+          localConstants={AlwaysPresentLocalConstants}
           FormActionProps={{
             config: [
               {
@@ -118,6 +122,7 @@ const ReferralStepForm: React.FC<Props> = ({ step }) => {
           definition={formDefinition.definition}
           values={initialValues}
           variant={'without_top_level_cards'}
+          localConstants={AlwaysPresentLocalConstants}
         />
       )}
     </>
