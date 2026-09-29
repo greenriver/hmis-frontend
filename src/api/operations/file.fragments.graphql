@@ -30,3 +30,12 @@ fragment FileFields on File {
     ...UserFields
   }
 }
+
+# FileFields is also used for file-valued CustomDataElements (valueFile), so it must not itself
+# select customDataElements (that would make the fragments recursive).
+fragment FileWithCustomDataElementsFields on File {
+  ...FileFields
+  customDataElements {
+    ...CustomDataElementFields
+  }
+}

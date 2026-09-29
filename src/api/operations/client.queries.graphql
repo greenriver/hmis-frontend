@@ -211,7 +211,7 @@ query GetClientHouseholdMemberCandidates(
 
 query GetFile($id: ID!) {
   file(id: $id) {
-    ...FileFields
+    ...FileWithCustomDataElementsFields
   }
 }
 
@@ -228,7 +228,7 @@ query GetClientFiles(
       limit
       nodesCount
       nodes {
-        ...FileFields
+        ...FileWithCustomDataElementsFields
         enrollment {
           ...ClientEnrollmentFields
         }

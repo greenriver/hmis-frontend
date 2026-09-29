@@ -138,7 +138,7 @@ mutation SubmitForm($input: SubmitFormInput!) {
         ...ServiceFields
       }
       ... on File {
-        ...FileFields
+        ...FileWithCustomDataElementsFields
       }
       ... on Enrollment {
         ...SubmittedEnrollmentResultFields

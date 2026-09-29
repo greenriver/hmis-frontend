@@ -9,7 +9,7 @@ import EditRecord from '@/modules/form/components/EditRecord';
 import { cache } from '@/providers/apolloClient';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
-  FileFieldsFragment,
+  FileWithCustomDataElementsFieldsFragment,
   RecordFormRole,
   useGetFileQuery,
 } from '@/types/gqlTypes';
@@ -47,7 +47,7 @@ const EditFilePage = ({ create = false }: { create?: boolean }) => {
   if (!create && !loading && !data?.file) throw Error('File not found');
 
   return (
-    <EditRecord<FileFieldsFragment>
+    <EditRecord<FileWithCustomDataElementsFieldsFragment>
       formRole={RecordFormRole.File}
       onCompleted={onCompleted}
       record={data?.file || undefined}

@@ -3707,6 +3707,7 @@ export type File = {
   access: FileAccess;
   confidential?: Maybe<Scalars['Boolean']['output']>;
   contentType?: Maybe<Scalars['String']['output']>;
+  customDataElements: Array<CustomDataElement>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   effectiveDate?: Maybe<Scalars['ISO8601Date']['output']>;
@@ -25703,6 +25704,135 @@ export type GetFileQuery = {
     enrollmentId?: string | null;
     dateCreated?: string | null;
     dateUpdated?: string | null;
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      fieldType: CustomDataElementType;
+      repeats: boolean;
+      displayHooks: Array<DisplayHook>;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        valueFile?: {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType?: string | null;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          url?: string | null;
+          tags: Array<string>;
+          redacted: boolean;
+          enrollmentId?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          access: {
+            __typename?: 'FileAccess';
+            canEditFile: boolean;
+            canDeleteFile: boolean;
+          };
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          updatedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            firstName?: string | null;
+            lastName?: string | null;
+            email: string;
+          } | null;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      }> | null;
+    }>;
     access: {
       __typename?: 'FileAccess';
       canEditFile: boolean;
@@ -25781,6 +25911,135 @@ export type GetClientFilesQuery = {
             canViewEnrollmentDetails: boolean;
           };
         } | null;
+        customDataElements: Array<{
+          __typename?: 'CustomDataElement';
+          id: string;
+          key: string;
+          label: string;
+          fieldType: CustomDataElementType;
+          repeats: boolean;
+          displayHooks: Array<DisplayHook>;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            valueFile?: {
+              __typename?: 'File';
+              confidential?: boolean | null;
+              contentType?: string | null;
+              effectiveDate?: string | null;
+              expirationDate?: string | null;
+              id: string;
+              name: string;
+              url?: string | null;
+              tags: Array<string>;
+              redacted: boolean;
+              enrollmentId?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              access: {
+                __typename?: 'FileAccess';
+                canEditFile: boolean;
+                canDeleteFile: boolean;
+              };
+              enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+              uploadedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              updatedBy?: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              firstName?: string | null;
+              lastName?: string | null;
+              email: string;
+            } | null;
+          }> | null;
+        }>;
         access: {
           __typename?: 'FileAccess';
           canEditFile: boolean;
@@ -34366,6 +34625,175 @@ export type FileFieldsFragment = {
   } | null;
 };
 
+export type FileWithCustomDataElementsFieldsFragment = {
+  __typename?: 'File';
+  confidential?: boolean | null;
+  contentType?: string | null;
+  effectiveDate?: string | null;
+  expirationDate?: string | null;
+  id: string;
+  name: string;
+  url?: string | null;
+  tags: Array<string>;
+  redacted: boolean;
+  enrollmentId?: string | null;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    fieldType: CustomDataElementType;
+    repeats: boolean;
+    displayHooks: Array<DisplayHook>;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        email: string;
+      } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      valueFile?: {
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType?: string | null;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        url?: string | null;
+        tags: Array<string>;
+        redacted: boolean;
+        enrollmentId?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        access: {
+          __typename?: 'FileAccess';
+          canEditFile: boolean;
+          canDeleteFile: boolean;
+        };
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          firstName?: string | null;
+          lastName?: string | null;
+          email: string;
+        } | null;
+      } | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        firstName?: string | null;
+        lastName?: string | null;
+        email: string;
+      } | null;
+    }> | null;
+  }>;
+  access: {
+    __typename?: 'FileAccess';
+    canEditFile: boolean;
+    canDeleteFile: boolean;
+  };
+  enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+  uploadedBy?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  } | null;
+  updatedBy?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  } | null;
+  user?: {
+    __typename: 'ApplicationUser';
+    id: string;
+    name: string;
+    firstName?: string | null;
+    lastName?: string | null;
+    email: string;
+  } | null;
+};
+
 export type ValidationErrorFieldsFragment = {
   __typename?: 'ValidationError';
   type: ValidationType;
@@ -41139,6 +41567,135 @@ export type SubmitFormMutation = {
           enrollmentId?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          customDataElements: Array<{
+            __typename?: 'CustomDataElement';
+            id: string;
+            key: string;
+            label: string;
+            fieldType: CustomDataElementType;
+            repeats: boolean;
+            displayHooks: Array<DisplayHook>;
+            value?: {
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              valueFile?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                url?: string | null;
+                tags: Array<string>;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                access: {
+                  __typename?: 'FileAccess';
+                  canEditFile: boolean;
+                  canDeleteFile: boolean;
+                };
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            } | null;
+            values?: Array<{
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              valueFile?: {
+                __typename?: 'File';
+                confidential?: boolean | null;
+                contentType?: string | null;
+                effectiveDate?: string | null;
+                expirationDate?: string | null;
+                id: string;
+                name: string;
+                url?: string | null;
+                tags: Array<string>;
+                redacted: boolean;
+                enrollmentId?: string | null;
+                dateCreated?: string | null;
+                dateUpdated?: string | null;
+                access: {
+                  __typename?: 'FileAccess';
+                  canEditFile: boolean;
+                  canDeleteFile: boolean;
+                };
+                enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+                uploadedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                updatedBy?: {
+                  __typename?: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                } | null;
+                user?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
+                  email: string;
+                } | null;
+              } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              } | null;
+            }> | null;
+          }>;
           access: {
             __typename?: 'FileAccess';
             canEditFile: boolean;
@@ -54951,6 +55508,16 @@ export const ExternalFormSubmissionFieldsFragmentDoc = gql`
   ${ExternalFormSubmissionSummaryFragmentDoc}
   ${FormDefinitionFieldsFragmentDoc}
 `;
+export const FileWithCustomDataElementsFieldsFragmentDoc = gql`
+  fragment FileWithCustomDataElementsFields on File {
+    ...FileFields
+    customDataElements {
+      ...CustomDataElementFields
+    }
+  }
+  ${FileFieldsFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
+`;
 export const ValidationErrorFieldsFragmentDoc = gql`
   fragment ValidationErrorFields on ValidationError {
     type
@@ -63230,10 +63797,10 @@ export type GetClientHouseholdMemberCandidatesQueryResult = Apollo.QueryResult<
 export const GetFileDocument = gql`
   query GetFile($id: ID!) {
     file(id: $id) {
-      ...FileFields
+      ...FileWithCustomDataElementsFields
     }
   }
-  ${FileFieldsFragmentDoc}
+  ${FileWithCustomDataElementsFieldsFragmentDoc}
 `;
 
 /**
@@ -63323,7 +63890,7 @@ export const GetClientFilesDocument = gql`
         limit
         nodesCount
         nodes {
-          ...FileFields
+          ...FileWithCustomDataElementsFields
           enrollment {
             ...ClientEnrollmentFields
           }
@@ -63331,7 +63898,7 @@ export const GetClientFilesDocument = gql`
       }
     }
   }
-  ${FileFieldsFragmentDoc}
+  ${FileWithCustomDataElementsFieldsFragmentDoc}
   ${ClientEnrollmentFieldsFragmentDoc}
 `;
 
@@ -69058,7 +69625,7 @@ export const SubmitFormDocument = gql`
           ...ServiceFields
         }
         ... on File {
-          ...FileFields
+          ...FileWithCustomDataElementsFields
         }
         ... on Enrollment {
           ...SubmittedEnrollmentResultFields
@@ -69097,7 +69664,7 @@ export const SubmitFormDocument = gql`
   ${ProjectCocFieldsFragmentDoc}
   ${InventoryFieldsFragmentDoc}
   ${ServiceFieldsFragmentDoc}
-  ${FileFieldsFragmentDoc}
+  ${FileWithCustomDataElementsFieldsFragmentDoc}
   ${SubmittedEnrollmentResultFieldsFragmentDoc}
   ${CurrentLivingSituationFieldsFragmentDoc}
   ${CeAssessmentFieldsFragmentDoc}
