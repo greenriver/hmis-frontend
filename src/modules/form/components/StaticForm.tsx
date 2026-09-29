@@ -1,7 +1,6 @@
 import { TypedDocumentNode } from '@apollo/client';
-import { Ref, RefObject, useMemo } from 'react';
+import { Ref, RefObject } from 'react';
 import { FormValues, LocalConstants } from '../types';
-import { AlwaysPresentLocalConstants } from '../util/formUtil';
 import Loading from '@/components/elements/Loading';
 import DynamicForm, {
   DynamicFormProps,
@@ -44,7 +43,7 @@ const StaticForm = <
 >({
   role,
   initialValues,
-  localConstants: localConstantsProp,
+  localConstants,
   mutationDocument,
   getVariables,
   getErrors,
@@ -54,11 +53,6 @@ const StaticForm = <
   DynamicFormProps,
 }: Props<TData, TVariables>) => {
   const { formDefinition, itemMap } = useStaticFormDefinition(role);
-
-  const localConstants: LocalConstants = useMemo(
-    () => ({ ...AlwaysPresentLocalConstants, ...localConstantsProp }),
-    [localConstantsProp]
-  );
 
   const initialFormValues = useInitialFormValues({
     record: initialValues,

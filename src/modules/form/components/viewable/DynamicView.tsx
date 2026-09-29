@@ -1,5 +1,6 @@
 import { GridProps } from '@mui/material';
 
+import { useMemo } from 'react';
 import { FormProvider } from 'react-hook-form';
 import useFormDefinitionHandlers from '../../hooks/useFormDefinitionHandlers';
 import { LocalConstants, PickListArgs } from '../../types';
@@ -11,6 +12,7 @@ import DynamicFormLayout, {
 } from '@/modules/form/components/DynamicFormLayout';
 import { useEnrichedFormData } from '@/modules/form/hooks/rhf/useEnrichedFormData';
 import { DynamicFormContext } from '@/modules/form/hooks/useDynamicFormContext';
+import { AlwaysPresentLocalConstants } from '@/modules/form/util/formUtil';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
 export interface DynamicViewProps {
@@ -76,17 +78,27 @@ const DynamicViewEnrichmentLoader: React.FC<
     pickListArgs?: PickListArgs;
   }
 > = (props): JSX.Element => {
+  const localConstants = useMemo(
+    () => ({ ...AlwaysPresentLocalConstants, ...props.localConstants }),
+    [props.localConstants]
+  );
   const { defaultValues, loading } = useEnrichedFormData({
     pickListArgs: props.pickListArgs,
     definition: props.definition,
     initialValues: props.values,
-    localConstants: props.localConstants,
+    localConstants,
     viewOnly: false,
   });
   if (loading || !defaultValues) {
     return <Loading />;
   }
-  return <DynamicView {...props} defaultValues={defaultValues} />;
+  return (
+    <DynamicView
+      {...props}
+      localConstants={localConstants}
+      defaultValues={defaultValues}
+    />
+  );
 };
 
 export default DynamicViewEnrichmentLoader;
