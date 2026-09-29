@@ -19,14 +19,16 @@ Read the doc before working in the area.
 | --- | --- |
 | Setup, dev server, SSO/oauth-proxy mode, backend config, package upgrades | `README.md` |
 | Where a file belongs / adding a module | `README.md` "Project Structure" |
-| Apollo/GraphQL conventions | `.cursor/rules/react-graphql-apollo-client.mdc` |
 | Link chain, retries, cache normalization | `src/providers/apolloClient.tsx` |
 | Auth, session expiry, cross-tab session sync | `src/modules/auth/hooks/README.md` |
 | Bumping dependencies | `docs/DEPENDENCY_UPGRADES.md` |
 
 ## Non-obvious rules
 
-- **`src/types/gqlTypes.ts` is generated — never edit it.** After changing any `.graphql` file in `src/api/operations/`, or after a backend schema change, run `SCHEMA_PATH=/path/to/hmis-warehouse/drivers/hmis/app/graphql/schema.graphql yarn graphql:codegen`. Each operation yields a typed hook (`GetClient` → `useGetClientQuery`) imported from `@/types/gqlTypes`.
+- **`src/types/gqlTypes.ts` is generated — never edit it.** After changing any `.graphql` file in `src/api/operations/`, or after a backend schema change, regenerate it from a fresh warehouse schema:
+  1. In `hmis-warehouse` (checked out alongside this repo), dump the current GraphQL schema — see that repo's `AGENTS.md` for the exact command.
+  2. Here, run `SCHEMA_PATH=<path-to-hmis-warehouse>/drivers/hmis/app/graphql/schema.graphql yarn graphql:codegen`.
+- This repo has no backend of its own. For anything backend-side — resolvers, authorization policies, HUD data model quirks, schema changes — read the `hmis-warehouse` repo's `AGENTS.md` directly rather than guessing from the frontend alone.
 - **Route ids are obfuscated** (when `PUBLIC_PROTECTED_IDS=true`). Always build paths with `generateSafePath()` (`@/utils/pathEncoding`) and read params with `useSafeParams()` (`@/hooks/useSafeParams`), never bare `generatePath`/`useParams`.
 - **Most data entry is data-driven, not hardcoded.** Assessments, services, client/enrollment records and case notes render from `FormDefinitionJson` via `DynamicForm` in `src/modules/form`; value transformation lives in `formUtil.ts`. `src/modules/formBuilder` is the admin UI for editing definitions. Before adding a form field, check whether it belongs in a definition (seeded on the backend) instead.
 - **Every new page needs an authorization gate** in `src/routes/protected.tsx`: a route wrapper (`RootPermissionsFilter`, `accessWrappers/*`), or `src/modules/permissions/useHasPermissionsHooks.tsx` when that is too coarse.
