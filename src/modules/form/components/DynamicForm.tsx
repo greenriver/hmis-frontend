@@ -1,4 +1,10 @@
-import { forwardRef, ReactNode, useCallback, useImperativeHandle } from 'react';
+import {
+  forwardRef,
+  ReactNode,
+  useCallback,
+  useImperativeHandle,
+  useMemo,
+} from 'react';
 
 import { DefaultValues, FormProvider } from 'react-hook-form';
 import useFormDefinitionHandlers, {
@@ -12,6 +18,7 @@ import Loading from '@/components/elements/Loading';
 import { ErrorFilterFn } from '@/modules/errors/util';
 import { useEnrichedFormData } from '@/modules/form/hooks/rhf/useEnrichedFormData';
 import { DynamicFormContext } from '@/modules/form/hooks/useDynamicFormContext';
+import { AlwaysPresentLocalConstants } from '@/modules/form/util/formUtil';
 
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
@@ -167,11 +174,15 @@ const DynamicFormEnrichedDataLoader = forwardRef<
     initialLoadingElement?: ReactNode;
   }
 >(({ initialValues, initialLoadingElement, ...props }, ref) => {
+  const localConstants = useMemo(
+    () => ({ ...AlwaysPresentLocalConstants, ...props.localConstants }),
+    [props.localConstants]
+  );
   const { defaultValues, loading } = useEnrichedFormData({
     pickListArgs: props.pickListArgs,
     definition: props.definition,
     initialValues: initialValues,
-    localConstants: props.localConstants,
+    localConstants,
     viewOnly: false,
   });
   if (loading || !defaultValues) {
@@ -181,6 +192,7 @@ const DynamicFormEnrichedDataLoader = forwardRef<
     <DynamicFormWithHandlers
       defaultValues={defaultValues}
       {...props}
+      localConstants={localConstants}
       ref={ref}
     />
   );

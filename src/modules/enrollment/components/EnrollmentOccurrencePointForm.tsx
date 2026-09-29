@@ -2,7 +2,6 @@ import React, { useMemo } from 'react';
 import OccurrencePointForm, {
   OccurrencePointFormProps,
 } from '@/modules/form/components/OccurrencePointForm';
-import { AlwaysPresentLocalConstants } from '@/modules/form/util/formUtil';
 import { DashboardEnrollment } from '@/modules/hmis/types';
 
 const EnrollmentOccurrencePointForm: React.FC<
@@ -13,7 +12,6 @@ const EnrollmentOccurrencePointForm: React.FC<
       entryDate: enrollment.entryDate,
       exitDate: enrollment.exitDate,
       projectType: enrollment.project.projectType,
-      ...AlwaysPresentLocalConstants,
     }),
     [enrollment.entryDate, enrollment.exitDate, enrollment.project.projectType]
   );

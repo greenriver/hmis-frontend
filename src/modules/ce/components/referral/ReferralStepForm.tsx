@@ -11,10 +11,7 @@ import DynamicForm from '@/modules/form/components/DynamicForm';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import useInitialFormValues from '@/modules/form/hooks/useInitialFormValues';
 import { FormActionTypes } from '@/modules/form/types';
-import {
-  AlwaysPresentLocalConstants,
-  getItemMap,
-} from '@/modules/form/util/formUtil';
+import { getItemMap } from '@/modules/form/util/formUtil';
 import {
   CeReferralStatus,
   CeReferralStepFieldsFragment,
@@ -74,10 +71,7 @@ const ReferralStepForm: React.FC<Props> = ({ step }) => {
   );
 
   const localConstants = useMemo(
-    () => ({
-      ...AlwaysPresentLocalConstants,
-      projectId: referral.opportunity?.projectId,
-    }),
+    () => ({ projectId: referral.opportunity?.projectId }),
     [referral.opportunity?.projectId]
   );
 
