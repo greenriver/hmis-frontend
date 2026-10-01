@@ -1,6 +1,6 @@
 import { Container, Stack, Typography } from '@mui/material';
 import { useCallback, useMemo, useState } from 'react';
-import { Outlet, useOutletContext } from 'react-router-dom';
+import { Outlet, useOutletContext } from 'react-router';
 
 import { useDetailedProject } from '../hooks/useDetailedProject';
 import { useProjectDashboardNavItems } from '../hooks/useProjectDashboardNavItems';

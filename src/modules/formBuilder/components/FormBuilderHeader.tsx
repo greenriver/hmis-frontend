@@ -1,7 +1,7 @@
 import { Alert, Button, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import React, { useCallback } from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import EditIconButton from '@/components/elements/EditIconButton';

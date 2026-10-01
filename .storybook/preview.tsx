@@ -8,7 +8,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { withThemeFromJSXProvider } from '@storybook/addon-themes';
 import en from 'date-fns/locale/en-US';
 import React from 'react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router';
 import theme from '../src/config/theme';
 import '../src/index.css';
 import {

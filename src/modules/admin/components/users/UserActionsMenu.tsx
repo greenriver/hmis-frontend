@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { generatePath } from 'react-router-dom';
+import { generatePath } from 'react-router';
 import CommonMenuButton from '@/components/elements/CommonMenuButton';
 import {
   AuditIcon,

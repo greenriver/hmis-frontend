@@ -10,7 +10,7 @@ import { setContext } from '@apollo/client/link/context';
 import { RetryLink } from '@apollo/client/link/retry';
 import { SentryLink } from 'apollo-link-sentry';
 import fetch from 'cross-fetch';
-import { generatePath, matchRoutes } from 'react-router-dom';
+import { generatePath, matchRoutes } from 'react-router';
 
 import { dispatchSessionTrackingEvent } from '../modules/auth/events';
 import { HMIS_SESSION_UID_HEADER } from '@/modules/auth/api/constants';

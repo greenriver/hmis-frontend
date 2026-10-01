@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { To } from 'react-router-dom';
+import { To } from 'react-router';
 import {
   clientBriefName,
   relationshipToHohForDisplay,

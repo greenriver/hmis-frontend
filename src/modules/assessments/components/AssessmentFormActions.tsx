@@ -1,6 +1,6 @@
 import { Stack } from '@mui/material';
 import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import DeleteAssessmentButton from './DeleteAssessmentButton';
 import PrintViewButton from '@/components/layout/PrintViewButton';

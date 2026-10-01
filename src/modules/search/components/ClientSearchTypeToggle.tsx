@@ -2,7 +2,7 @@ import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
 import SearchIcon from '@mui/icons-material/Search';
 
 import { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import CommonToggle from '@/components/elements/CommonToggle';
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import { Routes } from '@/routes/routes';

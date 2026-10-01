@@ -1,5 +1,5 @@
 import { Alert, Box, Paper, Stack } from '@mui/material';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router';
 import CommonToggle, { ToggleItem } from '@/components/elements/CommonToggle';
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import {

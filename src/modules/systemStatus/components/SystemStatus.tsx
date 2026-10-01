@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 // eslint-disable-next-line no-restricted-imports
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { fetchSystemStatus } from '../api';
 
 const SystemStatus = () => {

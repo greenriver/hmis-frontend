@@ -3,12 +3,13 @@ name: Build and test app
 on:
   push:
     branches:
-      - stable
-      - 'release-*'
+      - main
+      - staging
+      - production
   pull_request:
     branches:
-      - stable
-      - 'release-*'
+      - "*"
+      - "**/*"
 
 jobs:
 

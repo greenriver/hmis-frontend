@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router';
 
 import CeMatchRuleForm from '../editor/CeMatchRuleForm';
 import Loading from '@/components/elements/Loading';

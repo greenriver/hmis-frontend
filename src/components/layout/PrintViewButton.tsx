@@ -2,7 +2,7 @@ import CancelPresentationIcon from '@mui/icons-material/CancelPresentation';
 import PrintIcon from '@mui/icons-material/Print';
 import { Button } from '@mui/material';
 import React, { useCallback, useMemo } from 'react';
-import { To, useLocation } from 'react-router-dom';
+import { To, useLocation } from 'react-router';
 import ButtonLink, { ButtonLinkProps } from '../elements/ButtonLink';
 
 export interface PrintViewButtonProps extends Omit<

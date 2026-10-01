@@ -4,8 +4,9 @@ on:
   workflow_dispatch:
   pull_request:
     branches:
-      - stable
-      - 'release-*'
+      - main
+      - staging
+      - production
   push:
     branches:
       - "*"
@@ -171,8 +172,7 @@ jobs:
             ${{ steps.env.outputs.image_tag }}
             ${{ steps.env.outputs.image_tag_9 }}
             type=raw,event=branch,value=branch-{{branch}}-{{sha}}
-            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'stable') }}
-            type=raw,value=stable,enable=${{ github.ref == format('refs/heads/{0}', 'stable') }}
+            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'production') }}
             type=ref,event=branch
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}

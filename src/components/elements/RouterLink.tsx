@@ -3,7 +3,7 @@ import { ComponentType, forwardRef } from 'react';
 import {
   Link as ReactRouterLink,
   LinkProps as ReactRouterLinkProps,
-} from 'react-router-dom';
+} from 'react-router';
 import NewTabIcon from '@/components/elements/NewTabIcon';
 
 export type RouterLinkProps = Omit<LinkProps, 'href'> &

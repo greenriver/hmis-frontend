@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { generatePath } from 'react-router-dom';
+import { generatePath } from 'react-router';
 import FormJsonDrawer from './FormJsonDrawer';
 import { usePublishForm } from './usePublishForm';
 import ButtonLink from '@/components/elements/ButtonLink';

@@ -3,7 +3,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { Box, Button } from '@mui/material';
 import React, { ReactNode, useCallback, useMemo } from 'react';
 
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 import CommonStickyBar from '../../CommonStickyBar';
 import {
   CONTEXT_HEADER_HEIGHT,

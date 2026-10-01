@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router';
 import {
   ErrorState,
   emptyErrorState,

@@ -1,4 +1,4 @@
-import { matchRoutes, useLocation } from 'react-router-dom';
+import { matchRoutes, useLocation } from 'react-router';
 
 import { allRoutes } from '@/routes/routes';
 

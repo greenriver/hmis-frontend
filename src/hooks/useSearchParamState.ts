@@ -1,6 +1,6 @@
 import { isDate } from 'date-fns';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router';
 import { formatDateForGql, parseHmisDateString } from '@/modules/hmis/hmisUtil';
 
 // adapted from https://github.com/jschwindt/react-use-search-params-state/tree/main
@@ -138,7 +138,7 @@ const useSearchParamsState = ({
   const { pathname, hash } = useLocation();
   const navigate = useNavigate();
 
-  // `initial` is NOT passed to `useSearchParams` here, since react-router-dom's
+  // `initial` is NOT passed to `useSearchParams` here, since react-router's
   // useSearchParams's `defaultInit` prop auto-populates the internal state, but not
   // the search params that appear in the url. See the useEffect below
   const [searchParams] = useSearchParams();

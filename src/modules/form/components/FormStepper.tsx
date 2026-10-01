@@ -1,7 +1,7 @@
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import { Link, Step, StepButton, StepLabel, Stepper } from '@mui/material';
 import { useCallback, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 
 import RouterLink from '@/components/elements/RouterLink';
 import { scrollToElement } from '@/hooks/useScrollToHash';

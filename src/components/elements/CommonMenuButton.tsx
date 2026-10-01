@@ -13,7 +13,7 @@ import {
   Typography,
 } from '@mui/material';
 import { ComponentType, ReactNode, useState } from 'react';
-import { To } from 'react-router-dom';
+import { To } from 'react-router';
 
 import RouterLink from './RouterLink';
 import { MoreMenuIcon } from './SemanticIcons';

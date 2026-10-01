@@ -1,6 +1,6 @@
 import { Alert, Button, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 
 import { getCsrfToken } from '@/utils/csrf';
 import { reloadWindow } from '@/utils/location';

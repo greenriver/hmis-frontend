@@ -5,7 +5,7 @@ import {
   useLocation,
   useNavigate,
   useRoutes,
-} from 'react-router-dom';
+} from 'react-router';
 
 import { protectedRoutes } from './protected';
 

@@ -1,6 +1,6 @@
 import { Button } from '@mui/material';
 import { useCallback, useMemo } from 'react';
-import { Link as ReactRouterLink } from 'react-router-dom';
+import { Link as ReactRouterLink } from 'react-router';
 
 import useSafeParams from '@/hooks/useSafeParams';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';

@@ -1,7 +1,7 @@
 import { Container } from '@mui/material';
 import { isNil } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 
 import Loading from '@/components/elements/Loading';
 import ContextHeaderContent from '@/components/layout/dashboard/contextHeader/ContextHeaderContent';

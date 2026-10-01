@@ -1,7 +1,7 @@
 import { Paper } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import SendReferralSubForm from '@/modules/ce/components/directReferral/SendReferralSubForm';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import DynamicField from '@/modules/form/components/DynamicField';

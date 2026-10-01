@@ -1,7 +1,7 @@
 import { Container } from '@mui/material';
 import type { FC } from 'react';
 import { useCallback, useMemo, useState } from 'react';
-import { Outlet, useOutletContext } from 'react-router-dom';
+import { Outlet, useOutletContext } from 'react-router';
 
 import { ContextHeaderAppBar } from '@/components/layout/dashboard/contextHeader/ContextHeader';
 import ContextHeaderContent from '@/components/layout/dashboard/contextHeader/ContextHeaderContent';

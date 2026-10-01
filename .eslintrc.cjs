@@ -120,7 +120,7 @@ module.exports = {
     'no-restricted-imports': [
       'warn',
       {
-        name: 'react-router-dom',
+        name: 'react-router',
         importNames: ['useParams'],
         message: 'use useSafeParams',
       },

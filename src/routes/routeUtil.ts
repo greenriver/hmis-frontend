@@ -1,4 +1,4 @@
-import { Location, To } from 'react-router-dom';
+import { Location, To } from 'react-router';
 
 export type LocationState = {
   fromLoginRedirect?: boolean;

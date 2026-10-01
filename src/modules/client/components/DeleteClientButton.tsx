@@ -1,6 +1,6 @@
 import { Button, ButtonProps, Link, Typography } from '@mui/material';
 import React, { useCallback, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router';
 
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import { defaultRenderError } from '@/modules/errors/components/WarningAlert';

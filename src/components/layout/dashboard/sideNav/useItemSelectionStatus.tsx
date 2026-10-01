@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 
 import { NavItem } from './types';
 import { addTrailingSlash } from '@/components/layout/dashboard/sideNav/navUtil';

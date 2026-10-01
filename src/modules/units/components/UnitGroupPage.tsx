@@ -3,7 +3,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
 
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import UnitManagementTable from './UnitManagementTable';
 
 import Loading from '@/components/elements/Loading';

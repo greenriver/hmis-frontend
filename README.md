@@ -59,7 +59,7 @@
    yarn dev
    ```
 
-For instructions on running multiple HMISes against the same warehouse locally, see the [HMIS README](https://github.com/greenriver/hmis-warehouse/blob/stable/drivers/hmis/README.md) in the Warehouse repo.
+For instructions on running multiple HMISes against the same warehouse locally, see the [HMIS README](https://github.com/greenriver/hmis-warehouse/blob/main/drivers/hmis/README.md) in the Warehouse repo.
 
 ### Run behind the warehouse's local SSO stack (JWT/IdP)
 
@@ -154,7 +154,7 @@ See [docs/DEPENDENCY_UPGRADES.md](./docs/DEPENDENCY_UPGRADES.md) for team proces
 
 ### Capybara System Tests
 
-See the [HMIS README](https://github.com/greenriver/hmis-warehouse/blob/stable/drivers/hmis/README.md) in the Warehouse repo for instructions on running end-to-end Capybara tests.
+See the [HMIS README](https://github.com/greenriver/hmis-warehouse/blob/main/drivers/hmis/README.md) in the Warehouse repo for instructions on running end-to-end Capybara tests.
 
 ## Backend configuration
 

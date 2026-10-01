@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import CeMatchRuleForm from '../editor/CeMatchRuleForm';
 import PageTitle from '@/components/layout/PageTitle';
 import { AdminDashboardRoutes } from '@/routes/routes';

@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@mui/material';
 import { useCallback, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import DeleteClientButton from '@/modules/client/components/DeleteClientButton';
 import useClientDashboardContext from '@/modules/client/hooks/useClientDashboardContext';
 

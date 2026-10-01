@@ -1,5 +1,5 @@
 import { Button, ButtonProps } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { BackIcon } from './SemanticIcons';
 
 const BackButton: React.FC<ButtonProps> = (props) => {

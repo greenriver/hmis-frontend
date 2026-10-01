@@ -2,7 +2,7 @@ import { Button, Chip, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import pluralize from 'pluralize';
 import { ReactNode, useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import ClientMergeDetailsTable from '../ClientMergeDetailsTable';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import ExternalLink from '@/components/elements/ExternalLink';

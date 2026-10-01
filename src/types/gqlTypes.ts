@@ -3856,6 +3856,7 @@ export type FormIdentifierAccess = {
 };
 
 export type FormIdentifierFilterOptions = {
+  formType?: InputMaybe<Array<FormRole>>;
   searchTerm?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -5763,6 +5764,8 @@ export enum PickListType {
   Coc = 'COC',
   /** Continuum Projects */
   ContinuumProjects = 'CONTINUUM_PROJECTS',
+  /** Form types that the user can create */
+  CreatableFormTypes = 'CREATABLE_FORM_TYPES',
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
   CustomServiceCategories = 'CUSTOM_SERVICE_CATEGORIES',
   CustomServiceTypes = 'CUSTOM_SERVICE_TYPES',
@@ -5778,7 +5781,7 @@ export enum PickListType {
   EnrollmentAuditEventRecordTypes = 'ENROLLMENT_AUDIT_EVENT_RECORD_TYPES',
   /** External form types for the project. */
   ExternalFormTypesForProject = 'EXTERNAL_FORM_TYPES_FOR_PROJECT',
-  /** Form Types */
+  /** Form types visible in the Forms admin tool */
   FormTypes = 'FORM_TYPES',
   Geocode = 'GEOCODE',
   HudServiceCategories = 'HUD_SERVICE_CATEGORIES',
@@ -8099,7 +8102,6 @@ export enum ServiceSubTypeProvided {
 
 export type ServiceType = {
   __typename?: 'ServiceType';
-  category: Scalars['String']['output'];
   createdBy?: Maybe<ApplicationUser>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -8116,9 +8118,18 @@ export type ServiceType = {
   user?: Maybe<ApplicationUser>;
 };
 
+export enum ServiceTypeFilterOptionSupportsBulkAssignment {
+  /** No */
+  No = 'NO',
+  /** Yes */
+  Yes = 'YES',
+}
+
 export type ServiceTypeFilterOptions = {
   includeHudServices?: InputMaybe<Scalars['Boolean']['input']>;
   searchTerm?: InputMaybe<Scalars['String']['input']>;
+  serviceCategory?: InputMaybe<Array<Scalars['ID']['input']>>;
+  supportsBulkAssignment?: InputMaybe<ServiceTypeFilterOptionSupportsBulkAssignment>;
 };
 
 /** Create service type input */
@@ -27217,13 +27228,6 @@ export type GetServiceTypesQuery = {
       dateCreated?: string | null;
       dateUpdated?: string | null;
       supportsBulkAssignment: boolean;
-      formDefinitions: Array<{
-        __typename?: 'FormDefinition';
-        id: string;
-        identifier: string;
-        cacheKey: string;
-        title: string;
-      }>;
       serviceCategory: {
         __typename?: 'ServiceCategory';
         id: string;
@@ -64626,11 +64630,11 @@ export const GetServiceTypesDocument = gql`
       limit
       nodesCount
       nodes {
-        ...ServiceTypeConfigFields
+        ...ServiceTypeFields
       }
     }
   }
-  ${ServiceTypeConfigFieldsFragmentDoc}
+  ${ServiceTypeFieldsFragmentDoc}
 `;
 
 /**

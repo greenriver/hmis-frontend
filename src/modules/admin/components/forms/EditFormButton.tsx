@@ -1,6 +1,6 @@
 import { LoadingButton } from '@mui/lab';
 import { ButtonProps } from '@mui/material';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {

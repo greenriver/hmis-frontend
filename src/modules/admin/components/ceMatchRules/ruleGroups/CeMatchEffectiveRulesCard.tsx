@@ -1,6 +1,6 @@
 import { Paper, Stack, Typography } from '@mui/material';
 import { ReactNode } from 'react';
-import { To } from 'react-router-dom';
+import { To } from 'react-router';
 import RouterLink from '@/components/elements/RouterLink';
 
 export interface CeMatchRuleCountSummary {
