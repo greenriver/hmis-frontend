@@ -5805,6 +5805,8 @@ export enum PickListType {
   ProjectsReceivingDirectCeReferrals = 'PROJECTS_RECEIVING_DIRECT_CE_REFERRALS',
   /** Open Projects that can receive referrals */
   ProjectsReceivingReferrals = 'PROJECTS_RECEIVING_REFERRALS',
+  /** Projects that can send direct CE referrals */
+  ProjectsSendingDirectCeReferrals = 'PROJECTS_SENDING_DIRECT_CE_REFERRALS',
   ProjectConfigTypes = 'PROJECT_CONFIG_TYPES',
   ReferralOutcome = 'REFERRAL_OUTCOME',
   /** Residential Projects */
@@ -6838,6 +6840,7 @@ export type ProjectConfigInput = {
   projectId?: InputMaybe<Scalars['ID']['input']>;
   projectType?: InputMaybe<ProjectType>;
   receivesDirectReferrals?: InputMaybe<Scalars['Boolean']['input']>;
+  receivesDirectReferralsFrom?: InputMaybe<Array<Scalars['ID']['input']>>;
   supportsWaitlistReferrals?: InputMaybe<Scalars['Boolean']['input']>;
 };
 

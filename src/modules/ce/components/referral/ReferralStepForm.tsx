@@ -11,7 +11,10 @@ import DynamicForm from '@/modules/form/components/DynamicForm';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import useInitialFormValues from '@/modules/form/hooks/useInitialFormValues';
 import { FormActionTypes } from '@/modules/form/types';
-import { getItemMap } from '@/modules/form/util/formUtil';
+import {
+  AlwaysPresentLocalConstants,
+  getItemMap,
+} from '@/modules/form/util/formUtil';
 import {
   CeReferralStatus,
   CeReferralStepFieldsFragment,
@@ -70,12 +73,20 @@ const ReferralStepForm: React.FC<Props> = ({ step }) => {
     [formDefinition]
   );
 
+  const localConstants = useMemo(
+    () => ({
+      ...AlwaysPresentLocalConstants,
+      projectId: referral.opportunity?.projectId,
+    }),
+    [referral.opportunity?.projectId]
+  );
+
   // Display form values based on the Step record (CustomDataElements) rather than the submittedValues field, to be consistent with other form behavior throughout the application.
   const initialValues = useInitialFormValues({
     record: step,
     itemMap,
     definition: formDefinition?.definition,
-    localConstants: { projectId: referral.opportunity?.projectId },
+    localConstants,
   });
 
   const editable =
@@ -101,6 +112,7 @@ const ReferralStepForm: React.FC<Props> = ({ step }) => {
           }}
           errors={errors}
           loading={submitLoading}
+          localConstants={localConstants}
           FormActionProps={{
             config: [
               {
@@ -118,6 +130,7 @@ const ReferralStepForm: React.FC<Props> = ({ step }) => {
           definition={formDefinition.definition}
           values={initialValues}
           variant={'without_top_level_cards'}
+          localConstants={localConstants}
         />
       )}
     </>

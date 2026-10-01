@@ -1,20 +1,21 @@
-## Description
+## _Merging this PR_
+- use the squash-merge strategy for PRs targeting `main`
+- use a merge-commit or rebase strategy for PRs targeting `staging` and `production`
 
-Summary of changes:
+## Description
+[//]: # (Summarize changes and include links related issue)
+[//]: # (List any new dependencies or relevant ADRs)
 
 [//]: # 'remove if not applicable'
 Depends on hmis-warehouse PR:
-
-[//]: # 'remove if not applicable'
-How to test:
 
 ## Type of change
 [//]: # (e.g., Bug fix, New feature, Documentation, Code clean-up, Dependency update)
 
 ## Checklist before requesting review
-- [ ] I have performed a self-review of my code
-- [ ] I have run the code that is being changed under ideal conditions, and it doesn't fail
-- [ ] I have used Axe DevTools to scan for accessibility issues (or not applicable)
+- [ ] I performed a self-review of my code
+- [ ] I ran the OP review skill
+- [ ] I ran the code that is being changed under ideal conditions, and it doesn't fail
 - [ ] My code includes comments and/or descriptive variable names to help other engineers understand the intent (or not applicable)
-- [ ] I have updated the documentation (or not applicable)
-- [ ] If it's not obvious how to test this change, I have provided testing instructions in this PR or the related issue
+- [ ] I updated the documentation (or not applicable)
+- [ ] I provided testing instructions in this PR or the related issue (or not applicable)

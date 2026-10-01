@@ -1042,6 +1042,8 @@ export const HmisEnums = {
     PROJECTS_RECEIVING_DIRECT_CE_REFERRALS:
       'Projects that can receive CE referrals',
     PROJECTS_RECEIVING_REFERRALS: 'Open Projects that can receive referrals',
+    PROJECTS_SENDING_DIRECT_CE_REFERRALS:
+      'Projects that can send direct CE referrals',
     PROJECT_CONFIG_TYPES: 'PROJECT_CONFIG_TYPES',
     REFERRAL_OUTCOME: 'REFERRAL_OUTCOME',
     RESIDENTIAL_PROJECTS: 'Residential Projects',
