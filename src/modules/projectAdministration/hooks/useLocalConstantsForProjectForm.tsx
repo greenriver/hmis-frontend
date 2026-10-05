@@ -1,4 +1,3 @@
-import { AlwaysPresentLocalConstants } from '@/modules/form/util/formUtil';
 import { ProjectAllFieldsFragment } from '@/types/gqlTypes';
 
 export const useLocalConstantsForProjectForm = (
@@ -6,6 +5,5 @@ export const useLocalConstantsForProjectForm = (
 ) => {
   return {
     projectId: project?.id || undefined, // For Project creation, projectId is undefined
-    ...AlwaysPresentLocalConstants,
   };
 };

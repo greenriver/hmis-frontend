@@ -46,6 +46,7 @@ export function useViewEditRecordDialogs<T extends SubmitFormAllowedTypes>({
       onClose: () => setViewingRecord(undefined),
       formRole,
       projectId,
+      localConstants,
     });
 
   const { openFormDialog, renderFormDialog, closeDialog } = useFormDialog<T>({
