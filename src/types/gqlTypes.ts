@@ -5728,11 +5728,7 @@ export enum PickListType {
   AllServiceTypes = 'ALL_SERVICE_TYPES',
   /** All unit types. */
   AllUnitTypes = 'ALL_UNIT_TYPES',
-  /**
-   * Assessment names, including custom assessments and assessments that are
-   * inactive. If a project is specified, the list is limited to assessments that
-   * exist in the project (both active and inactive).
-   */
+  /** Assessment names for filtering assessments. Includes all HUD and custom assessments, regardless of applicability rules. */
   AssessmentNames = 'ASSESSMENT_NAMES',
   /**
    * Current and historical user accounts
