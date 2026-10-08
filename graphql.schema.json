@@ -40744,7 +40744,7 @@
           },
           {
             "name": "ASSESSMENT_NAMES",
-            "description": "Assessment names, including custom assessments and assessments that are\ninactive. If a project is specified, the list is limited to assessments that\nexist in the project (both active and inactive).",
+            "description": "Assessment names for filtering assessments. Includes all HUD and custom assessments, regardless of applicability rules.",
             "isDeprecated": false,
             "deprecationReason": null
           },
