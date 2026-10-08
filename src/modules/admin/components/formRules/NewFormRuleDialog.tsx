@@ -86,7 +86,6 @@ const NewFormRuleDialog: React.FC<Props> = ({
     );
 
     return {
-      dataCollectedAbout: dataCollectedAbout,
       projectId: conditions.projectId,
       projectType: conditions.projectType as ProjectType,
       organizationId: conditions.organizationId,
@@ -94,9 +93,11 @@ const NewFormRuleDialog: React.FC<Props> = ({
       otherFunder: conditions.otherFunder as FundingSource,
       serviceTypeId: conditions.serviceTypeId,
       serviceCategoryId: conditions.serviceCategoryId,
+      // Service rules carry the service they collect; every other role carries a
+      // client type instead, which service form resolution would never read.
       ...(formRole === FormRole.Service
         ? { [serviceConditionType]: serviceConditionValue }
-        : {}),
+        : { dataCollectedAbout }),
     };
   }, [
     dataCollectedAbout,
@@ -333,21 +334,19 @@ const NewFormRuleDialog: React.FC<Props> = ({
               />
             </Box>
           )}
-          <FormSelect
-            label={
-              formRole === FormRole.Service
-                ? 'For client type'
-                : 'Applies to client type'
-            }
-            sx={{ flexGrow: 1 }}
-            value={{ code: dataCollectedAbout }}
-            options={dataCollectedAboutPickList}
-            onChange={(_event, option) => {
-              if (isPickListOption(option)) {
-                setDataCollectedAbout(option.code as DataCollectedAbout);
-              }
-            }}
-          />
+          {formRole !== FormRole.Service && (
+            <FormSelect
+              label='Applies to client type'
+              sx={{ flexGrow: 1 }}
+              value={{ code: dataCollectedAbout }}
+              options={dataCollectedAboutPickList}
+              onChange={(_event, option) => {
+                if (isPickListOption(option)) {
+                  setDataCollectedAbout(option.code as DataCollectedAbout);
+                }
+              }}
+            />
+          )}
         </Stack>
         <CardGroup
           onAddItem={() => {
