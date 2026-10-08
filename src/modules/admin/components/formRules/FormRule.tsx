@@ -15,7 +15,10 @@ const FormRuleChip: React.FC<{ label: string }> = ({ label }) => {
   return <Chip component='span' sx={{ mb: 0.25 }} size='small' label={label} />;
 };
 
-const nonClientFormRoles = [
+// Roles whose rules never display a client type. Most of these forms aren't about
+// clients at all. Service is the exception: it collects client data, but service
+// form resolution matches on project only, so a rule's client type is never read.
+const rolesWithoutClientType = [
   FormRole.CeParticipation,
   FormRole.Funder,
   FormRole.HmisParticipation,
@@ -24,6 +27,7 @@ const nonClientFormRoles = [
   FormRole.Project,
   FormRole.ProjectCoc,
   FormRole.ReferralRequest,
+  FormRole.Service,
 ];
 
 const nonProjectFormRoles = [FormRole.Organization];
@@ -81,10 +85,9 @@ export const BaseFormRule: React.FC<BaseFormRuleProps> = ({
     }
   }
 
-  const isServiceForm =
-    formRole === FormRole.Service && (serviceTypeName || serviceCategoryName);
+  const isServiceForm = formRole === FormRole.Service;
 
-  const isClientForm = formRole && !nonClientFormRoles.includes(formRole);
+  const isClientForm = formRole && !rolesWithoutClientType.includes(formRole);
 
   const conditionCount = Object.keys(conditions).length;
 
@@ -97,7 +100,6 @@ export const BaseFormRule: React.FC<BaseFormRuleProps> = ({
             <FormRuleChip
               label={serviceTypeName || serviceCategoryName || 'Service'}
             />{' '}
-            for{' '}
           </>
         ) : (
           `Applies ${isClientForm ? 'to ' : ''}`
