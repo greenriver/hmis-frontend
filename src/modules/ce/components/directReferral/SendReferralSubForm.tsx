@@ -9,6 +9,7 @@ import {
 import DynamicForm, {
   DynamicFormOnSubmit,
 } from '@/modules/form/components/DynamicForm';
+import { AlwaysPresentLocalConstants } from '@/modules/form/util/formUtil';
 import {
   ReferralMode,
   useCreateDirectCeReferralMutation,
@@ -108,6 +109,7 @@ const SendReferralSubForm: React.FC<Props> = ({
           definition={formDefinition.definition}
           onSubmit={handleSubmit}
           loading={submitLoading}
+          localConstants={AlwaysPresentLocalConstants}
           errors={errors}
           FormActionProps={{
             submitButtonText: 'Refer Household',
