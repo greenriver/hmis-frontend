@@ -92,6 +92,26 @@ flowchart TD
 
 5. **Timing Mechanism** - `useSessionStatus` calculates remaining time and schedules appropriate UI notifications
 
+## Expiry by auth method
+
+`storage.sessionExpiresAt` picks the expiry the countdown runs to:
+
+* **`devise`** — the last response's `timestamp` plus the user's `sessionDuration`.
+  Devise's timeout restarts on every request, so every response moves it.
+* **`jwt`** — the forwarded token's expiry. oauth2-proxy refreshes the token only
+  once its cookie is 5 minutes old, so a response doesn't restart the token's
+  lifetime. `Hmis::BaseController#set_app_user_header` sends the token's remaining
+  seconds as `X-app-session-remaining-secs` on every response, and
+  `useSessionTrackingObserver` stores `expiresAt` = request start + remaining
+  seconds. The newest request wins, not the latest expiry, so a failed refresh
+  can pull the expiry earlier.
+
+Under `jwt`, if "Keep me signed-in" gets back an expiry still inside the warning
+window, the token didn't refresh, usually because the IdP session is gone.
+`SessionStatusManager` says the session can't be extended and offers Close, which
+keeps the dialog shut until the session expires so the user can save their work.
+A reload wouldn't help: oauth2-proxy keeps serving the old token until it expires.
+
 ## Terminal account errors vs. re-authentication
 
 Three states are terminal — re-authenticating cannot clear them — so they must not

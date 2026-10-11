@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { HMIS_ACCOUNT_ERROR_EVENT } from '@/modules/auth/api/constants';
 import {
   dispatchAccountErrorEvent,
+  dispatchSessionTrackingFromHeaders,
   isTerminalAccountErrorType,
   terminalAccountErrorFromResponseBody,
 } from '@/modules/auth/events';
@@ -82,5 +83,66 @@ describe('dispatchAccountErrorEvent', () => {
     expect(dispatched).toHaveLength(1);
     expect(dispatched[0].type).toBe(HMIS_ACCOUNT_ERROR_EVENT);
     expect(dispatched[0].init?.detail).toBe('no_hmis_access');
+  });
+});
+
+describe('dispatchSessionTrackingFromHeaders', () => {
+  let dispatched: Array<{ type: string; init?: { detail?: unknown } }>;
+
+  beforeEach(() => {
+    dispatched = [];
+    vi.stubGlobal('document', {
+      dispatchEvent: (event: any) => {
+        dispatched.push(event);
+        return true;
+      },
+    });
+    vi.stubGlobal(
+      'CustomEvent',
+      class {
+        constructor(
+          public type: string,
+          public init?: { detail?: unknown }
+        ) {}
+      }
+    );
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('reports the remaining seconds with the request start time', () => {
+    dispatchSessionTrackingFromHeaders(
+      new Headers({
+        'X-app-user-id': '7',
+        'X-app-session-remaining-secs': '1500',
+      }),
+      123.5
+    );
+
+    expect(dispatched[0].init?.detail).toEqual({
+      userId: '7',
+      remainingSecs: 1500,
+      requestedAt: 123.5,
+    });
+  });
+
+  it('reports only the user without the remaining-seconds header', () => {
+    dispatchSessionTrackingFromHeaders(
+      new Headers({ 'X-app-user-id': '7' }),
+      123.5
+    );
+
+    expect(dispatched[0].init?.detail).toEqual({ userId: '7' });
+  });
+
+  it('reports no user for an empty user header', () => {
+    dispatchSessionTrackingFromHeaders(
+      new Headers({ 'X-app-user-id': '' }),
+      123.5
+    );
+
+    expect(dispatched[0].init?.detail).toEqual({ userId: undefined });
   });
 });

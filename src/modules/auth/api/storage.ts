@@ -53,8 +53,19 @@ export const clearLastConnectorId = () =>
 
 export interface HmisSessionTracking {
   userId: string;
+  // when the last response arrived
   timestamp: number;
+  // JWT arm only: when the token expires, and when the request that reported it started
+  expiresAt?: number;
+  requestedAt?: number;
 }
+
+// The JWT arm counts down to the token's expiry. The Devise arm's timeout restarts on
+// every request, so it counts down from the last response.
+export const sessionExpiresAt = (
+  tracking: HmisSessionTracking,
+  sessionDuration: number
+) => tracking.expiresAt ?? tracking.timestamp + sessionDuration;
 export const setSessionTracking = (session: HmisSessionTracking) => {
   localStorage.setItem(SESSION_TRACKING_STORAGE_KEY, JSON.stringify(session));
 };

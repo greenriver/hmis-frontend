@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { HmisUser } from '@/modules/auth/api/sessions';
+import { sessionExpiresAt } from '@/modules/auth/api/storage';
 import { useSessionTracking } from '@/modules/auth/hooks/useSessionTracking';
 import { currentTimeInSeconds } from '@/utils/time';
 
@@ -32,15 +33,17 @@ const useSessionStatus = ({
     tracking ? sessionDuration : undefined
   );
 
-  // update time remaining in response to timestamp changes
+  // update time remaining in response to expiry changes
   const sessionExited = !!exitStatus;
+  const expiresAt = tracking?.timestamp
+    ? sessionExpiresAt(tracking, sessionDuration)
+    : undefined;
   useEffect(() => {
-    const timestamp = tracking?.timestamp;
-    if (!timestamp) return;
+    if (!expiresAt) return;
     if (sessionExited) return;
 
     const updateTimeRemaining = () => {
-      const value = sessionDuration - (currentTimeInSeconds() - timestamp);
+      const value = expiresAt - currentTimeInSeconds();
       setTimeRemaining(value > 0 ? value : 0);
     };
 
@@ -49,13 +52,10 @@ const useSessionStatus = ({
     const timeouts: Array<NodeJS.Timeout> = [];
 
     // when to expire the session
-    const expireTimeout = timestamp + sessionDuration - now;
+    const expireTimeout = expiresAt - now;
 
-    // seconds relative to session start to show warning
-    const warnAfter = sessionDuration - promptToExtendBefore;
     // when to show session expiration warning
-    const warnTimeout =
-      tracking.timestamp + (warnAfter > 0 ? warnAfter : 0) - now;
+    const warnTimeout = expireTimeout - promptToExtendBefore;
 
     if (expireTimeout > 0) {
       timeouts.push(
@@ -76,12 +76,7 @@ const useSessionStatus = ({
     return () => {
       for (const timeout of timeouts) clearTimeout(timeout);
     };
-  }, [
-    sessionExited,
-    tracking?.timestamp,
-    promptToExtendBefore,
-    sessionDuration,
-  ]);
+  }, [sessionExited, expiresAt, promptToExtendBefore]);
 
   // check if the session has ended due to expiration or invalid
   useEffect(() => {

@@ -1,11 +1,9 @@
 import { User } from '@sentry/react';
-import {
-  HMIS_REMOTE_SESSION_UID_EVENT,
-  HMIS_SESSION_UID_HEADER,
-} from '@/modules/auth/api/constants';
 import * as storage from '@/modules/auth/api/storage';
 import {
+  dispatchSessionTrackingFromHeaders,
   isTerminalAccountErrorType,
+  requestStartInSeconds,
   TerminalAccountErrorType,
 } from '@/modules/auth/events';
 
@@ -69,15 +67,10 @@ const throwMaybeHmisError = (json: any) => {
   }
 };
 
-// check header and fire events for session tracking
-const trackSessionFromResponse = (response: Response) => {
+// check headers and fire events for session tracking
+const trackSessionFromResponse = (response: Response, requestedAt: number) => {
   const { headers } = response;
-  if (headers) {
-    const userId = headers.get(HMIS_SESSION_UID_HEADER) as string | undefined;
-    document.dispatchEvent(
-      new CustomEvent(HMIS_REMOTE_SESSION_UID_EVENT, { detail: userId })
-    );
-  }
+  if (headers) dispatchSessionTrackingFromHeaders(headers, requestedAt);
 };
 
 // /hmis/user.json answers 200 even with no token, so a result with neither field
@@ -90,10 +83,11 @@ export interface CurrentUserResult {
 }
 
 export async function fetchCurrentUser(): Promise<CurrentUserResult> {
+  const requestedAt = requestStartInSeconds();
   const response = await fetch('/hmis/user.json', {
     credentials: 'include',
   });
-  trackSessionFromResponse(response);
+  trackSessionFromResponse(response, requestedAt);
 
   if (response.ok) {
     const payload: (HmisUser & { accountError?: unknown }) | undefined =
@@ -136,10 +130,11 @@ export type LoginParams = {
 };
 
 export async function sendSessionKeepalive() {
+  const requestedAt = requestStartInSeconds();
   const response = await fetchWithCsrf('/hmis/session_keepalive', {
     method: 'POST',
   });
-  trackSessionFromResponse(response);
+  trackSessionFromResponse(response, requestedAt);
   return response;
 }
 
@@ -148,6 +143,7 @@ export async function login({
   password,
   otpAttempt,
 }: LoginParams): Promise<HmisUser> {
+  const requestedAt = requestStartInSeconds();
   const response = await fetchWithCsrf('/hmis/login', {
     method: 'POST',
     body: JSON.stringify({
@@ -158,7 +154,7 @@ export async function login({
       },
     }),
   });
-  trackSessionFromResponse(response);
+  trackSessionFromResponse(response, requestedAt);
 
   if (!response.ok) {
     return response.json().then(throwMaybeHmisError);
@@ -185,6 +181,7 @@ export function resetLocalSession({ keepSessionTracking = false } = {}) {
 }
 
 export async function logout() {
+  const requestedAt = requestStartInSeconds();
   const response = await fetchWithCsrf('/hmis/logout', {
     method: 'DELETE',
   });
@@ -197,7 +194,7 @@ export async function logout() {
     return response.json().then(throwMaybeHmisError);
   }
 
-  trackSessionFromResponse(response);
+  trackSessionFromResponse(response, requestedAt);
   resetLocalSession();
   return response;
 }
@@ -222,11 +219,12 @@ export const sentryUser = (user?: HmisUser): User | undefined => {
 };
 
 export async function startImpersonating(userId: string) {
+  const requestedAt = requestStartInSeconds();
   const response = await fetchWithCsrf('/hmis/impersonations', {
     method: 'POST',
     body: JSON.stringify({ user_id: userId }),
   });
-  trackSessionFromResponse(response);
+  trackSessionFromResponse(response, requestedAt);
 
   if (!response.ok) {
     return response.json().then(throwMaybeHmisError);
@@ -240,10 +238,11 @@ export async function startImpersonating(userId: string) {
 }
 
 export async function stopImpersonating() {
+  const requestedAt = requestStartInSeconds();
   const response = await fetchWithCsrf('/hmis/impersonations', {
     method: 'DELETE',
   });
-  trackSessionFromResponse(response);
+  trackSessionFromResponse(response, requestedAt);
 
   if (!response.ok) {
     return response.json().then(throwMaybeHmisError);

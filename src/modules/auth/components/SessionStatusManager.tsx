@@ -1,7 +1,8 @@
 import { Link, Typography } from '@mui/material';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
+import { HMIS_SESSION_REMAINING_HEADER } from '@/modules/auth/api/constants';
 import {
   RELOAD_ONCE_SESSION_KEY,
   resetLocalSession,
@@ -10,11 +11,27 @@ import {
 import { HmisSessionProps } from '@/modules/auth/hooks/useSessionStatus';
 import { reloadWindow } from '@/utils/location';
 
-const SessionStatusManager: React.FC<HmisSessionProps> = ({
+interface Props extends HmisSessionProps {
+  promptToExtendBefore: number;
+}
+
+const SessionStatusManager: React.FC<Props> = ({
   status,
   promptToExtend,
+  promptToExtendBefore,
 }) => {
   const [loading, setLoading] = useState(false);
+  // JWT arm: keepalive answered, but the token didn't refresh
+  const [renewFailed, setRenewFailed] = useState(false);
+  const [warningDismissed, setWarningDismissed] = useState(false);
+
+  // Out of the warning window again (e.g. signed in again in another tab): the next
+  // warning starts fresh.
+  useEffect(() => {
+    if (promptToExtend) return;
+    setRenewFailed(false);
+    setWarningDismissed(false);
+  }, [promptToExtend]);
 
   const handleResetSession = useCallback(() => {
     sessionStorage.removeItem(RELOAD_ONCE_SESSION_KEY);
@@ -27,9 +44,19 @@ const SessionStatusManager: React.FC<HmisSessionProps> = ({
   const handleKeepAlive = useCallback(() => {
     setLoading(true);
     sendSessionKeepalive()
-      .then(() => setLoading(false))
+      .then((response) => {
+        setLoading(false);
+        // Still inside the warning window: the token didn't refresh, usually because
+        // the IdP session is gone. A reload wouldn't help, since oauth2-proxy keeps
+        // serving the old token until it expires.
+        const remainingSecs = parseInt(
+          response.headers.get(HMIS_SESSION_REMAINING_HEADER) || '',
+          10
+        );
+        if (remainingSecs <= promptToExtendBefore) setRenewFailed(true);
+      })
       .catch(() => reloadWindow());
-  }, []);
+  }, [promptToExtendBefore]);
 
   // current session has ended, user clicks continue
   const handleReload = useCallback(() => {
@@ -40,7 +67,27 @@ const SessionStatusManager: React.FC<HmisSessionProps> = ({
 
   switch (status) {
     case 'valid':
-      if (!promptToExtend) return null;
+      if (!promptToExtend || warningDismissed) return null;
+      if (renewFailed) {
+        // Closing keeps the dialog shut for the rest of the countdown so the user can
+        // save their work; at 0 the session expires as usual.
+        return (
+          <ConfirmationDialog
+            open={true}
+            confirmText='Close'
+            title="Your session can't be extended"
+            loading={false}
+            hideCancelButton
+            onConfirm={() => setWarningDismissed(true)}
+            maxWidth='sm'
+            fullWidth
+          >
+            <Typography>
+              Save your work before your session expires, then sign in again.
+            </Typography>
+          </ConfirmationDialog>
+        );
+      }
       return (
         <ConfirmationDialog
           open={true}

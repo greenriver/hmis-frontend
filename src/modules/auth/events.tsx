@@ -1,11 +1,47 @@
 import {
   HMIS_ACCOUNT_ERROR_EVENT,
   HMIS_REMOTE_SESSION_UID_EVENT,
+  HMIS_SESSION_REMAINING_HEADER,
+  HMIS_SESSION_UID_HEADER,
 } from '@/modules/auth/api/constants';
 
-export const dispatchSessionTrackingEvent = (userId: string | undefined) => {
+// JWT arm only. `requestedAt` is when the request started, in browser-clock seconds:
+// the server reads the token early in the request, so anchoring there errs early by
+// network latency rather than late by the request's run time.
+export interface SessionRemaining {
+  remainingSecs: number;
+  requestedAt: number;
+}
+
+export type RemoteSessionDetail = {
+  userId?: string;
+} & Partial<SessionRemaining>;
+
+// Fractional, unlike currentTimeInSeconds, so requests in the same second still order.
+export const requestStartInSeconds = () => Date.now() / 1000;
+
+export const dispatchSessionTrackingEvent = (
+  userId: string | undefined,
+  remaining?: SessionRemaining
+) => {
+  const detail: RemoteSessionDetail = { userId, ...remaining };
   document.dispatchEvent(
-    new CustomEvent(HMIS_REMOTE_SESSION_UID_EVENT, { detail: userId })
+    new CustomEvent(HMIS_REMOTE_SESSION_UID_EVENT, { detail })
+  );
+};
+
+export const dispatchSessionTrackingFromHeaders = (
+  headers: Headers,
+  requestedAt: number
+) => {
+  const userId = headers.get(HMIS_SESSION_UID_HEADER) || undefined;
+  const remainingSecs = parseInt(
+    headers.get(HMIS_SESSION_REMAINING_HEADER) || '',
+    10
+  );
+  dispatchSessionTrackingEvent(
+    userId,
+    Number.isNaN(remainingSecs) ? undefined : { remainingSecs, requestedAt }
   );
 };
 
