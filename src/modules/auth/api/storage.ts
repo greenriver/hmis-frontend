@@ -80,7 +80,7 @@ export const setSessionTracking = (session: HmisSessionTracking) => {
   localStorage.setItem(SESSION_TRACKING_STORAGE_KEY, JSON.stringify(session));
 };
 
-export const clearSessionTacking = () => {
+export const clearSessionTracking = () => {
   localStorage.removeItem(SESSION_TRACKING_STORAGE_KEY);
 };
 

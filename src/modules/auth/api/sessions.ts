@@ -171,7 +171,7 @@ export async function login({
 export function resetLocalSession({ keepSessionTracking = false } = {}) {
   storage.clearUser();
   storage.clearAppSettings();
-  if (!keepSessionTracking) storage.clearSessionTacking();
+  if (!keepSessionTracking) storage.clearSessionTracking();
   // Clear cache without re-fetching any queries
   apolloClient.clearStore();
 }

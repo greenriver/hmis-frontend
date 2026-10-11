@@ -93,7 +93,7 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
       storage.setLastSessionId(currentSessionId);
       storage.clearUser();
       storage.clearAppSettings();
-      storage.clearSessionTacking();
+      storage.clearSessionTracking();
     }
   }, []);
 

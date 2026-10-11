@@ -103,7 +103,8 @@ flowchart TD
   lifetime. `Hmis::BaseController#set_app_user_header` sends the token's remaining
   seconds as `X-app-session-remaining-secs` on every response, and
   `useSessionTrackingObserver` stores `expiresAt` = response time + remaining
-  seconds. The last response wins.
+  seconds. A response reporting an earlier expiry than the stored one, such as a
+  slow response or one from another tab, doesn't move it back (`storage.laterExpiresAt`).
 
 Under `jwt`, if "Keep me signed-in" gets back an expiry still inside the warning
 window, the token didn't refresh, usually because the IdP session is gone.

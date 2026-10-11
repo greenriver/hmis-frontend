@@ -12,7 +12,7 @@ import { SentryLink } from 'apollo-link-sentry';
 import fetch from 'cross-fetch';
 import { generatePath, matchRoutes } from 'react-router';
 
-import { dispatchSessionTrackingFromHeaders } from '../modules/auth/events';
+import { dispatchSessionTrackingFromHeaders } from '@/modules/auth/events';
 import apolloErrorLink from '@/providers/apolloErrorLink';
 import { allRoutes } from '@/routes/routes';
 import { getCsrfToken } from '@/utils/csrf';

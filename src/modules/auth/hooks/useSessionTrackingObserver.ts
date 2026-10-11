@@ -38,7 +38,7 @@ export const useSessionTrackingObserver = () => {
       ).detail;
       if (!userId) {
         fireEvent(undefined);
-        storage.clearSessionTacking();
+        storage.clearSessionTracking();
         return;
       }
 
