@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { HmisUser } from '@/modules/auth/api/sessions';
 import { sessionExpiresAt } from '@/modules/auth/api/storage';
@@ -8,6 +8,8 @@ import { currentTimeInSeconds } from '@/utils/time';
 export type HmisSessionProps = {
   status: 'invalid' | 'expired' | 'valid';
   promptToExtend: boolean;
+  // ends the session as timed out, e.g. when the server says it already has
+  expireSession: () => void;
 };
 
 // how often to check for a warning or expiry that a sleeping timer missed
@@ -31,6 +33,10 @@ const useSessionStatus = ({
   const [{ sessionDuration, id: initialUserId }] = useState(initialUser);
   // if this session has ended
   const [exitStatus, setExitStatus] = useState<'invalid' | 'expired'>();
+  const expireSession = useCallback(
+    () => setExitStatus((current) => current ?? 'expired'),
+    []
+  );
   // how long until the session expires
   const [timeRemaining, setTimeRemaining] = useState(
     tracking ? sessionDuration : undefined
@@ -133,12 +139,14 @@ const useSessionStatus = ({
   }, [exitStatus, timeRemaining, tracking?.userId, initialUserId]);
 
   return useMemo<HmisSessionProps>(() => {
-    if (exitStatus) return { status: exitStatus, promptToExtend: false };
+    if (exitStatus) {
+      return { status: exitStatus, promptToExtend: false, expireSession };
+    }
 
     if (timeRemaining && timeRemaining - 1 <= promptToExtendBefore) {
-      return { status: 'valid', promptToExtend: true };
+      return { status: 'valid', promptToExtend: true, expireSession };
     }
-    return { status: 'valid', promptToExtend: false };
-  }, [exitStatus, timeRemaining, promptToExtendBefore]);
+    return { status: 'valid', promptToExtend: false, expireSession };
+  }, [exitStatus, timeRemaining, promptToExtendBefore, expireSession]);
 };
 export default useSessionStatus;

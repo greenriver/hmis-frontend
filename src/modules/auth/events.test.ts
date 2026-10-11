@@ -177,9 +177,17 @@ describe('keepaliveOutcome', () => {
         : {},
     });
 
-  it('reloads on a failed keepalive, even with the remaining-seconds header', () => {
-    expect(keepaliveOutcome(keepalive(401, '1500'), 300)).toBe('reload');
-    expect(keepaliveOutcome(keepalive(500), 300)).toBe('reload');
+  it('reports a signed-out session on a 401, even with the remaining-seconds header', () => {
+    expect(keepaliveOutcome(keepalive(401, '1500'), 300)).toBe('signedOut');
+  });
+
+  it('reloads when refused', () => {
+    expect(keepaliveOutcome(keepalive(403), 300)).toBe('reload');
+  });
+
+  it('reports an error without reloading on a server error', () => {
+    expect(keepaliveOutcome(keepalive(500, '120'), 300)).toBe('error');
+    expect(keepaliveOutcome(keepalive(502), 300)).toBe('error');
   });
 
   it('reports a failed refresh when the token is still inside the warning window', () => {

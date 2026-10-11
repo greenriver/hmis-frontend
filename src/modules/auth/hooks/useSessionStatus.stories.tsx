@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { expect, within } from '@storybook/test';
+import { expect, userEvent, within } from '@storybook/test';
 import React from 'react';
 
 import { HmisUser } from '@/modules/auth/api/sessions';
@@ -17,11 +17,18 @@ const user: HmisUser = {
 };
 
 const SessionStatusHarness: React.FC = () => {
-  const { status } = useSessionStatus({
+  const { status, expireSession } = useSessionStatus({
     initialUser: user,
     promptToExtendBefore: 300,
   });
-  return <div data-testid='sessionStatus'>{status}</div>;
+  return (
+    <>
+      <div data-testid='sessionStatus'>{status}</div>
+      <button type='button' onClick={expireSession}>
+        Expire session
+      </button>
+    </>
+  );
 };
 
 export default {
@@ -63,11 +70,23 @@ const startSession = () => {
   };
 };
 
+// Turns off the wall-clock check, so only the page event under test can catch
+// the expiry.
+const startSessionWithoutWallClockCheck = () => {
+  const endSession = startSession();
+  const originalSetInterval = window.setInterval;
+  window.setInterval = (() => 0) as unknown as typeof window.setInterval;
+  return () => {
+    window.setInterval = originalSetInterval;
+    endSession();
+  };
+};
+
 const status = (canvasElement: HTMLElement) =>
   within(canvasElement).getByTestId('sessionStatus');
 
 export const ExpiresWhenShownAfterSleep: Story = {
-  beforeEach: startSession,
+  beforeEach: startSessionWithoutWallClockCheck,
   play: async ({ canvasElement }) => {
     await expect(status(canvasElement)).toHaveTextContent('valid');
 
@@ -81,7 +100,7 @@ export const ExpiresWhenShownAfterSleep: Story = {
 };
 
 export const ExpiresWhenFocusedAfterSleep: Story = {
-  beforeEach: startSession,
+  beforeEach: startSessionWithoutWallClockCheck,
   play: async ({ canvasElement }) => {
     await expect(status(canvasElement)).toHaveTextContent('valid');
 
@@ -104,5 +123,17 @@ export const ExpiresAfterSleepWithoutPageEvent: Story = {
       {},
       { timeout: WALL_CLOCK_CHECK_MS + 1000 }
     );
+  },
+};
+
+// A keepalive answered 401: the session ends as expired with time still on the
+// countdown.
+export const ExpiresWhenServerSaysSo: Story = {
+  beforeEach: startSession,
+  play: async ({ canvasElement }) => {
+    await expect(status(canvasElement)).toHaveTextContent('valid');
+
+    await userEvent.click(within(canvasElement).getByText('Expire session'));
+    await within(canvasElement).findByText('expired');
   },
 };

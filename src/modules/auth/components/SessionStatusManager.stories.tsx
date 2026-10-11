@@ -1,5 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { expect, userEvent, waitFor, within } from '@storybook/test';
+import { expect, fn, userEvent, waitFor, within } from '@storybook/test';
+import React, { useState } from 'react';
 
 import SessionStatusManager from './SessionStatusManager';
 import { HMIS_SESSION_REMAINING_HEADER } from '@/modules/auth/api/constants';
@@ -14,6 +15,7 @@ const args = {
   status: 'valid' as const,
   promptToExtend: true,
   promptToExtendBefore: 300,
+  expireSession: fn(),
 };
 
 // The dialog renders in a portal, so queries go through document.body rather
@@ -22,19 +24,21 @@ const dialog = () => within(document.body);
 
 // Answers the keepalive POST as the server would, with the token's remaining
 // seconds in the header (JWT arm) or without it (Devise arm).
-const stubKeepalive = (remainingSecs?: string) => () => {
-  const originalFetch = window.fetch;
-  window.fetch = async () =>
-    new Response('{}', {
-      status: 200,
-      headers: remainingSecs
-        ? { [HMIS_SESSION_REMAINING_HEADER]: remainingSecs }
-        : {},
-    });
-  return () => {
-    window.fetch = originalFetch;
+const stubKeepalive =
+  (remainingSecs?: string, status = 200) =>
+  () => {
+    const originalFetch = window.fetch;
+    window.fetch = async () =>
+      new Response('{}', {
+        status,
+        headers: remainingSecs
+          ? { [HMIS_SESSION_REMAINING_HEADER]: remainingSecs }
+          : {},
+      });
+    return () => {
+      window.fetch = originalFetch;
+    };
   };
-};
 
 const clickKeepAlive = async () => {
   await userEvent.click(dialog().getByText('Keep me signed-in'));
@@ -99,5 +103,72 @@ export const CloseAfterRenewFailed: Story = {
     await waitFor(() =>
       expect(dialog().queryByRole('dialog')).not.toBeInTheDocument()
     );
+  },
+};
+
+// A server error may be transient, so the dialog stays open for a retry instead
+// of reloading away unsaved work.
+export const RenewServerError: Story = {
+  args,
+  beforeEach: stubKeepalive(undefined, 500),
+  play: async () => {
+    await clickKeepAlive();
+    await expect(
+      await dialog().findByText('Something went wrong. Please try again.')
+    ).toBeInTheDocument();
+    await expect(dialog().getByTestId('confirmDialogAction')).toBeEnabled();
+    await expect(
+      dialog().getByText('Are you still there?')
+    ).toBeInTheDocument();
+  },
+};
+
+// Leaves the warning window and comes back, as when the user signs in again in
+// another tab and that session later nears expiry.
+const ReenterWarningHarness: React.FC<typeof args> = (props) => {
+  const [promptToExtend, setPromptToExtend] = useState(props.promptToExtend);
+  return (
+    <>
+      <button
+        type='button'
+        onClick={() => setPromptToExtend((value) => !value)}
+      >
+        Toggle warning
+      </button>
+      <SessionStatusManager {...props} promptToExtend={promptToExtend} />
+    </>
+  );
+};
+
+export const WarningShowsAgainAfterDismissed: Story = {
+  args,
+  beforeEach: stubKeepalive('120'),
+  render: (storyArgs) => <ReenterWarningHarness {...args} {...storyArgs} />,
+  play: async ({ canvasElement }) => {
+    await clickKeepAlive();
+    await dialog().findByText("Your session can't be extended");
+    await userEvent.click(dialog().getByText('Close'));
+    await waitFor(() =>
+      expect(dialog().queryByRole('dialog')).not.toBeInTheDocument()
+    );
+
+    const toggle = within(canvasElement).getByText('Toggle warning');
+    await userEvent.click(toggle); // out of the warning window
+    await userEvent.click(toggle); // back in
+
+    await expect(
+      await dialog().findByText('Are you still there?')
+    ).toBeInTheDocument();
+  },
+};
+
+// The session already timed out on the server: end it as expired, which clears
+// the page and shows the timed-out notice, rather than reloading.
+export const RenewSignedOut: Story = {
+  args,
+  beforeEach: stubKeepalive(undefined, 401),
+  play: async ({ args }) => {
+    await clickKeepAlive();
+    await waitFor(() => expect(args.expireSession).toHaveBeenCalledOnce());
   },
 };

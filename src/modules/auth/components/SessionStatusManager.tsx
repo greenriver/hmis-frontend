@@ -18,11 +18,14 @@ interface Props extends HmisSessionProps {
 const SessionStatusManager: React.FC<Props> = ({
   status,
   promptToExtend,
+  expireSession,
   promptToExtendBefore,
 }) => {
   const [loading, setLoading] = useState(false);
   // JWT arm: keepalive answered, but the token didn't refresh
   const [renewFailed, setRenewFailed] = useState(false);
+  // keepalive failed with a server error; the session may still be valid
+  const [keepaliveError, setKeepaliveError] = useState(false);
   const [warningDismissed, setWarningDismissed] = useState(false);
 
   // Out of the warning window again (e.g. signed in again in another tab): the next
@@ -30,6 +33,7 @@ const SessionStatusManager: React.FC<Props> = ({
   useEffect(() => {
     if (promptToExtend) return;
     setRenewFailed(false);
+    setKeepaliveError(false);
     setWarningDismissed(false);
   }, [promptToExtend]);
 
@@ -43,15 +47,19 @@ const SessionStatusManager: React.FC<Props> = ({
   // user clicks "Keep me signed in"
   const handleKeepAlive = useCallback(() => {
     setLoading(true);
+    setKeepaliveError(false);
     sendSessionKeepalive()
       .then((response) => {
         const outcome = keepaliveOutcome(response, promptToExtendBefore);
+        // Show the timed-out notice over a cleared page; OK reloads to sign in.
+        if (outcome === 'signedOut') return expireSession();
         if (outcome === 'reload') return reloadWindow();
         setLoading(false);
         if (outcome === 'renewFailed') setRenewFailed(true);
+        if (outcome === 'error') setKeepaliveError(true);
       })
       .catch(() => reloadWindow());
-  }, [promptToExtendBefore]);
+  }, [expireSession, promptToExtendBefore]);
 
   // current session has ended, user clicks continue
   const handleReload = useCallback(() => {
@@ -97,6 +105,11 @@ const SessionStatusManager: React.FC<Props> = ({
           <Typography>
             Your session will expire soon due to inactivity.
           </Typography>
+          {keepaliveError && (
+            <Typography color='error' sx={{ mt: 2 }}>
+              Something went wrong. Please try again.
+            </Typography>
+          )}
         </ConfirmationDialog>
       );
     case 'invalid':

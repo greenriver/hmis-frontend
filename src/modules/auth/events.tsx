@@ -41,15 +41,26 @@ export const sessionRemainingSecsFromHeaders = (
   return Number.isNaN(remainingSecs) ? undefined : remainingSecs;
 };
 
-export type KeepaliveOutcome = 'reload' | 'renewed' | 'renewFailed';
+export type KeepaliveOutcome =
+  | 'signedOut'
+  | 'reload'
+  | 'error'
+  | 'renewed'
+  | 'renewFailed';
 
 export const keepaliveOutcome = (
   response: Response,
   promptToExtendBefore: number
 ): KeepaliveOutcome => {
-  // The header is set before the action runs, so a failed request can still
-  // carry it. Only a successful keepalive says whether the token refreshed.
-  if (!response.ok) return 'reload';
+  // The session already timed out on the server.
+  if (response.status === 401) return 'signedOut';
+  // Refused, e.g. a deactivated account: a reload shows the terminal page.
+  if (response.status === 403) return 'reload';
+  // Any other failure may be transient and the session may still be valid, so
+  // don't reload away unsaved work. The header is set before the action runs, so a
+  // failed request can still carry it; only a successful keepalive says whether the
+  // token refreshed.
+  if (!response.ok) return 'error';
   // Still inside the warning window: the token didn't refresh, usually because
   // the IdP session is gone. A reload wouldn't help, since oauth2-proxy keeps
   // serving the old token until it expires.
