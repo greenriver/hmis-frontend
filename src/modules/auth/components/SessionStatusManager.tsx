@@ -7,7 +7,7 @@ import {
   resetLocalSession,
   sendSessionKeepalive,
 } from '@/modules/auth/api/sessions';
-import { sessionRemainingSecsFromHeaders } from '@/modules/auth/events';
+import { keepaliveOutcome } from '@/modules/auth/events';
 import { HmisSessionProps } from '@/modules/auth/hooks/useSessionStatus';
 import { reloadWindow } from '@/utils/location';
 
@@ -45,19 +45,10 @@ const SessionStatusManager: React.FC<Props> = ({
     setLoading(true);
     sendSessionKeepalive()
       .then((response) => {
-        // The header is set before the action runs, so a failed request can still
-        // carry it. Only a successful keepalive says whether the token refreshed.
-        if (!response.ok) return reloadWindow();
+        const outcome = keepaliveOutcome(response, promptToExtendBefore);
+        if (outcome === 'reload') return reloadWindow();
         setLoading(false);
-        // Still inside the warning window: the token didn't refresh, usually because
-        // the IdP session is gone. A reload wouldn't help, since oauth2-proxy keeps
-        // serving the old token until it expires.
-        const remainingSecs = sessionRemainingSecsFromHeaders(response.headers);
-        if (
-          remainingSecs !== undefined &&
-          remainingSecs <= promptToExtendBefore
-        )
-          setRenewFailed(true);
+        if (outcome === 'renewFailed') setRenewFailed(true);
       })
       .catch(() => reloadWindow());
   }, [promptToExtendBefore]);

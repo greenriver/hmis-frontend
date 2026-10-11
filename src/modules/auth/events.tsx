@@ -41,6 +41,25 @@ export const sessionRemainingSecsFromHeaders = (
   return Number.isNaN(remainingSecs) ? undefined : remainingSecs;
 };
 
+export type KeepaliveOutcome = 'reload' | 'renewed' | 'renewFailed';
+
+export const keepaliveOutcome = (
+  response: Response,
+  promptToExtendBefore: number
+): KeepaliveOutcome => {
+  // The header is set before the action runs, so a failed request can still
+  // carry it. Only a successful keepalive says whether the token refreshed.
+  if (!response.ok) return 'reload';
+  // Still inside the warning window: the token didn't refresh, usually because
+  // the IdP session is gone. A reload wouldn't help, since oauth2-proxy keeps
+  // serving the old token until it expires.
+  const remainingSecs = sessionRemainingSecsFromHeaders(response.headers);
+  if (remainingSecs !== undefined && remainingSecs <= promptToExtendBefore) {
+    return 'renewFailed';
+  }
+  return 'renewed';
+};
+
 export const dispatchSessionTrackingFromHeaders = (
   headers: Headers,
   requestedAt: number

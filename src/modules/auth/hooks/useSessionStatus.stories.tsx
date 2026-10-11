@@ -4,7 +4,9 @@ import React from 'react';
 
 import { HmisUser } from '@/modules/auth/api/sessions';
 import * as storage from '@/modules/auth/api/storage';
-import useSessionStatus from '@/modules/auth/hooks/useSessionStatus';
+import useSessionStatus, {
+  WALL_CLOCK_CHECK_MS,
+} from '@/modules/auth/hooks/useSessionStatus';
 
 const user: HmisUser = {
   id: '1',
@@ -86,5 +88,21 @@ export const ExpiresWhenFocusedAfterSleep: Story = {
     skipAhead(60 * 60);
     window.dispatchEvent(new Event('focus'));
     await within(canvasElement).findByText('expired');
+  },
+};
+
+// Waking with the page already shown fires no event, so the wall-clock check
+// catches it.
+export const ExpiresAfterSleepWithoutPageEvent: Story = {
+  beforeEach: startSession,
+  play: async ({ canvasElement }) => {
+    await expect(status(canvasElement)).toHaveTextContent('valid');
+
+    skipAhead(60 * 60);
+    await within(canvasElement).findByText(
+      'expired',
+      {},
+      { timeout: WALL_CLOCK_CHECK_MS + 1000 }
+    );
   },
 };

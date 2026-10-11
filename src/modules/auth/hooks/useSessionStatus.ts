@@ -10,6 +10,9 @@ export type HmisSessionProps = {
   promptToExtend: boolean;
 };
 
+// how often to check for a warning or expiry that a sleeping timer missed
+export const WALL_CLOCK_CHECK_MS = 5000;
+
 interface Props {
   initialUser: HmisUser;
   promptToExtendBefore: number; // prompt when X seconds remain in session
@@ -87,9 +90,24 @@ const useSessionStatus = ({
       )
     );
 
+    // Waking with the page already shown fires neither visibilitychange nor focus,
+    // so also poll the wall clock for a warning or expiry the timers missed.
+    let pendingDeadlines = [expiresAt - promptToExtendBefore, expiresAt].filter(
+      (deadline) => deadline > now
+    );
+    const wallClockCheck = setInterval(() => {
+      const checkedAt = currentTimeInSeconds();
+      if (pendingDeadlines.every((deadline) => deadline > checkedAt)) return;
+      pendingDeadlines = pendingDeadlines.filter(
+        (deadline) => deadline > checkedAt
+      );
+      updateTimeRemaining();
+    }, WALL_CLOCK_CHECK_MS);
+
     // cleanup events
     return () => {
       for (const timeout of timeouts) clearTimeout(timeout);
+      clearInterval(wallClockCheck);
     };
   }, [sessionExited, expiresAt, promptToExtendBefore, pageShownAt]);
 

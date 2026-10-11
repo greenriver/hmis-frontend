@@ -90,7 +90,7 @@ flowchart TD
 
 4. **Session Recovery** - When a session becomes invalid, the system attempts page reload once to reestablish it
 
-5. **Timing Mechanism** - `useSessionStatus` calculates remaining time and schedules appropriate UI notifications. Timers don't count time the computer spends asleep, so it also reschedules from the wall clock on `visibilitychange` and window `focus`. An expired session clears as soon as the user returns to the page.
+5. **Timing Mechanism** - `useSessionStatus` calculates remaining time and schedules appropriate UI notifications. Timers don't count time the computer spends asleep, so it also reschedules from the wall clock on `visibilitychange` and window `focus`, and checks the wall clock every `WALL_CLOCK_CHECK_MS` for a wake that fires neither event. An expired session clears when the user returns to the page, or within a few seconds of the wake.
 
 ## Expiry by auth method
 

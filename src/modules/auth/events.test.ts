@@ -5,6 +5,7 @@ import {
   dispatchAccountErrorEvent,
   dispatchSessionTrackingFromHeaders,
   isTerminalAccountErrorType,
+  keepaliveOutcome,
   sessionRemainingSecsFromHeaders,
   terminalAccountErrorFromResponseBody,
 } from '@/modules/auth/events';
@@ -164,5 +165,32 @@ describe('sessionRemainingSecsFromHeaders', () => {
         new Headers({ 'X-app-session-remaining-secs': 'abc' })
       )
     ).toBeUndefined();
+  });
+});
+
+describe('keepaliveOutcome', () => {
+  const keepalive = (status: number, remainingSecs?: string) =>
+    new Response('{}', {
+      status,
+      headers: remainingSecs
+        ? { 'X-app-session-remaining-secs': remainingSecs }
+        : {},
+    });
+
+  it('reloads on a failed keepalive, even with the remaining-seconds header', () => {
+    expect(keepaliveOutcome(keepalive(401, '1500'), 300)).toBe('reload');
+    expect(keepaliveOutcome(keepalive(500), 300)).toBe('reload');
+  });
+
+  it('reports a failed refresh when the token is still inside the warning window', () => {
+    expect(keepaliveOutcome(keepalive(200, '120'), 300)).toBe('renewFailed');
+  });
+
+  it('reports a renewal when the token is outside the warning window', () => {
+    expect(keepaliveOutcome(keepalive(200, '1500'), 300)).toBe('renewed');
+  });
+
+  it('reports a renewal without the remaining-seconds header (Devise)', () => {
+    expect(keepaliveOutcome(keepalive(200), 300)).toBe('renewed');
   });
 });
