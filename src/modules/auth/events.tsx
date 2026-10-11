@@ -30,18 +30,26 @@ export const dispatchSessionTrackingEvent = (
   );
 };
 
+// JWT arm only: undefined on the Devise arm, which doesn't send the header.
+export const sessionRemainingSecsFromHeaders = (
+  headers: Headers
+): number | undefined => {
+  const remainingSecs = parseInt(
+    headers.get(HMIS_SESSION_REMAINING_HEADER) || '',
+    10
+  );
+  return Number.isNaN(remainingSecs) ? undefined : remainingSecs;
+};
+
 export const dispatchSessionTrackingFromHeaders = (
   headers: Headers,
   requestedAt: number
 ) => {
   const userId = headers.get(HMIS_SESSION_UID_HEADER) || undefined;
-  const remainingSecs = parseInt(
-    headers.get(HMIS_SESSION_REMAINING_HEADER) || '',
-    10
-  );
+  const remainingSecs = sessionRemainingSecsFromHeaders(headers);
   dispatchSessionTrackingEvent(
     userId,
-    Number.isNaN(remainingSecs) ? undefined : { remainingSecs, requestedAt }
+    remainingSecs === undefined ? undefined : { remainingSecs, requestedAt }
   );
 };
 

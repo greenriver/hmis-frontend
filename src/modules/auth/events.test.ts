@@ -5,6 +5,7 @@ import {
   dispatchAccountErrorEvent,
   dispatchSessionTrackingFromHeaders,
   isTerminalAccountErrorType,
+  sessionRemainingSecsFromHeaders,
   terminalAccountErrorFromResponseBody,
 } from '@/modules/auth/events';
 
@@ -144,5 +145,24 @@ describe('dispatchSessionTrackingFromHeaders', () => {
     );
 
     expect(dispatched[0].init?.detail).toEqual({ userId: undefined });
+  });
+});
+
+describe('sessionRemainingSecsFromHeaders', () => {
+  it('parses the remaining seconds', () => {
+    expect(
+      sessionRemainingSecsFromHeaders(
+        new Headers({ 'X-app-session-remaining-secs': '120' })
+      )
+    ).toBe(120);
+  });
+
+  it('returns undefined for a missing or non-numeric header', () => {
+    expect(sessionRemainingSecsFromHeaders(new Headers())).toBeUndefined();
+    expect(
+      sessionRemainingSecsFromHeaders(
+        new Headers({ 'X-app-session-remaining-secs': 'abc' })
+      )
+    ).toBeUndefined();
   });
 });

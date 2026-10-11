@@ -2,12 +2,12 @@ import { Link, Typography } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
-import { HMIS_SESSION_REMAINING_HEADER } from '@/modules/auth/api/constants';
 import {
   RELOAD_ONCE_SESSION_KEY,
   resetLocalSession,
   sendSessionKeepalive,
 } from '@/modules/auth/api/sessions';
+import { sessionRemainingSecsFromHeaders } from '@/modules/auth/events';
 import { HmisSessionProps } from '@/modules/auth/hooks/useSessionStatus';
 import { reloadWindow } from '@/utils/location';
 
@@ -45,15 +45,19 @@ const SessionStatusManager: React.FC<Props> = ({
     setLoading(true);
     sendSessionKeepalive()
       .then((response) => {
+        // The header is set before the action runs, so a failed request can still
+        // carry it. Only a successful keepalive says whether the token refreshed.
+        if (!response.ok) return reloadWindow();
         setLoading(false);
         // Still inside the warning window: the token didn't refresh, usually because
         // the IdP session is gone. A reload wouldn't help, since oauth2-proxy keeps
         // serving the old token until it expires.
-        const remainingSecs = parseInt(
-          response.headers.get(HMIS_SESSION_REMAINING_HEADER) || '',
-          10
-        );
-        if (remainingSecs <= promptToExtendBefore) setRenewFailed(true);
+        const remainingSecs = sessionRemainingSecsFromHeaders(response.headers);
+        if (
+          remainingSecs !== undefined &&
+          remainingSecs <= promptToExtendBefore
+        )
+          setRenewFailed(true);
       })
       .catch(() => reloadWindow());
   }, [promptToExtendBefore]);
