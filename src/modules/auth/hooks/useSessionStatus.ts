@@ -33,6 +33,21 @@ const useSessionStatus = ({
     tracking ? sessionDuration : undefined
   );
 
+  // Timers don't count time the computer spends asleep, so they fire late after
+  // a wake. Reschedule from the wall clock when the page is shown again.
+  const [pageShownAt, setPageShownAt] = useState<number>();
+  useEffect(() => {
+    const handlePageShown = () => {
+      if (document.visibilityState === 'visible') setPageShownAt(Date.now());
+    };
+    document.addEventListener('visibilitychange', handlePageShown);
+    window.addEventListener('focus', handlePageShown);
+    return () => {
+      document.removeEventListener('visibilitychange', handlePageShown);
+      window.removeEventListener('focus', handlePageShown);
+    };
+  }, []);
+
   // update time remaining in response to expiry changes
   const sessionExited = !!exitStatus;
   const expiresAt = tracking?.timestamp
@@ -76,7 +91,7 @@ const useSessionStatus = ({
     return () => {
       for (const timeout of timeouts) clearTimeout(timeout);
     };
-  }, [sessionExited, expiresAt, promptToExtendBefore]);
+  }, [sessionExited, expiresAt, promptToExtendBefore, pageShownAt]);
 
   // check if the session has ended due to expiration or invalid
   useEffect(() => {
