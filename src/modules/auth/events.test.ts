@@ -181,8 +181,8 @@ describe('keepaliveOutcome', () => {
     expect(keepaliveOutcome(keepalive(401, '1500'), 300)).toBe('signedOut');
   });
 
-  it('reloads when refused', () => {
-    expect(keepaliveOutcome(keepalive(403), 300)).toBe('reload');
+  it('reports a refusal on a 403', () => {
+    expect(keepaliveOutcome(keepalive(403), 300)).toBe('refused');
   });
 
   it('reports an error without reloading on a server error', () => {

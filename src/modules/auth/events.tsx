@@ -43,7 +43,7 @@ export const sessionRemainingSecsFromHeaders = (
 
 export type KeepaliveOutcome =
   | 'signedOut'
-  | 'reload'
+  | 'refused'
   | 'error'
   | 'renewed'
   | 'renewFailed';
@@ -55,7 +55,7 @@ export const keepaliveOutcome = (
   // The session already timed out on the server.
   if (response.status === 401) return 'signedOut';
   // Refused, e.g. a deactivated account: a reload shows the terminal page.
-  if (response.status === 403) return 'reload';
+  if (response.status === 403) return 'refused';
   // Any other failure may be transient and the session may still be valid, so
   // don't reload away unsaved work. The header is set before the action runs, so a
   // failed request can still carry it; only a successful keepalive says whether the

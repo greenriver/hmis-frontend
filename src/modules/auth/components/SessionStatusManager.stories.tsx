@@ -146,7 +146,9 @@ export const RenewNetworkError: Story = {
 
 // Leaves the warning window and comes back, as when the user signs in again in
 // another tab and that session later nears expiry.
-const ReenterWarningHarness: React.FC<typeof args> = (props) => {
+const ReenterWarningHarness: React.FC<
+  React.ComponentProps<typeof SessionStatusManager>
+> = (props) => {
   const [promptToExtend, setPromptToExtend] = useState(props.promptToExtend);
   return (
     <>

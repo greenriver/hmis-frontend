@@ -56,6 +56,22 @@ describe('nextSessionTracking', () => {
     expect(tracking?.expiresAt).toBe(now + 195);
   });
 
+  it('replaces a stored request from the future, as after the clock moved back', () => {
+    const stored = {
+      userId: '1',
+      timestamp: now,
+      requestedAt: now + 600,
+      expiresAt: now + 2400,
+    };
+    const tracking = nextSessionTracking(
+      { userId: '1', remainingSecs: 1500, requestedAt: now - 5 },
+      stored,
+      now
+    );
+
+    expect(tracking?.expiresAt).toBe(now - 5 + 1500);
+  });
+
   it('accepts an older request for a different user', () => {
     const stored = {
       userId: '1',

@@ -30,11 +30,13 @@ export const nextSessionTracking = (
   // The newest request wins, not the latest expiry: every tab shares one
   // oauth2-proxy cookie, so the newest request carries the current token, and a
   // failed refresh must be able to pull the expiry earlier. A slow response from an
-  // older request is dropped.
+  // older request is dropped. A stored request time in the future means the clock
+  // moved back, so it can't be compared and is replaced.
   if (
     stored?.userId === userId &&
     stored.requestedAt !== undefined &&
-    stored.requestedAt > requestedAt
+    stored.requestedAt > requestedAt &&
+    stored.requestedAt <= now
   ) {
     return undefined;
   }

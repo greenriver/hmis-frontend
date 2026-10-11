@@ -53,7 +53,7 @@ const SessionStatusManager: React.FC<Props> = ({
         const outcome = keepaliveOutcome(response, promptToExtendBefore);
         // Show the timed-out notice over a cleared page; OK reloads to sign in.
         if (outcome === 'signedOut') return expireSession();
-        if (outcome === 'reload') return reloadWindow();
+        if (outcome === 'refused') return reloadWindow();
         setLoading(false);
         if (outcome === 'renewFailed') setRenewFailed(true);
         if (outcome === 'error') setKeepaliveError(true);
