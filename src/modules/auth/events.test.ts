@@ -5,7 +5,6 @@ import {
   dispatchAccountErrorEvent,
   dispatchSessionTrackingFromHeaders,
   isTerminalAccountErrorType,
-  keepaliveOutcome,
   sessionRemainingSecsFromHeaders,
   terminalAccountErrorFromResponseBody,
 } from '@/modules/auth/events';
@@ -114,38 +113,36 @@ describe('dispatchSessionTrackingFromHeaders', () => {
     vi.unstubAllGlobals();
   });
 
-  it('reports the remaining seconds with the request start time', () => {
+  it('reports the remaining seconds', () => {
     dispatchSessionTrackingFromHeaders(
       new Headers({
         'X-app-user-id': '7',
         'X-app-session-remaining-secs': '1500',
-      }),
-      123.5
+      })
     );
 
     expect(dispatched[0].init?.detail).toEqual({
       userId: '7',
       remainingSecs: 1500,
-      requestedAt: 123.5,
     });
   });
 
   it('reports only the user without the remaining-seconds header', () => {
-    dispatchSessionTrackingFromHeaders(
-      new Headers({ 'X-app-user-id': '7' }),
-      123.5
-    );
+    dispatchSessionTrackingFromHeaders(new Headers({ 'X-app-user-id': '7' }));
 
-    expect(dispatched[0].init?.detail).toEqual({ userId: '7' });
+    expect(dispatched[0].init?.detail).toEqual({
+      userId: '7',
+      remainingSecs: undefined,
+    });
   });
 
   it('reports no user for an empty user header', () => {
-    dispatchSessionTrackingFromHeaders(
-      new Headers({ 'X-app-user-id': '' }),
-      123.5
-    );
+    dispatchSessionTrackingFromHeaders(new Headers({ 'X-app-user-id': '' }));
 
-    expect(dispatched[0].init?.detail).toEqual({ userId: undefined });
+    expect(dispatched[0].init?.detail).toEqual({
+      userId: undefined,
+      remainingSecs: undefined,
+    });
   });
 });
 
@@ -165,40 +162,5 @@ describe('sessionRemainingSecsFromHeaders', () => {
         new Headers({ 'X-app-session-remaining-secs': 'abc' })
       )
     ).toBeUndefined();
-  });
-});
-
-describe('keepaliveOutcome', () => {
-  const keepalive = (status: number, remainingSecs?: string) =>
-    new Response('{}', {
-      status,
-      headers: remainingSecs
-        ? { 'X-app-session-remaining-secs': remainingSecs }
-        : {},
-    });
-
-  it('reports a signed-out session on a 401, even with the remaining-seconds header', () => {
-    expect(keepaliveOutcome(keepalive(401, '1500'), 300)).toBe('signedOut');
-  });
-
-  it('reports a refusal on a 403', () => {
-    expect(keepaliveOutcome(keepalive(403), 300)).toBe('refused');
-  });
-
-  it('reports an error without reloading on a server error', () => {
-    expect(keepaliveOutcome(keepalive(500, '120'), 300)).toBe('error');
-    expect(keepaliveOutcome(keepalive(502), 300)).toBe('error');
-  });
-
-  it('reports a failed refresh when the token is still inside the warning window', () => {
-    expect(keepaliveOutcome(keepalive(200, '120'), 300)).toBe('renewFailed');
-  });
-
-  it('reports a renewal when the token is outside the warning window', () => {
-    expect(keepaliveOutcome(keepalive(200, '1500'), 300)).toBe('renewed');
-  });
-
-  it('reports a renewal without the remaining-seconds header (Devise)', () => {
-    expect(keepaliveOutcome(keepalive(200), 300)).toBe('renewed');
   });
 });

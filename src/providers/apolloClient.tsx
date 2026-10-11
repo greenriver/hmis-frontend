@@ -12,10 +12,7 @@ import { SentryLink } from 'apollo-link-sentry';
 import fetch from 'cross-fetch';
 import { generatePath, matchRoutes } from 'react-router';
 
-import {
-  dispatchSessionTrackingFromHeaders,
-  requestStartInSeconds,
-} from '../modules/auth/events';
+import { dispatchSessionTrackingFromHeaders } from '../modules/auth/events';
 import apolloErrorLink from '@/providers/apolloErrorLink';
 import { allRoutes } from '@/routes/routes';
 import { getCsrfToken } from '@/utils/csrf';
@@ -88,8 +85,6 @@ const pathHeaderLink = setContext((_request, previousContext) => {
 });
 
 const sessionExpiryLink = new ApolloLink((operation, forward) => {
-  // At or before the batched request is sent, so the expiry errs early.
-  const requestedAt = requestStartInSeconds();
   return forward(operation).map((response) => {
     const context = operation.getContext();
     const {
@@ -97,7 +92,7 @@ const sessionExpiryLink = new ApolloLink((operation, forward) => {
     } = context;
 
     if (headers) {
-      dispatchSessionTrackingFromHeaders(headers, requestedAt);
+      dispatchSessionTrackingFromHeaders(headers);
     }
     return response;
   });

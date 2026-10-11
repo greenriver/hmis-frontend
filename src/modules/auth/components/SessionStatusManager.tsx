@@ -7,7 +7,7 @@ import {
   resetLocalSession,
   sendSessionKeepalive,
 } from '@/modules/auth/api/sessions';
-import { keepaliveOutcome } from '@/modules/auth/events';
+import { sessionRemainingSecsFromHeaders } from '@/modules/auth/events';
 import { HmisSessionProps } from '@/modules/auth/hooks/useSessionStatus';
 import { reloadWindow } from '@/utils/location';
 
@@ -15,26 +15,22 @@ interface Props extends HmisSessionProps {
   promptToExtendBefore: number;
 }
 
+// notRenewed: JWT arm only, the keepalive succeeded but the token didn't refresh,
+// usually because the IdP session is gone. A reload wouldn't help: oauth2-proxy keeps
+// serving the old token until it expires.
+type KeepaliveNotice = 'error' | 'notRenewed' | 'dismissed';
+
 const SessionStatusManager: React.FC<Props> = ({
   status,
   promptToExtend,
-  expireSession,
   promptToExtendBefore,
 }) => {
   const [loading, setLoading] = useState(false);
-  // JWT arm: keepalive answered, but the token didn't refresh
-  const [renewFailed, setRenewFailed] = useState(false);
-  // keepalive failed with a server or network error; the session may still be valid
-  const [keepaliveError, setKeepaliveError] = useState(false);
-  const [warningDismissed, setWarningDismissed] = useState(false);
+  const [notice, setNotice] = useState<KeepaliveNotice>();
 
-  // Out of the warning window again (e.g. signed in again in another tab): the next
-  // warning starts fresh.
+  // the next warning starts fresh
   useEffect(() => {
-    if (promptToExtend) return;
-    setRenewFailed(false);
-    setKeepaliveError(false);
-    setWarningDismissed(false);
+    if (!promptToExtend) setNotice(undefined);
   }, [promptToExtend]);
 
   const handleResetSession = useCallback(() => {
@@ -47,24 +43,28 @@ const SessionStatusManager: React.FC<Props> = ({
   // user clicks "Keep me signed in"
   const handleKeepAlive = useCallback(() => {
     setLoading(true);
-    setKeepaliveError(false);
     sendSessionKeepalive()
       .then((response) => {
-        const outcome = keepaliveOutcome(response, promptToExtendBefore);
-        // Show the timed-out notice over a cleared page; OK reloads to sign in.
-        if (outcome === 'signedOut') return expireSession();
-        if (outcome === 'refused') return reloadWindow();
+        // signed out or refused: a reload shows the sign-in or terminal page
+        if (response.status === 401 || response.status === 403) {
+          return reloadWindow();
+        }
         setLoading(false);
-        if (outcome === 'renewFailed') setRenewFailed(true);
-        if (outcome === 'error') setKeepaliveError(true);
+        // may be transient; don't reload away unsaved work
+        if (!response.ok) return setNotice('error');
+        const remainingSecs = sessionRemainingSecsFromHeaders(response.headers);
+        if (
+          remainingSecs !== undefined &&
+          remainingSecs <= promptToExtendBefore
+        ) {
+          setNotice('notRenewed');
+        }
       })
-      // Network failure, e.g. offline after a wake: a reload would replace the page
-      // with the browser's error page and lose unsaved work.
       .catch(() => {
         setLoading(false);
-        setKeepaliveError(true);
+        setNotice('error');
       });
-  }, [expireSession, promptToExtendBefore]);
+  }, [promptToExtendBefore]);
 
   // current session has ended, user clicks continue
   const handleReload = useCallback(() => {
@@ -75,10 +75,9 @@ const SessionStatusManager: React.FC<Props> = ({
 
   switch (status) {
     case 'valid':
-      if (!promptToExtend || warningDismissed) return null;
-      if (renewFailed) {
-        // Closing keeps the dialog shut for the rest of the countdown so the user can
-        // save their work; at 0 the session expires as usual.
+      if (!promptToExtend || notice === 'dismissed') return null;
+      if (notice === 'notRenewed') {
+        // Close leaves the page usable until the session expires
         return (
           <ConfirmationDialog
             open={true}
@@ -86,7 +85,7 @@ const SessionStatusManager: React.FC<Props> = ({
             title="Your session can't be extended"
             loading={false}
             hideCancelButton
-            onConfirm={() => setWarningDismissed(true)}
+            onConfirm={() => setNotice('dismissed')}
             maxWidth='sm'
             fullWidth
           >
@@ -110,7 +109,7 @@ const SessionStatusManager: React.FC<Props> = ({
           <Typography>
             Your session will expire soon due to inactivity.
           </Typography>
-          {keepaliveError && (
+          {notice === 'error' && (
             <Typography color='error' sx={{ mt: 2 }}>
               Something went wrong. Please try again.
             </Typography>

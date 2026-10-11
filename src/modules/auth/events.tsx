@@ -5,26 +5,17 @@ import {
   HMIS_SESSION_UID_HEADER,
 } from '@/modules/auth/api/constants';
 
-// JWT arm only. `requestedAt` is when the request started, in browser-clock seconds:
-// the server reads the token early in the request, so anchoring there errs early by
-// network latency rather than late by the request's run time.
-export interface SessionRemaining {
-  remainingSecs: number;
-  requestedAt: number;
-}
-
 export type RemoteSessionDetail = {
   userId?: string;
-} & Partial<SessionRemaining>;
-
-// Fractional, unlike currentTimeInSeconds, so requests in the same second still order.
-export const requestStartInSeconds = () => Date.now() / 1000;
+  // JWT arm only: the token's remaining seconds
+  remainingSecs?: number;
+};
 
 export const dispatchSessionTrackingEvent = (
   userId: string | undefined,
-  remaining?: SessionRemaining
+  remainingSecs?: number
 ) => {
-  const detail: RemoteSessionDetail = { userId, ...remaining };
+  const detail: RemoteSessionDetail = { userId, remainingSecs };
   document.dispatchEvent(
     new CustomEvent(HMIS_REMOTE_SESSION_UID_EVENT, { detail })
   );
@@ -41,45 +32,10 @@ export const sessionRemainingSecsFromHeaders = (
   return Number.isNaN(remainingSecs) ? undefined : remainingSecs;
 };
 
-export type KeepaliveOutcome =
-  | 'signedOut'
-  | 'refused'
-  | 'error'
-  | 'renewed'
-  | 'renewFailed';
-
-export const keepaliveOutcome = (
-  response: Response,
-  promptToExtendBefore: number
-): KeepaliveOutcome => {
-  // The session already timed out on the server.
-  if (response.status === 401) return 'signedOut';
-  // Refused, e.g. a deactivated account: a reload shows the terminal page.
-  if (response.status === 403) return 'refused';
-  // Any other failure may be transient and the session may still be valid, so
-  // don't reload away unsaved work. The header is set before the action runs, so a
-  // failed request can still carry it; only a successful keepalive says whether the
-  // token refreshed.
-  if (!response.ok) return 'error';
-  // Still inside the warning window: the token didn't refresh, usually because
-  // the IdP session is gone. A reload wouldn't help, since oauth2-proxy keeps
-  // serving the old token until it expires.
-  const remainingSecs = sessionRemainingSecsFromHeaders(response.headers);
-  if (remainingSecs !== undefined && remainingSecs <= promptToExtendBefore) {
-    return 'renewFailed';
-  }
-  return 'renewed';
-};
-
-export const dispatchSessionTrackingFromHeaders = (
-  headers: Headers,
-  requestedAt: number
-) => {
-  const userId = headers.get(HMIS_SESSION_UID_HEADER) || undefined;
-  const remainingSecs = sessionRemainingSecsFromHeaders(headers);
+export const dispatchSessionTrackingFromHeaders = (headers: Headers) => {
   dispatchSessionTrackingEvent(
-    userId,
-    remainingSecs === undefined ? undefined : { remainingSecs, requestedAt }
+    headers.get(HMIS_SESSION_UID_HEADER) || undefined,
+    sessionRemainingSecsFromHeaders(headers)
   );
 };
 

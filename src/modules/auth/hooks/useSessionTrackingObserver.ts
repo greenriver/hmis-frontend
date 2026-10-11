@@ -14,40 +14,6 @@ const fireEvent = (value: storage.HmisSessionTracking | undefined) => {
   );
 };
 
-// The tracking record for a signed-in response, or undefined to keep `stored`.
-export const nextSessionTracking = (
-  {
-    userId,
-    remainingSecs,
-    requestedAt,
-  }: RemoteSessionDetail & { userId: string },
-  stored: storage.HmisSessionTracking | undefined,
-  now: number
-): storage.HmisSessionTracking | undefined => {
-  if (remainingSecs === undefined || requestedAt === undefined) {
-    return { userId, timestamp: now };
-  }
-  // The newest request wins, not the latest expiry: every tab shares one
-  // oauth2-proxy cookie, so the newest request carries the current token, and a
-  // failed refresh must be able to pull the expiry earlier. A slow response from an
-  // older request is dropped. A stored request time in the future means the clock
-  // moved back, so it can't be compared and is replaced.
-  if (
-    stored?.userId === userId &&
-    stored.requestedAt !== undefined &&
-    stored.requestedAt > requestedAt &&
-    stored.requestedAt <= now
-  ) {
-    return undefined;
-  }
-  return {
-    userId,
-    timestamp: now,
-    requestedAt,
-    expiresAt: requestedAt + remainingSecs,
-  };
-};
-
 // Translate storage and user id events into one expiration event
 // Also syncs uid events to localstorage to share update with other tabs
 export const useSessionTrackingObserver = () => {
@@ -67,7 +33,7 @@ export const useSessionTrackingObserver = () => {
   // handle session user id changed (within the same tab)
   useEffect(() => {
     const handleSessionUserIdEvent = (evt: Event) => {
-      const { userId, remainingSecs, requestedAt } = (
+      const { userId, remainingSecs } = (
         evt as CustomEvent<RemoteSessionDetail>
       ).detail;
       if (!userId) {
@@ -76,12 +42,9 @@ export const useSessionTrackingObserver = () => {
         return;
       }
 
-      const tracking = nextSessionTracking(
-        { userId, remainingSecs, requestedAt },
-        storage.getSessionTracking(),
-        currentTimeInSeconds()
-      );
-      if (!tracking) return;
+      const now = currentTimeInSeconds();
+      const tracking: storage.HmisSessionTracking = { userId, timestamp: now };
+      if (remainingSecs !== undefined) tracking.expiresAt = now + remainingSecs;
       fireEvent(tracking);
       storage.setSessionTracking(tracking);
     };

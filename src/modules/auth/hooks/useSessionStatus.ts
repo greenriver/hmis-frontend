@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { HmisUser } from '@/modules/auth/api/sessions';
 import { sessionExpiresAt } from '@/modules/auth/api/storage';
@@ -8,12 +8,9 @@ import { currentTimeInSeconds } from '@/utils/time';
 export type HmisSessionProps = {
   status: 'invalid' | 'expired' | 'valid';
   promptToExtend: boolean;
-  // ends the session as timed out, e.g. when the server says it already has
-  expireSession: () => void;
 };
 
-// how often to check for a warning or expiry that a sleeping timer missed
-export const WALL_CLOCK_CHECK_MS = 5000;
+type Phase = 'active' | 'warning' | 'expired';
 
 interface Props {
   initialUser: HmisUser;
@@ -33,31 +30,10 @@ const useSessionStatus = ({
   const [{ sessionDuration, id: initialUserId }] = useState(initialUser);
   // if this session has ended
   const [exitStatus, setExitStatus] = useState<'invalid' | 'expired'>();
-  const expireSession = useCallback(
-    () => setExitStatus((current) => current ?? 'expired'),
-    []
-  );
-  // how long until the session expires
-  const [timeRemaining, setTimeRemaining] = useState(
-    tracking ? sessionDuration : undefined
-  );
+  const [phase, setPhase] = useState<Phase>('active');
 
-  // Timers don't count time the computer spends asleep, so they fire late after
-  // a wake. Reschedule from the wall clock when the page is shown again.
-  const [pageShownAt, setPageShownAt] = useState<number>();
-  useEffect(() => {
-    const handlePageShown = () => {
-      if (document.visibilityState === 'visible') setPageShownAt(Date.now());
-    };
-    document.addEventListener('visibilitychange', handlePageShown);
-    window.addEventListener('focus', handlePageShown);
-    return () => {
-      document.removeEventListener('visibilitychange', handlePageShown);
-      window.removeEventListener('focus', handlePageShown);
-    };
-  }, []);
-
-  // update time remaining in response to expiry changes
+  // Check the wall clock every second rather than scheduling timeouts, which fire
+  // late after the computer sleeps. setPhase only re-renders when the phase changes.
   const sessionExited = !!exitStatus;
   const expiresAt = tracking?.timestamp
     ? sessionExpiresAt(tracking, sessionDuration)
@@ -66,56 +42,16 @@ const useSessionStatus = ({
     if (!expiresAt) return;
     if (sessionExited) return;
 
-    const updateTimeRemaining = () => {
-      const value = expiresAt - currentTimeInSeconds();
-      setTimeRemaining(value > 0 ? value : 0);
+    const updatePhase = () => {
+      const timeRemaining = expiresAt - currentTimeInSeconds();
+      if (timeRemaining <= 1) setPhase('expired');
+      else if (timeRemaining - 1 <= promptToExtendBefore) setPhase('warning');
+      else setPhase('active');
     };
-
-    updateTimeRemaining();
-    const now = currentTimeInSeconds();
-    const timeouts: Array<NodeJS.Timeout> = [];
-
-    // when to expire the session
-    const expireTimeout = expiresAt - now;
-
-    // when to show session expiration warning
-    const warnTimeout = expireTimeout - promptToExtendBefore;
-
-    if (expireTimeout > 0) {
-      timeouts.push(
-        setTimeout(
-          updateTimeRemaining,
-          warnTimeout > 0 ? warnTimeout * 1000 : 0
-        )
-      );
-    }
-    timeouts.push(
-      setTimeout(
-        updateTimeRemaining,
-        expireTimeout > 0 ? expireTimeout * 1000 : 0
-      )
-    );
-
-    // Waking with the page already shown fires neither visibilitychange nor focus,
-    // so also poll the wall clock for a warning or expiry the timers missed.
-    let pendingDeadlines = [expiresAt - promptToExtendBefore, expiresAt].filter(
-      (deadline) => deadline > now
-    );
-    const wallClockCheck = setInterval(() => {
-      const checkedAt = currentTimeInSeconds();
-      if (pendingDeadlines.every((deadline) => deadline > checkedAt)) return;
-      pendingDeadlines = pendingDeadlines.filter(
-        (deadline) => deadline > checkedAt
-      );
-      updateTimeRemaining();
-    }, WALL_CLOCK_CHECK_MS);
-
-    // cleanup events
-    return () => {
-      for (const timeout of timeouts) clearTimeout(timeout);
-      clearInterval(wallClockCheck);
-    };
-  }, [sessionExited, expiresAt, promptToExtendBefore, pageShownAt]);
+    updatePhase();
+    const interval = setInterval(updatePhase, 1000);
+    return () => clearInterval(interval);
+  }, [sessionExited, expiresAt, promptToExtendBefore]);
 
   // check if the session has ended due to expiration or invalid
   useEffect(() => {
@@ -133,20 +69,14 @@ const useSessionStatus = ({
       }, 500);
 
       return () => clearTimeout(timeout);
-    } else if (timeRemaining !== undefined && timeRemaining <= 1) {
+    } else if (phase === 'expired') {
       setExitStatus('expired');
     }
-  }, [exitStatus, timeRemaining, tracking?.userId, initialUserId]);
+  }, [exitStatus, phase, tracking?.userId, initialUserId]);
 
   return useMemo<HmisSessionProps>(() => {
-    if (exitStatus) {
-      return { status: exitStatus, promptToExtend: false, expireSession };
-    }
-
-    if (timeRemaining && timeRemaining - 1 <= promptToExtendBefore) {
-      return { status: 'valid', promptToExtend: true, expireSession };
-    }
-    return { status: 'valid', promptToExtend: false, expireSession };
-  }, [exitStatus, timeRemaining, promptToExtendBefore, expireSession]);
+    if (exitStatus) return { status: exitStatus, promptToExtend: false };
+    return { status: 'valid', promptToExtend: phase === 'warning' };
+  }, [exitStatus, phase]);
 };
 export default useSessionStatus;

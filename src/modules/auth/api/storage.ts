@@ -55,9 +55,8 @@ export interface HmisSessionTracking {
   userId: string;
   // when the last response arrived
   timestamp: number;
-  // JWT arm only: when the token expires, and when the request that reported it started
+  // JWT arm only: when the token expires
   expiresAt?: number;
-  requestedAt?: number;
 }
 
 // The JWT arm counts down to the token's expiry. The Devise arm's timeout restarts on
