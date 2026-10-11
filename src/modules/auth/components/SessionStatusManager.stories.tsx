@@ -123,6 +123,27 @@ export const RenewServerError: Story = {
   },
 };
 
+// A network failure leaves the dialog open for a retry, same as a server error.
+export const RenewNetworkError: Story = {
+  args,
+  beforeEach: () => {
+    const originalFetch = window.fetch;
+    window.fetch = async () => {
+      throw new TypeError('Failed to fetch');
+    };
+    return () => {
+      window.fetch = originalFetch;
+    };
+  },
+  play: async () => {
+    await clickKeepAlive();
+    await expect(
+      await dialog().findByText('Something went wrong. Please try again.')
+    ).toBeInTheDocument();
+    await expect(dialog().getByTestId('confirmDialogAction')).toBeEnabled();
+  },
+};
+
 // Leaves the warning window and comes back, as when the user signs in again in
 // another tab and that session later nears expiry.
 const ReenterWarningHarness: React.FC<typeof args> = (props) => {

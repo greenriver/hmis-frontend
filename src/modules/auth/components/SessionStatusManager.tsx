@@ -24,7 +24,7 @@ const SessionStatusManager: React.FC<Props> = ({
   const [loading, setLoading] = useState(false);
   // JWT arm: keepalive answered, but the token didn't refresh
   const [renewFailed, setRenewFailed] = useState(false);
-  // keepalive failed with a server error; the session may still be valid
+  // keepalive failed with a server or network error; the session may still be valid
   const [keepaliveError, setKeepaliveError] = useState(false);
   const [warningDismissed, setWarningDismissed] = useState(false);
 
@@ -58,7 +58,12 @@ const SessionStatusManager: React.FC<Props> = ({
         if (outcome === 'renewFailed') setRenewFailed(true);
         if (outcome === 'error') setKeepaliveError(true);
       })
-      .catch(() => reloadWindow());
+      // Network failure, e.g. offline after a wake: a reload would replace the page
+      // with the browser's error page and lose unsaved work.
+      .catch(() => {
+        setLoading(false);
+        setKeepaliveError(true);
+      });
   }, [expireSession, promptToExtendBefore]);
 
   // current session has ended, user clicks continue
