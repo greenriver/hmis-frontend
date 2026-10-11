@@ -65,6 +65,17 @@ export const sessionExpiresAt = (
   tracking: HmisSessionTracking,
   sessionDuration: number
 ) => tracking.expiresAt ?? tracking.timestamp + sessionDuration;
+// Keep the later expiry: a slower response, or one from another tab, may carry the
+// token from before a refresh. Expiry only moves forward within a session; sign-out
+// clears tracking and a new user changes userId.
+export const laterExpiresAt = (
+  prev: HmisSessionTracking | undefined,
+  userId: string,
+  expiresAt: number
+) =>
+  prev?.userId === userId && prev.expiresAt
+    ? Math.max(expiresAt, prev.expiresAt)
+    : expiresAt;
 export const setSessionTracking = (session: HmisSessionTracking) => {
   localStorage.setItem(SESSION_TRACKING_STORAGE_KEY, JSON.stringify(session));
 };

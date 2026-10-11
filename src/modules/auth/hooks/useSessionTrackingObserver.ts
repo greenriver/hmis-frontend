@@ -44,7 +44,13 @@ export const useSessionTrackingObserver = () => {
 
       const now = currentTimeInSeconds();
       const tracking: storage.HmisSessionTracking = { userId, timestamp: now };
-      if (remainingSecs !== undefined) tracking.expiresAt = now + remainingSecs;
+      if (remainingSecs !== undefined) {
+        tracking.expiresAt = storage.laterExpiresAt(
+          storage.getSessionTracking(),
+          userId,
+          now + remainingSecs
+        );
+      }
       fireEvent(tracking);
       storage.setSessionTracking(tracking);
     };
