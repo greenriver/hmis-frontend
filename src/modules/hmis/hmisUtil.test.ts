@@ -2,6 +2,7 @@ import { it, describe, expect } from 'vitest';
 import {
   maskSSN,
   enrollmentName,
+  findHohOrRep,
   formatDateForGql,
   parseAndFormatDate,
   parseAndFormatDateTime,
@@ -10,7 +11,7 @@ import {
   formatDateTimeForDisplay,
 } from './hmisUtil';
 
-import { ProjectType } from '@/types/gqlTypes';
+import { ProjectType, RelationshipToHoH } from '@/types/gqlTypes';
 
 describe('Other fns', () => {
   it('enrollment name', () => {
@@ -39,6 +40,36 @@ describe('Other fns', () => {
     expect(maskSSN('XXX456789')).toBe('XXX-45-6789');
     expect(maskSSN('abcd1234')).toBe('XXX-XX-1234');
     expect(maskSSN('000123456789')).toBe('123-45-6789');
+  });
+});
+
+describe('findHohOrRep', () => {
+  const member = (id: string, relationshipToHoH: RelationshipToHoH) => ({
+    relationshipToHoH,
+    client: { id },
+    enrollment: { id: `e-${id}` },
+  });
+
+  it('returns the HoH when the household has one', () => {
+    const hoh = member('1', RelationshipToHoH.SelfHeadOfHousehold);
+    const child = member('2', RelationshipToHoH.Child);
+
+    expect(findHohOrRep([child, hoh])).toBe(hoh);
+  });
+
+  it('returns a representative member when the household has no HoH', () => {
+    const spouse = member('1', RelationshipToHoH.SpouseOrPartner);
+    const child = member('2', RelationshipToHoH.Child);
+
+    // spouse sorts ahead of child
+    expect(findHohOrRep([child, spouse])).toBe(spouse);
+  });
+
+  it('is deterministic when no member outranks the others', () => {
+    const first = member('1', RelationshipToHoH.OtherRelative);
+    const second = member('2', RelationshipToHoH.OtherRelative);
+
+    expect(findHohOrRep([second, first])).toBe(first);
   });
 });
 
