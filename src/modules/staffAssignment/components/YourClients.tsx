@@ -15,28 +15,20 @@ import {
   WITH_ENROLLMENT_OPTIONAL_COLUMNS,
 } from '@/modules/enrollment/columns/enrollmentColumns';
 import { HouseholdStatus } from '@/modules/hmis/components/EnrollmentStatus';
-import { clientBriefName } from '@/modules/hmis/hmisUtil';
+import { clientBriefName, findHohOrRep } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   GetUserStaffAssignmentsDocument,
   GetUserStaffAssignmentsQuery,
   GetUserStaffAssignmentsQueryVariables,
-  RelationshipToHoH,
   StaffAssignmentWithClientsFragment,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 // use lodash's memoize (rather than react's useMemo) because the result of this function should be memoized by
 // row (assignment), not by props or state of the overarching MyClients component.
-const memoizedHoh = memoize(
-  (assignment: StaffAssignmentWithClientsFragment) => {
-    const hoh = assignment.household.householdClients.find(
-      (c) => c.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
-    );
-    if (!hoh)
-      throw new Error(`Household ${assignment.household.id} does not have HoH`);
-    return hoh;
-  }
+const memoizedHoh = memoize((assignment: StaffAssignmentWithClientsFragment) =>
+  findHohOrRep(assignment.household.householdClients)
 );
 
 const MY_CLIENTS_COLUMNS: ColumnDef<StaffAssignmentWithClientsFragment>[] = [
