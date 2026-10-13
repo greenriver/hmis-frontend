@@ -25665,6 +25665,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               id: string;
               lockVersion: number;
               relationshipToHoH: RelationshipToHoH;
+              householdSize: number;
               autoExited: boolean;
               entryDate: string;
               exitDate?: string | null;
@@ -31456,6 +31457,7 @@ export type EnrollmentWithHouseholdFieldsFragment = {
         id: string;
         lockVersion: number;
         relationshipToHoH: RelationshipToHoH;
+        householdSize: number;
         autoExited: boolean;
         entryDate: string;
         exitDate?: string | null;
@@ -32743,6 +32745,7 @@ export type GetEnrollmentWithHouseholdQuery = {
           id: string;
           lockVersion: number;
           relationshipToHoH: RelationshipToHoH;
+          householdSize: number;
           autoExited: boolean;
           entryDate: string;
           exitDate?: string | null;
@@ -43852,6 +43855,7 @@ export type HouseholdFieldsFragment = {
       id: string;
       lockVersion: number;
       relationshipToHoH: RelationshipToHoH;
+      householdSize: number;
       autoExited: boolean;
       entryDate: string;
       exitDate?: string | null;
@@ -43933,6 +43937,7 @@ export type HouseholdClientFieldsFragment = {
     id: string;
     lockVersion: number;
     relationshipToHoH: RelationshipToHoH;
+    householdSize: number;
     autoExited: boolean;
     entryDate: string;
     exitDate?: string | null;
@@ -44111,6 +44116,7 @@ export type JoinHouseholdMutation = {
           id: string;
           lockVersion: number;
           relationshipToHoH: RelationshipToHoH;
+          householdSize: number;
           autoExited: boolean;
           entryDate: string;
           exitDate?: string | null;
@@ -44200,6 +44206,7 @@ export type JoinHouseholdMutation = {
           id: string;
           lockVersion: number;
           relationshipToHoH: RelationshipToHoH;
+          householdSize: number;
           autoExited: boolean;
           entryDate: string;
           exitDate?: string | null;
@@ -44302,6 +44309,7 @@ export type SplitHouseholdMutation = {
           id: string;
           lockVersion: number;
           relationshipToHoH: RelationshipToHoH;
+          householdSize: number;
           autoExited: boolean;
           entryDate: string;
           exitDate?: string | null;
@@ -44391,6 +44399,7 @@ export type SplitHouseholdMutation = {
           id: string;
           lockVersion: number;
           relationshipToHoH: RelationshipToHoH;
+          householdSize: number;
           autoExited: boolean;
           entryDate: string;
           exitDate?: string | null;
@@ -44489,6 +44498,7 @@ export type GetHouseholdQuery = {
         id: string;
         lockVersion: number;
         relationshipToHoH: RelationshipToHoH;
+        householdSize: number;
         autoExited: boolean;
         entryDate: string;
         exitDate?: string | null;
@@ -54887,6 +54897,7 @@ export const HouseholdClientFieldsFragmentDoc = gql`
       id
       lockVersion
       relationshipToHoH
+      householdSize
       ...EnrollmentRangeFields
       autoExited
       currentUnit {
