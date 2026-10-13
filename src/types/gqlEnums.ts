@@ -991,7 +991,7 @@ export const HmisEnums = {
     ALL_SERVICE_TYPES: 'ALL_SERVICE_TYPES',
     ALL_UNIT_TYPES: 'All unit types.',
     ASSESSMENT_NAMES:
-      'Assessment names, including custom assessments and assessments that are inactive. If a project is specified, the list is limited to assessments that exist in the project (both active and inactive).',
+      'Assessment names for filtering assessments. Includes all HUD and custom assessments, regardless of applicability rules.',
     AUDITABLE_USERS: 'Current and historical user accounts',
     AVAILABLE_BULK_SERVICE_TYPES: 'AVAILABLE_BULK_SERVICE_TYPES',
     AVAILABLE_FILE_TYPES: 'AVAILABLE_FILE_TYPES',
