@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { HmisUser } from '@/modules/auth/api/sessions';
+import { sessionExpiresAt } from '@/modules/auth/api/storage';
 import { useSessionTracking } from '@/modules/auth/hooks/useSessionTracking';
 import { currentTimeInSeconds } from '@/utils/time';
 
@@ -8,6 +9,8 @@ export type HmisSessionProps = {
   status: 'invalid' | 'expired' | 'valid';
   promptToExtend: boolean;
 };
+
+type Phase = 'active' | 'warning' | 'expired';
 
 interface Props {
   initialUser: HmisUser;
@@ -27,61 +30,28 @@ const useSessionStatus = ({
   const [{ sessionDuration, id: initialUserId }] = useState(initialUser);
   // if this session has ended
   const [exitStatus, setExitStatus] = useState<'invalid' | 'expired'>();
-  // how long until the session expires
-  const [timeRemaining, setTimeRemaining] = useState(
-    tracking ? sessionDuration : undefined
-  );
+  const [phase, setPhase] = useState<Phase>('active');
 
-  // update time remaining in response to timestamp changes
+  // Check the wall clock every second rather than scheduling timeouts, which fire
+  // late after the computer sleeps. setPhase only re-renders when the phase changes.
   const sessionExited = !!exitStatus;
+  const expiresAt = tracking?.timestamp
+    ? sessionExpiresAt(tracking, sessionDuration)
+    : undefined;
   useEffect(() => {
-    const timestamp = tracking?.timestamp;
-    if (!timestamp) return;
+    if (!expiresAt) return;
     if (sessionExited) return;
 
-    const updateTimeRemaining = () => {
-      const value = sessionDuration - (currentTimeInSeconds() - timestamp);
-      setTimeRemaining(value > 0 ? value : 0);
+    const updatePhase = () => {
+      const timeRemaining = expiresAt - currentTimeInSeconds();
+      if (timeRemaining <= 1) setPhase('expired');
+      else if (timeRemaining - 1 <= promptToExtendBefore) setPhase('warning');
+      else setPhase('active');
     };
-
-    updateTimeRemaining();
-    const now = currentTimeInSeconds();
-    const timeouts: Array<NodeJS.Timeout> = [];
-
-    // when to expire the session
-    const expireTimeout = timestamp + sessionDuration - now;
-
-    // seconds relative to session start to show warning
-    const warnAfter = sessionDuration - promptToExtendBefore;
-    // when to show session expiration warning
-    const warnTimeout =
-      tracking.timestamp + (warnAfter > 0 ? warnAfter : 0) - now;
-
-    if (expireTimeout > 0) {
-      timeouts.push(
-        setTimeout(
-          updateTimeRemaining,
-          warnTimeout > 0 ? warnTimeout * 1000 : 0
-        )
-      );
-    }
-    timeouts.push(
-      setTimeout(
-        updateTimeRemaining,
-        expireTimeout > 0 ? expireTimeout * 1000 : 0
-      )
-    );
-
-    // cleanup events
-    return () => {
-      for (const timeout of timeouts) clearTimeout(timeout);
-    };
-  }, [
-    sessionExited,
-    tracking?.timestamp,
-    promptToExtendBefore,
-    sessionDuration,
-  ]);
+    updatePhase();
+    const interval = setInterval(updatePhase, 1000);
+    return () => clearInterval(interval);
+  }, [sessionExited, expiresAt, promptToExtendBefore]);
 
   // check if the session has ended due to expiration or invalid
   useEffect(() => {
@@ -99,18 +69,14 @@ const useSessionStatus = ({
       }, 500);
 
       return () => clearTimeout(timeout);
-    } else if (timeRemaining !== undefined && timeRemaining <= 1) {
+    } else if (phase === 'expired') {
       setExitStatus('expired');
     }
-  }, [exitStatus, timeRemaining, tracking?.userId, initialUserId]);
+  }, [exitStatus, phase, tracking?.userId, initialUserId]);
 
   return useMemo<HmisSessionProps>(() => {
     if (exitStatus) return { status: exitStatus, promptToExtend: false };
-
-    if (timeRemaining && timeRemaining - 1 <= promptToExtendBefore) {
-      return { status: 'valid', promptToExtend: true };
-    }
-    return { status: 'valid', promptToExtend: false };
-  }, [exitStatus, timeRemaining, promptToExtendBefore]);
+    return { status: 'valid', promptToExtend: phase === 'warning' };
+  }, [exitStatus, phase]);
 };
 export default useSessionStatus;
