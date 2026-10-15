@@ -59,9 +59,8 @@ const getValidCachedUser = (): HmisUser | undefined => {
   const tracking = storage.getSessionTracking();
   const user = storage.getUser();
   if (tracking && user && tracking.userId === user.id) {
-    const { timestamp } = tracking;
     const now = currentTimeInSeconds();
-    if (timestamp + user.sessionDuration > now) {
+    if (storage.sessionExpiresAt(tracking, user.sessionDuration) > now) {
       return user;
     }
   }
@@ -94,7 +93,7 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
       storage.setLastSessionId(currentSessionId);
       storage.clearUser();
       storage.clearAppSettings();
-      storage.clearSessionTacking();
+      storage.clearSessionTracking();
     }
   }, []);
 

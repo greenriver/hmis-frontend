@@ -90,7 +90,27 @@ flowchart TD
 
 4. **Session Recovery** - When a session becomes invalid, the system attempts page reload once to reestablish it
 
-5. **Timing Mechanism** - `useSessionStatus` calculates remaining time and schedules appropriate UI notifications
+5. **Timing Mechanism** - `useSessionStatus` checks the wall clock every second and shows the warning or expiry when the remaining time crosses a threshold. Polling rather than scheduled timeouts means a computer waking from sleep catches up within a second.
+
+## Expiry by auth method
+
+`storage.sessionExpiresAt` picks the expiry the countdown runs to:
+
+* **`devise`** — the last response's `timestamp` plus the user's `sessionDuration`.
+  Devise's timeout restarts on every request, so every response moves it.
+* **`jwt`** — the forwarded token's expiry. oauth2-proxy refreshes the token only
+  once its cookie is 5 minutes old, so a response doesn't restart the token's
+  lifetime. `Hmis::BaseController#set_app_user_header` sends the token's remaining
+  seconds as `X-app-session-remaining-secs` on every response, and
+  `useSessionTrackingObserver` stores `expiresAt` = response time + remaining
+  seconds. A response reporting an earlier expiry than the stored one, such as a
+  slow response or one from another tab, doesn't move it back (`storage.laterExpiresAt`).
+
+Under `jwt`, if "Keep me signed-in" gets back an expiry still inside the warning
+window, the token didn't refresh, usually because the IdP session is gone.
+`SessionStatusManager` says the session can't be extended and offers Close, which
+keeps the dialog shut until the session expires so the user can save their work.
+A reload wouldn't help: oauth2-proxy keeps serving the old token until it expires.
 
 ## Terminal account errors vs. re-authentication
 

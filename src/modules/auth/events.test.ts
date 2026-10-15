@@ -3,7 +3,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { HMIS_ACCOUNT_ERROR_EVENT } from '@/modules/auth/api/constants';
 import {
   dispatchAccountErrorEvent,
+  dispatchSessionTrackingFromHeaders,
   isTerminalAccountErrorType,
+  sessionRemainingSecsFromHeaders,
   terminalAccountErrorFromResponseBody,
 } from '@/modules/auth/events';
 
@@ -82,5 +84,83 @@ describe('dispatchAccountErrorEvent', () => {
     expect(dispatched).toHaveLength(1);
     expect(dispatched[0].type).toBe(HMIS_ACCOUNT_ERROR_EVENT);
     expect(dispatched[0].init?.detail).toBe('no_hmis_access');
+  });
+});
+
+describe('dispatchSessionTrackingFromHeaders', () => {
+  let dispatched: Array<{ type: string; init?: { detail?: unknown } }>;
+
+  beforeEach(() => {
+    dispatched = [];
+    vi.stubGlobal('document', {
+      dispatchEvent: (event: any) => {
+        dispatched.push(event);
+        return true;
+      },
+    });
+    vi.stubGlobal(
+      'CustomEvent',
+      class {
+        constructor(
+          public type: string,
+          public init?: { detail?: unknown }
+        ) {}
+      }
+    );
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('reports the remaining seconds', () => {
+    dispatchSessionTrackingFromHeaders(
+      new Headers({
+        'X-app-user-id': '7',
+        'X-app-session-remaining-secs': '1500',
+      })
+    );
+
+    expect(dispatched[0].init?.detail).toEqual({
+      userId: '7',
+      remainingSecs: 1500,
+    });
+  });
+
+  it('reports only the user without the remaining-seconds header', () => {
+    dispatchSessionTrackingFromHeaders(new Headers({ 'X-app-user-id': '7' }));
+
+    expect(dispatched[0].init?.detail).toEqual({
+      userId: '7',
+      remainingSecs: undefined,
+    });
+  });
+
+  it('reports no user for an empty user header', () => {
+    dispatchSessionTrackingFromHeaders(new Headers({ 'X-app-user-id': '' }));
+
+    expect(dispatched[0].init?.detail).toEqual({
+      userId: undefined,
+      remainingSecs: undefined,
+    });
+  });
+});
+
+describe('sessionRemainingSecsFromHeaders', () => {
+  it('parses the remaining seconds', () => {
+    expect(
+      sessionRemainingSecsFromHeaders(
+        new Headers({ 'X-app-session-remaining-secs': '120' })
+      )
+    ).toBe(120);
+  });
+
+  it('returns undefined for a missing or non-numeric header', () => {
+    expect(sessionRemainingSecsFromHeaders(new Headers())).toBeUndefined();
+    expect(
+      sessionRemainingSecsFromHeaders(
+        new Headers({ 'X-app-session-remaining-secs': 'abc' })
+      )
+    ).toBeUndefined();
   });
 });
