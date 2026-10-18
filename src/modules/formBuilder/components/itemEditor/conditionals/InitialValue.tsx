@@ -7,6 +7,7 @@ import { useLocalConstantsPickList } from '../useLocalConstantsPickList';
 import CardGroup, { RemovableCard } from '@/components/elements/CardGroup';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import YesNoRadio from '@/components/elements/input/YesNoRadio';
+import ControlledNumberInput from '@/modules/form/components/rhf/ControlledNumberInput';
 import ControlledRadioGroupInput from '@/modules/form/components/rhf/ControlledRadioGroupInput';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
@@ -89,11 +90,10 @@ const InitialValue: React.FC<Props> = ({ itemType, control }) => {
               {!advanced.localConstant && (
                 <>
                   {valueField === 'valueNumber' && (
-                    <ControlledTextInput
+                    <ControlledNumberInput
                       name='initial.0.valueNumber'
                       control={control}
                       label='Initial Value (Numeric)'
-                      type='number'
                     />
                   )}
                   {valueField === 'valueBoolean' && (
