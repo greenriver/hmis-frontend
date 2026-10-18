@@ -6041,6 +6041,12 @@
             "deprecationReason": null
           },
           {
+            "name": "HOUSEHOLD",
+            "description": "Household",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "PSDE",
             "description": "HUD",
             "isDeprecated": false,
