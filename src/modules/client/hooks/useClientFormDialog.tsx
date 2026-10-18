@@ -2,7 +2,6 @@ import { filter } from 'lodash-es';
 import { useCallback, useMemo } from 'react';
 
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
-import { AlwaysPresentLocalConstants } from '@/modules/form/util/formUtil';
 import {
   ClientFieldsFragment,
   ExternalIdentifierType,
@@ -19,7 +18,6 @@ export const localConstantsForClientForm = (
     return {
       canViewFullSsn: true,
       canViewDob: true,
-      ...AlwaysPresentLocalConstants,
     };
   }
 
@@ -29,7 +27,6 @@ export const localConstantsForClientForm = (
     mciIds: filter(client.externalIds, {
       type: ExternalIdentifierType.MciId,
     }),
-    ...AlwaysPresentLocalConstants,
   };
 };
 
