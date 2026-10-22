@@ -1,10 +1,7 @@
 import { User } from '@sentry/react';
-import {
-  HMIS_REMOTE_SESSION_UID_EVENT,
-  HMIS_SESSION_UID_HEADER,
-} from '@/modules/auth/api/constants';
 import * as storage from '@/modules/auth/api/storage';
 import {
+  dispatchSessionTrackingFromHeaders,
   isTerminalAccountErrorType,
   TerminalAccountErrorType,
 } from '@/modules/auth/events';
@@ -69,15 +66,10 @@ const throwMaybeHmisError = (json: any) => {
   }
 };
 
-// check header and fire events for session tracking
+// check headers and fire events for session tracking
 const trackSessionFromResponse = (response: Response) => {
   const { headers } = response;
-  if (headers) {
-    const userId = headers.get(HMIS_SESSION_UID_HEADER) as string | undefined;
-    document.dispatchEvent(
-      new CustomEvent(HMIS_REMOTE_SESSION_UID_EVENT, { detail: userId })
-    );
-  }
+  if (headers) dispatchSessionTrackingFromHeaders(headers);
 };
 
 // /hmis/user.json answers 200 even with no token, so a result with neither field
@@ -179,7 +171,7 @@ export async function login({
 export function resetLocalSession({ keepSessionTracking = false } = {}) {
   storage.clearUser();
   storage.clearAppSettings();
-  if (!keepSessionTracking) storage.clearSessionTacking();
+  if (!keepSessionTracking) storage.clearSessionTracking();
   // Clear cache without re-fetching any queries
   apolloClient.clearStore();
 }

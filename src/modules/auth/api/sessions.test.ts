@@ -9,7 +9,7 @@ vi.mock('@/modules/auth/api/storage', () => ({
   setUser: vi.fn(),
   clearUser: vi.fn(),
   clearAppSettings: vi.fn(),
-  clearSessionTacking: vi.fn(),
+  clearSessionTracking: vi.fn(),
   setLastConnectorId: vi.fn(),
 }));
 
@@ -173,7 +173,7 @@ describe('session transport by auth method', () => {
       expect(apolloClient.clearStore).toHaveBeenCalled();
       expect(storage.clearUser).toHaveBeenCalled();
       expect(storage.clearAppSettings).toHaveBeenCalled();
-      expect(storage.clearSessionTacking).toHaveBeenCalled();
+      expect(storage.clearSessionTracking).toHaveBeenCalled();
     });
 
     it('throws HmisResponseError when the server refuses the sign-out', async () => {
@@ -196,7 +196,7 @@ describe('session transport by auth method', () => {
       expect(storage.clearAppSettings).toHaveBeenCalled();
       // But not the tracking record: the session is still live, and clearing it
       // makes useSessionStatus report "Your session has ended" over the dialog.
-      expect(storage.clearSessionTacking).not.toHaveBeenCalled();
+      expect(storage.clearSessionTracking).not.toHaveBeenCalled();
     });
 
     it('throws when a failed sign-out has an unparseable body', async () => {
@@ -209,7 +209,7 @@ describe('session transport by auth method', () => {
       expect(apolloClient.clearStore).toHaveBeenCalled();
       expect(storage.clearUser).toHaveBeenCalled();
       expect(storage.clearAppSettings).toHaveBeenCalled();
-      expect(storage.clearSessionTacking).not.toHaveBeenCalled();
+      expect(storage.clearSessionTracking).not.toHaveBeenCalled();
     });
 
     it('does not dispatch a session-tracking event when the sign-out fails', async () => {
