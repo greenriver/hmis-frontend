@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { ReactNode } from 'react';
 
-import { PickListArgs, SubmitFormAllowedTypes } from '../types';
+import { LocalConstants, PickListArgs, SubmitFormAllowedTypes } from '../types';
 
 import ViewRecord from './ViewRecord';
 
@@ -25,6 +25,7 @@ export interface RecordDialogProps<RecordType> extends DialogProps {
   actions?: ReactNode;
   children?: ReactNode;
   projectId?: string; // Project context for fetching form definition
+  localConstants?: LocalConstants;
 }
 
 const ViewRecordDialog = <RecordType extends SubmitFormAllowedTypes>({
@@ -36,6 +37,7 @@ const ViewRecordDialog = <RecordType extends SubmitFormAllowedTypes>({
   children,
   pickListArgs,
   projectId,
+  localConstants,
   ...props
 }: RecordDialogProps<RecordType>) => {
   const isTiny = useIsMobile('sm');
@@ -105,6 +107,7 @@ const ViewRecordDialog = <RecordType extends SubmitFormAllowedTypes>({
             formRole={formRole}
             pickListArgs={pickListArgs}
             projectId={projectId}
+            localConstants={localConstants}
           />
           {children}
         </Box>

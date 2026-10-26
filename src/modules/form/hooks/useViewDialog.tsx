@@ -23,6 +23,7 @@ export function useViewDialog<T extends SubmitFormAllowedTypes>({
   record,
   projectId,
   formRole,
+  localConstants,
 }: Args<T>) {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
@@ -37,6 +38,7 @@ export function useViewDialog<T extends SubmitFormAllowedTypes>({
             title={title}
             record={record}
             projectId={projectId}
+            localConstants={localConstants}
             {...props}
             formRole={formRole}
             open={dialogOpen}
@@ -45,7 +47,7 @@ export function useViewDialog<T extends SubmitFormAllowedTypes>({
         )}
       </>
     ),
-    [record, projectId, formRole, dialogOpen, onClose]
+    [record, projectId, localConstants, formRole, dialogOpen, onClose]
   );
 
   return useMemo(

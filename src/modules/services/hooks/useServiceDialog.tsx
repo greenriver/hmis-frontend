@@ -29,7 +29,6 @@ import DynamicForm, {
 } from '@/modules/form/components/DynamicForm';
 import { useDynamicFormHandlersForRecord } from '@/modules/form/hooks/useDynamicFormHandlersForRecord';
 import useServiceFormDefinition from '@/modules/form/hooks/useServiceFormDefinition';
-import { AlwaysPresentLocalConstants } from '@/modules/form/util/formUtil';
 import { cache } from '@/providers/apolloClient';
 import {
   DeleteServiceDocument,
@@ -125,7 +124,6 @@ export function useServiceDialog({
       hudTypeProvided: serviceType?.hudTypeProvided,
       entryDate: enrollment?.entryDate,
       exitDate: enrollment?.exitDate,
-      ...AlwaysPresentLocalConstants,
     };
     return {
       formDefinition,

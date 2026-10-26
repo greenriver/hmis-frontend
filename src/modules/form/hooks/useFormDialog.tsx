@@ -21,7 +21,6 @@ import DynamicForm, {
 import FormDialogActionContent from '../components/FormDialogActionContent';
 import { LocalConstants, PickListArgs, SubmitFormAllowedTypes } from '../types';
 
-import { AlwaysPresentLocalConstants } from '../util/formUtil';
 import {
   DynamicFormHandlerArgs,
   useDynamicFormHandlersForRecord,
@@ -83,7 +82,6 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
 
   const localConstants: LocalConstants = useMemo(
     () => ({
-      ...AlwaysPresentLocalConstants,
       projectId,
       ...localConstantsProp,
     }),
