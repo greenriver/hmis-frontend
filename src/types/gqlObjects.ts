@@ -4519,6 +4519,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
           ofType: { kind: 'SCALAR', name: 'String', ofType: null },
         },
       },
+      { name: 'note', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       {
         name: 'ownFile',
         type: {
