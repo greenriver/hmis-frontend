@@ -7,8 +7,8 @@ import { FormItemControl } from '../types';
 import { useLocalConstantsPickList } from '../useLocalConstantsPickList';
 import { useItemPickList } from './useItemPickList';
 import DatePicker from '@/components/elements/input/DatePicker';
+import ControlledNumberInput from '@/modules/form/components/rhf/ControlledNumberInput';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
-import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import { ItemMap } from '@/modules/form/types';
 import { formatDateForGql, parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
@@ -132,11 +132,10 @@ const ValueBoundCard: React.FC<Props> = ({ control, itemMap, index }) => {
           )}
         />
       ) : (
-        <ControlledTextInput
+        <ControlledNumberInput
           control={control}
           rules={{ validate: () => isValid || requiredMessage }}
           name={`bounds.${index}.valueNumber`}
-          type='number'
           label={`${labelPrefix} Value`}
         />
       )}
@@ -176,10 +175,9 @@ const ValueBoundCard: React.FC<Props> = ({ control, itemMap, index }) => {
                 specifying a maximum with value "Today" with offset "3" will set
                 the maximum bound to 3 days in the future.
               </Typography>
-              <ControlledTextInput
+              <ControlledNumberInput
                 control={control}
                 name={`bounds.${index}.offset`}
-                type='number'
                 label='Offset'
                 helperText={
                   fieldType === ItemType.Date
