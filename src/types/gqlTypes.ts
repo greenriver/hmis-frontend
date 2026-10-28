@@ -575,7 +575,7 @@ export type CeAssessment = {
   __typename?: 'CeAssessment';
   assessmentDate: Scalars['ISO8601Date']['output'];
   assessmentLevel?: Maybe<AssessmentLevel>;
-  assessmentLocation: Scalars['String']['output'];
+  assessmentLocation?: Maybe<Scalars['String']['output']>;
   assessmentType?: Maybe<AssessmentType>;
   client: Client;
   createdBy?: Maybe<ApplicationUser>;
@@ -10105,7 +10105,7 @@ export type AssessmentWithRecordsFragment = {
     id: string;
     assessmentDate: string;
     assessmentLevel?: AssessmentLevel | null;
-    assessmentLocation: string;
+    assessmentLocation?: string | null;
     assessmentType?: AssessmentType | null;
     dateCreated?: string | null;
     dateUpdated?: string | null;
@@ -11011,7 +11011,7 @@ export type FullAssessmentFragment = {
     id: string;
     assessmentDate: string;
     assessmentLevel?: AssessmentLevel | null;
-    assessmentLocation: string;
+    assessmentLocation?: string | null;
     assessmentType?: AssessmentType | null;
     dateCreated?: string | null;
     dateUpdated?: string | null;
@@ -13095,7 +13095,7 @@ export type GetAssessmentQuery = {
       id: string;
       assessmentDate: string;
       assessmentLevel?: AssessmentLevel | null;
-      assessmentLocation: string;
+      assessmentLocation?: string | null;
       assessmentType?: AssessmentType | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
@@ -14656,7 +14656,7 @@ export type SubmitAssessmentMutation = {
         id: string;
         assessmentDate: string;
         assessmentLevel?: AssessmentLevel | null;
-        assessmentLocation: string;
+        assessmentLocation?: string | null;
         assessmentType?: AssessmentType | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
@@ -15549,7 +15549,7 @@ export type SubmitHouseholdAssessmentsMutation = {
         id: string;
         assessmentDate: string;
         assessmentLevel?: AssessmentLevel | null;
-        assessmentLocation: string;
+        assessmentLocation?: string | null;
         assessmentType?: AssessmentType | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
@@ -16459,7 +16459,7 @@ export type GetAssessmentsForPopulationQuery = {
           id: string;
           assessmentDate: string;
           assessmentLevel?: AssessmentLevel | null;
-          assessmentLocation: string;
+          assessmentLocation?: string | null;
           assessmentType?: AssessmentType | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
@@ -31445,7 +31445,7 @@ export type CeAssessmentFieldsFragment = {
   id: string;
   assessmentDate: string;
   assessmentLevel?: AssessmentLevel | null;
-  assessmentLocation: string;
+  assessmentLocation?: string | null;
   assessmentType?: AssessmentType | null;
   dateCreated?: string | null;
   dateUpdated?: string | null;
@@ -32974,7 +32974,7 @@ export type GetEnrollmentCeAssessmentsQuery = {
         id: string;
         assessmentDate: string;
         assessmentLevel?: AssessmentLevel | null;
-        assessmentLocation: string;
+        assessmentLocation?: string | null;
         assessmentType?: AssessmentType | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
@@ -40398,7 +40398,7 @@ export type SubmitFormMutation = {
           id: string;
           assessmentDate: string;
           assessmentLevel?: AssessmentLevel | null;
-          assessmentLocation: string;
+          assessmentLocation?: string | null;
           assessmentType?: AssessmentType | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;

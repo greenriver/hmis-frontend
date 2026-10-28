@@ -505,11 +505,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'assessmentLocation',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'assessmentType',
