@@ -5,6 +5,7 @@ fragment FileFields on File {
   expirationDate
   id
   name
+  note
   url
   tags
   access {
