@@ -12,8 +12,7 @@ import { SentryLink } from 'apollo-link-sentry';
 import fetch from 'cross-fetch';
 import { generatePath, matchRoutes } from 'react-router';
 
-import { dispatchSessionTrackingEvent } from '../modules/auth/events';
-import { HMIS_SESSION_UID_HEADER } from '@/modules/auth/api/constants';
+import { dispatchSessionTrackingFromHeaders } from '@/modules/auth/events';
 import apolloErrorLink from '@/providers/apolloErrorLink';
 import { allRoutes } from '@/routes/routes';
 import { getCsrfToken } from '@/utils/csrf';
@@ -93,7 +92,7 @@ const sessionExpiryLink = new ApolloLink((operation, forward) => {
     } = context;
 
     if (headers) {
-      dispatchSessionTrackingEvent(headers.get(HMIS_SESSION_UID_HEADER));
+      dispatchSessionTrackingFromHeaders(headers);
     }
     return response;
   });

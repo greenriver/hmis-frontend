@@ -71,7 +71,7 @@ import {
  */
 
 // Numeric AHA score, may be -1 or 1..10. -1 means no score, which can occur if (1) the client has no MCI Unique ID yet, OR (2) the API call return -1 for the client.
-const SCORE_LINK_ID = 'aha_score';
+const AHA_SCORE_LINK_ID = 'aha_score';
 // This field is a 0/1 flag indicating whether the Alt-AHA should be performed or not. (1 = Alt-AHA is required, 0 = Alt-AHA is not required). Only present if the API call was successful.
 const MCI_QUALITY_INDICATOR_LINK_ID = 'aha_mci_quality_indicator';
 // MCI Unique ID that is associated with the retrieved score. Only present if the API call was successful.
@@ -89,7 +89,7 @@ const LOOKUP_REASON_LINK_ID = 'reason_for_aha_lookup';
 
 // Link IDs that are expected to be present on the form.
 const EXPECTED_LINK_IDS = [
-  SCORE_LINK_ID,
+  AHA_SCORE_LINK_ID,
   MCI_QUALITY_INDICATOR_LINK_ID,
   DW_CLIENT_LINK_ID,
   GENERATOR_LINK_ID,
@@ -127,14 +127,17 @@ const AhaScore = ({
   >();
 
   // Use RHF to watch the current value of the following fields:
-  // - score: to disable the fetch button after unlocking an assessment that's already fetched the score.
+  // - aha score/mh-aha score: to disable the fetch button after unlocking an assessment that's already fetched all scores,
+  //   and to display the MH-AHA score even when the AHA score is not available.
   // - lookup reason/lookup catalyst: to disable fetch when these haven't been provided yet, and to pass the values to the backend when calculating the score.
   const values = useDynamicFieldWatchValues([
-    SCORE_LINK_ID,
+    AHA_SCORE_LINK_ID,
+    MH_AHA_SCORE_LINK_ID,
     LOOKUP_REASON_LINK_ID,
     LOOKUP_CATALYST_LINK_ID,
   ]);
-  const scoreValue = values[SCORE_LINK_ID];
+  const ahaScoreValue = values[AHA_SCORE_LINK_ID];
+  const mhScoreValue = values[MH_AHA_SCORE_LINK_ID];
   const { lookupCatalyst, lookupReason, requireCatalystAndReason } =
     useMemo(() => {
       const linkIds = Object.keys(handlers?.itemMap || {});
@@ -159,9 +162,15 @@ const AhaScore = ({
       };
     }, [values, handlers?.itemMap]);
 
-  // If client has no score (-1 is returned), hasScore is false and the button stays enabled
-  const hasScore =
-    scoreValue !== null && scoreValue !== undefined && scoreValue >= 0;
+  // If client has no AHA score (-1 is returned), hasAhaScore is false
+  const hasAhaScore = typeof ahaScoreValue === 'number' && ahaScoreValue >= 0;
+  // If client has no MH-AHA score (-1 is returned), or the form doesn't collect it, hasMhScore is false.
+  // A client may have an MH-AHA score but no AHA score (-1). In that case, still show the MH-AHA score.
+  const hasMhScore =
+    formHasMhAhaScore && typeof mhScoreValue === 'number' && mhScoreValue >= 0;
+  // The fetch button stays enabled while any score this form collects is missing (-1 or not yet fetched).
+  // Re-fetching overwrites all scores, including any that already have a value.
+  const allScoresFetched = hasAhaScore && (!formHasMhAhaScore || hasMhScore);
 
   const [hasFetched, setHasFetched] = useState<boolean>(false);
 
@@ -186,7 +195,7 @@ const AhaScore = ({
       if (data.fetchAhaScore && severalItemsChanged) {
         severalItemsChanged({
           values: {
-            [SCORE_LINK_ID]: data.fetchAhaScore.score,
+            [AHA_SCORE_LINK_ID]: data.fetchAhaScore.score,
             [MCI_QUALITY_INDICATOR_LINK_ID]:
               data.fetchAhaScore.mciQualityIndicator,
             [DW_CLIENT_LINK_ID]: data.fetchAhaScore.dwClientId,
@@ -265,9 +274,9 @@ const AhaScore = ({
         >
           <LoadingButton
             loading={loading}
-            // If value already exists, disable the button
+            // If all score values already exist, disable the button
             // If this is not in the assessment context (such as form preview mode), disable the button
-            disabled={hasScore || !hasRequiredContext}
+            disabled={allScoresFetched || !hasRequiredContext}
             type='button'
             onClick={handleFetch}
             sx={{ my: 1 }}
@@ -275,7 +284,7 @@ const AhaScore = ({
             Fetch AHA Score
           </LoadingButton>
         </LabelWithContent>
-        {hasFetched && !hasScore && (
+        {hasFetched && !hasAhaScore && (
           <LabelWithContent label='AHA Score'>
             <Typography variant='body2' color='text.secondary'>
               {/* If AHA is not available due to the client not having an MCI Unique ID assigned yet, the score is not available TODAY.
@@ -287,12 +296,14 @@ const AhaScore = ({
           </LabelWithContent>
         )}
         {renderChildItem &&
-          // Hide items that display the score if the score hasn't been fetched yet
+          // Hide items that display the score if the score hasn't been fetched yet.
+          // If there's no AHA score but there is an MH-AHA score, show the MH-AHA score item.
           item.item
-            ?.filter((i) =>
-              hasScore
-                ? true
-                : !HIDDEN_UNTIL_FETCHED_LINK_IDS.includes(i.linkId)
+            ?.filter(
+              (i) =>
+                hasAhaScore ||
+                (hasMhScore && i.linkId === MH_AHA_SCORE_LINK_ID) ||
+                !HIDDEN_UNTIL_FETCHED_LINK_IDS.includes(i.linkId)
             )
             .map((i) => renderChildItem(i))}
       </Stack>

@@ -92,7 +92,10 @@ const ProtectedRoutes: React.FC<{ user: HmisUser }> = ({ user }) => {
 
   return (
     <>
-      <SessionStatusManager {...sessionStatus} />
+      <SessionStatusManager
+        {...sessionStatus}
+        promptToExtendBefore={promptToExtendBefore}
+      />
       {useRoutes(
         sessionStatus.status === 'valid' ? protectedRoutes : blankRoutes
       )}

@@ -1,11 +1,41 @@
 import {
   HMIS_ACCOUNT_ERROR_EVENT,
   HMIS_REMOTE_SESSION_UID_EVENT,
+  HMIS_SESSION_REMAINING_HEADER,
+  HMIS_SESSION_UID_HEADER,
 } from '@/modules/auth/api/constants';
 
-export const dispatchSessionTrackingEvent = (userId: string | undefined) => {
+export type RemoteSessionDetail = {
+  userId?: string;
+  // JWT arm only: the token's remaining seconds
+  remainingSecs?: number;
+};
+
+export const dispatchSessionTrackingEvent = (
+  userId: string | undefined,
+  remainingSecs?: number
+) => {
+  const detail: RemoteSessionDetail = { userId, remainingSecs };
   document.dispatchEvent(
-    new CustomEvent(HMIS_REMOTE_SESSION_UID_EVENT, { detail: userId })
+    new CustomEvent(HMIS_REMOTE_SESSION_UID_EVENT, { detail })
+  );
+};
+
+// JWT arm only: undefined on the Devise arm, which doesn't send the header.
+export const sessionRemainingSecsFromHeaders = (
+  headers: Headers
+): number | undefined => {
+  const remainingSecs = parseInt(
+    headers.get(HMIS_SESSION_REMAINING_HEADER) || '',
+    10
+  );
+  return Number.isNaN(remainingSecs) ? undefined : remainingSecs;
+};
+
+export const dispatchSessionTrackingFromHeaders = (headers: Headers) => {
+  dispatchSessionTrackingEvent(
+    headers.get(HMIS_SESSION_UID_HEADER) || undefined,
+    sessionRemainingSecsFromHeaders(headers)
   );
 };
 

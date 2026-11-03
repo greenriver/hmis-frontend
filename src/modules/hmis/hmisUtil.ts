@@ -724,9 +724,9 @@ export const stringifyHousehold = (
   );
 };
 
-export const findHohOrRep = (
-  householdClients: HouseholdClientFieldsFragment[]
-) => {
+export const findHohOrRep = <T extends GenericHouseholdClient>(
+  householdClients: T[]
+): T => {
   // It's invalid, but possible in case of bad data, to have no HoH. If so, return the first household member
   const sorted = sortHouseholdMembers(householdClients);
   return (

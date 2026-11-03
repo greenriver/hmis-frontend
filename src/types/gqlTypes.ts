@@ -575,7 +575,7 @@ export type CeAssessment = {
   __typename?: 'CeAssessment';
   assessmentDate: Scalars['ISO8601Date']['output'];
   assessmentLevel?: Maybe<AssessmentLevel>;
-  assessmentLocation: Scalars['String']['output'];
+  assessmentLocation?: Maybe<Scalars['String']['output']>;
   assessmentType?: Maybe<AssessmentType>;
   client: Client;
   createdBy?: Maybe<ApplicationUser>;
@@ -3717,6 +3717,7 @@ export type File = {
   expirationDate?: Maybe<Scalars['ISO8601Date']['output']>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+  note?: Maybe<Scalars['String']['output']>;
   ownFile: Scalars['Boolean']['output'];
   redacted: Scalars['Boolean']['output'];
   tags: Array<Scalars['String']['output']>;
@@ -9996,6 +9997,7 @@ export type AssessmentWithRecordsFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -10056,6 +10058,7 @@ export type AssessmentWithRecordsFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -10104,7 +10107,7 @@ export type AssessmentWithRecordsFragment = {
     id: string;
     assessmentDate: string;
     assessmentLevel?: AssessmentLevel | null;
-    assessmentLocation: string;
+    assessmentLocation?: string | null;
     assessmentType?: AssessmentType | null;
     dateCreated?: string | null;
     dateUpdated?: string | null;
@@ -10246,6 +10249,7 @@ export type AssessmentWithRecordsFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -10306,6 +10310,7 @@ export type AssessmentWithRecordsFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -10456,6 +10461,7 @@ export type AssessmentWithRecordsFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -10516,6 +10522,7 @@ export type AssessmentWithRecordsFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -10611,6 +10618,7 @@ export type AssessmentWithRecordsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -10671,6 +10679,7 @@ export type AssessmentWithRecordsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -10894,6 +10903,7 @@ export type FullAssessmentFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -10954,6 +10964,7 @@ export type FullAssessmentFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -11002,7 +11013,7 @@ export type FullAssessmentFragment = {
     id: string;
     assessmentDate: string;
     assessmentLevel?: AssessmentLevel | null;
-    assessmentLocation: string;
+    assessmentLocation?: string | null;
     assessmentType?: AssessmentType | null;
     dateCreated?: string | null;
     dateUpdated?: string | null;
@@ -11144,6 +11155,7 @@ export type FullAssessmentFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -11204,6 +11216,7 @@ export type FullAssessmentFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -11354,6 +11367,7 @@ export type FullAssessmentFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -11414,6 +11428,7 @@ export type FullAssessmentFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -11509,6 +11524,7 @@ export type FullAssessmentFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -11569,6 +11585,7 @@ export type FullAssessmentFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -11688,6 +11705,7 @@ export type AssessmentWithCdesFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -11748,6 +11766,7 @@ export type AssessmentWithCdesFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -12968,6 +12987,7 @@ export type GetAssessmentQuery = {
             expirationDate?: string | null;
             id: string;
             name: string;
+            note?: string | null;
             url?: string | null;
             tags: Array<string>;
             redacted: boolean;
@@ -13028,6 +13048,7 @@ export type GetAssessmentQuery = {
             expirationDate?: string | null;
             id: string;
             name: string;
+            note?: string | null;
             url?: string | null;
             tags: Array<string>;
             redacted: boolean;
@@ -13076,7 +13097,7 @@ export type GetAssessmentQuery = {
       id: string;
       assessmentDate: string;
       assessmentLevel?: AssessmentLevel | null;
-      assessmentLocation: string;
+      assessmentLocation?: string | null;
       assessmentType?: AssessmentType | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
@@ -13218,6 +13239,7 @@ export type GetAssessmentQuery = {
             expirationDate?: string | null;
             id: string;
             name: string;
+            note?: string | null;
             url?: string | null;
             tags: Array<string>;
             redacted: boolean;
@@ -13278,6 +13300,7 @@ export type GetAssessmentQuery = {
             expirationDate?: string | null;
             id: string;
             name: string;
+            note?: string | null;
             url?: string | null;
             tags: Array<string>;
             redacted: boolean;
@@ -13428,6 +13451,7 @@ export type GetAssessmentQuery = {
             expirationDate?: string | null;
             id: string;
             name: string;
+            note?: string | null;
             url?: string | null;
             tags: Array<string>;
             redacted: boolean;
@@ -13488,6 +13512,7 @@ export type GetAssessmentQuery = {
             expirationDate?: string | null;
             id: string;
             name: string;
+            note?: string | null;
             url?: string | null;
             tags: Array<string>;
             redacted: boolean;
@@ -13583,6 +13608,7 @@ export type GetAssessmentQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -13643,6 +13669,7 @@ export type GetAssessmentQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -13797,6 +13824,7 @@ export type GetClientAssessmentsQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -13857,6 +13885,7 @@ export type GetClientAssessmentsQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -13984,6 +14013,7 @@ export type GetEnrollmentAssessmentsQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -14044,6 +14074,7 @@ export type GetEnrollmentAssessmentsQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -14185,6 +14216,7 @@ export type GetHouseholdAssessmentsQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -14245,6 +14277,7 @@ export type GetHouseholdAssessmentsQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -14515,6 +14548,7 @@ export type SubmitAssessmentMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -14575,6 +14609,7 @@ export type SubmitAssessmentMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -14623,7 +14658,7 @@ export type SubmitAssessmentMutation = {
         id: string;
         assessmentDate: string;
         assessmentLevel?: AssessmentLevel | null;
-        assessmentLocation: string;
+        assessmentLocation?: string | null;
         assessmentType?: AssessmentType | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
@@ -14765,6 +14800,7 @@ export type SubmitAssessmentMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -14825,6 +14861,7 @@ export type SubmitAssessmentMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -14975,6 +15012,7 @@ export type SubmitAssessmentMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -15035,6 +15073,7 @@ export type SubmitAssessmentMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -15130,6 +15169,7 @@ export type SubmitAssessmentMutation = {
             expirationDate?: string | null;
             id: string;
             name: string;
+            note?: string | null;
             url?: string | null;
             tags: Array<string>;
             redacted: boolean;
@@ -15190,6 +15230,7 @@ export type SubmitAssessmentMutation = {
             expirationDate?: string | null;
             id: string;
             name: string;
+            note?: string | null;
             url?: string | null;
             tags: Array<string>;
             redacted: boolean;
@@ -15400,6 +15441,7 @@ export type SubmitHouseholdAssessmentsMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -15460,6 +15502,7 @@ export type SubmitHouseholdAssessmentsMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -15508,7 +15551,7 @@ export type SubmitHouseholdAssessmentsMutation = {
         id: string;
         assessmentDate: string;
         assessmentLevel?: AssessmentLevel | null;
-        assessmentLocation: string;
+        assessmentLocation?: string | null;
         assessmentType?: AssessmentType | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
@@ -15650,6 +15693,7 @@ export type SubmitHouseholdAssessmentsMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -15710,6 +15754,7 @@ export type SubmitHouseholdAssessmentsMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -15860,6 +15905,7 @@ export type SubmitHouseholdAssessmentsMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -15920,6 +15966,7 @@ export type SubmitHouseholdAssessmentsMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -16015,6 +16062,7 @@ export type SubmitHouseholdAssessmentsMutation = {
             expirationDate?: string | null;
             id: string;
             name: string;
+            note?: string | null;
             url?: string | null;
             tags: Array<string>;
             redacted: boolean;
@@ -16075,6 +16123,7 @@ export type SubmitHouseholdAssessmentsMutation = {
             expirationDate?: string | null;
             id: string;
             name: string;
+            note?: string | null;
             url?: string | null;
             tags: Array<string>;
             redacted: boolean;
@@ -16302,6 +16351,7 @@ export type GetAssessmentsForPopulationQuery = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
+                note?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 redacted: boolean;
@@ -16362,6 +16412,7 @@ export type GetAssessmentsForPopulationQuery = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
+                note?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 redacted: boolean;
@@ -16410,7 +16461,7 @@ export type GetAssessmentsForPopulationQuery = {
           id: string;
           assessmentDate: string;
           assessmentLevel?: AssessmentLevel | null;
-          assessmentLocation: string;
+          assessmentLocation?: string | null;
           assessmentType?: AssessmentType | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
@@ -16552,6 +16603,7 @@ export type GetAssessmentsForPopulationQuery = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
+                note?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 redacted: boolean;
@@ -16612,6 +16664,7 @@ export type GetAssessmentsForPopulationQuery = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
+                note?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 redacted: boolean;
@@ -16762,6 +16815,7 @@ export type GetAssessmentsForPopulationQuery = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
+                note?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 redacted: boolean;
@@ -16822,6 +16876,7 @@ export type GetAssessmentsForPopulationQuery = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
+                note?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 redacted: boolean;
@@ -16917,6 +16972,7 @@ export type GetAssessmentsForPopulationQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -16977,6 +17033,7 @@ export type GetAssessmentsForPopulationQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -17202,6 +17259,7 @@ export type EnrollmentFieldsFromAssessmentFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -17262,6 +17320,7 @@ export type EnrollmentFieldsFromAssessmentFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -18483,6 +18542,7 @@ export type CeReferralFieldsFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -18543,6 +18603,7 @@ export type CeReferralFieldsFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -18827,6 +18888,7 @@ export type CeReferralStepSummaryFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -18887,6 +18949,7 @@ export type CeReferralStepSummaryFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -19499,6 +19562,7 @@ export type CeReferralStepFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -19559,6 +19623,7 @@ export type CeReferralStepFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -20314,6 +20379,7 @@ export type StartCeReferralStepMutation = {
             expirationDate?: string | null;
             id: string;
             name: string;
+            note?: string | null;
             url?: string | null;
             tags: Array<string>;
             redacted: boolean;
@@ -20374,6 +20440,7 @@ export type StartCeReferralStepMutation = {
             expirationDate?: string | null;
             id: string;
             name: string;
+            note?: string | null;
             url?: string | null;
             tags: Array<string>;
             redacted: boolean;
@@ -21015,6 +21082,7 @@ export type SubmitCeReferralStepMutation = {
             expirationDate?: string | null;
             id: string;
             name: string;
+            note?: string | null;
             url?: string | null;
             tags: Array<string>;
             redacted: boolean;
@@ -21075,6 +21143,7 @@ export type SubmitCeReferralStepMutation = {
             expirationDate?: string | null;
             id: string;
             name: string;
+            note?: string | null;
             url?: string | null;
             tags: Array<string>;
             redacted: boolean;
@@ -21228,6 +21297,7 @@ export type SubmitCeReferralStepMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -21288,6 +21358,7 @@ export type SubmitCeReferralStepMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -21711,6 +21782,7 @@ export type AssignParticipantsMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -21771,6 +21843,7 @@ export type AssignParticipantsMutation = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -22170,6 +22243,7 @@ export type GetCeReferralQuery = {
             expirationDate?: string | null;
             id: string;
             name: string;
+            note?: string | null;
             url?: string | null;
             tags: Array<string>;
             redacted: boolean;
@@ -22230,6 +22304,7 @@ export type GetCeReferralQuery = {
             expirationDate?: string | null;
             id: string;
             name: string;
+            note?: string | null;
             url?: string | null;
             tags: Array<string>;
             redacted: boolean;
@@ -22982,6 +23057,7 @@ export type GetCeReferralStepQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -23042,6 +23118,7 @@ export type GetCeReferralStepQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -24331,6 +24408,7 @@ export type ClientFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -24391,6 +24469,7 @@ export type ClientFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -24828,6 +24907,7 @@ export type GetClientQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -24888,6 +24968,7 @@ export type GetClientQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -25256,6 +25337,7 @@ export type GetClientServicesQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -25316,6 +25398,7 @@ export type GetClientServicesQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -25464,6 +25547,7 @@ export type DeleteClientFileMutation = {
       expirationDate?: string | null;
       id: string;
       name: string;
+      note?: string | null;
       url?: string | null;
       tags: Array<string>;
       redacted: boolean;
@@ -25667,6 +25751,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               id: string;
               lockVersion: number;
               relationshipToHoH: RelationshipToHoH;
+              householdSize: number;
               autoExited: boolean;
               entryDate: string;
               exitDate?: string | null;
@@ -25698,6 +25783,7 @@ export type GetFileQuery = {
     expirationDate?: string | null;
     id: string;
     name: string;
+    note?: string | null;
     url?: string | null;
     tags: Array<string>;
     redacted: boolean;
@@ -25756,6 +25842,7 @@ export type GetClientFilesQuery = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -26584,6 +26671,7 @@ export type MergeClientsMutation = {
             expirationDate?: string | null;
             id: string;
             name: string;
+            note?: string | null;
             url?: string | null;
             tags: Array<string>;
             redacted: boolean;
@@ -26644,6 +26732,7 @@ export type MergeClientsMutation = {
             expirationDate?: string | null;
             id: string;
             name: string;
+            note?: string | null;
             url?: string | null;
             tags: Array<string>;
             redacted: boolean;
@@ -27321,6 +27410,7 @@ export type CurrentLivingSituationFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -27381,6 +27471,7 @@ export type CurrentLivingSituationFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -27502,6 +27593,7 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -27562,6 +27654,7 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -27683,6 +27776,7 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -27743,6 +27837,7 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -27883,6 +27978,7 @@ export type GetProjectCurrentLivingSituationsQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -27943,6 +28039,7 @@ export type GetProjectCurrentLivingSituationsQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -28051,6 +28148,7 @@ export type CustomCaseNoteFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -28111,6 +28209,7 @@ export type CustomCaseNoteFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -28223,6 +28322,7 @@ export type GetEnrollmentCustomCaseNotesQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -28283,6 +28383,7 @@ export type GetEnrollmentCustomCaseNotesQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -28445,6 +28546,7 @@ export type GetClientCaseNotesQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -28505,6 +28607,7 @@ export type GetClientCaseNotesQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -28571,6 +28674,7 @@ export type CustomDataElementValueFieldsFragment = {
     expirationDate?: string | null;
     id: string;
     name: string;
+    note?: string | null;
     url?: string | null;
     tags: Array<string>;
     redacted: boolean;
@@ -28640,6 +28744,7 @@ export type CustomDataElementFieldsFragment = {
       expirationDate?: string | null;
       id: string;
       name: string;
+      note?: string | null;
       url?: string | null;
       tags: Array<string>;
       redacted: boolean;
@@ -28700,6 +28805,7 @@ export type CustomDataElementFieldsFragment = {
       expirationDate?: string | null;
       id: string;
       name: string;
+      note?: string | null;
       url?: string | null;
       tags: Array<string>;
       redacted: boolean;
@@ -29888,6 +29994,7 @@ export type EnrolledClientFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -29948,6 +30055,7 @@ export type EnrolledClientFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -30047,6 +30155,7 @@ export type AllEnrollmentDetailsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -30107,6 +30216,7 @@ export type AllEnrollmentDetailsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -30190,6 +30300,7 @@ export type AllEnrollmentDetailsFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -30250,6 +30361,7 @@ export type AllEnrollmentDetailsFragment = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -31025,6 +31137,7 @@ export type EnrollmentValuesFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -31085,6 +31198,7 @@ export type EnrollmentValuesFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -31180,6 +31294,7 @@ export type SubmittedEnrollmentResultFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -31240,6 +31355,7 @@ export type SubmittedEnrollmentResultFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -31331,7 +31447,7 @@ export type CeAssessmentFieldsFragment = {
   id: string;
   assessmentDate: string;
   assessmentLevel?: AssessmentLevel | null;
-  assessmentLocation: string;
+  assessmentLocation?: string | null;
   assessmentType?: AssessmentType | null;
   dateCreated?: string | null;
   dateUpdated?: string | null;
@@ -31458,6 +31574,7 @@ export type EnrollmentWithHouseholdFieldsFragment = {
         id: string;
         lockVersion: number;
         relationshipToHoH: RelationshipToHoH;
+        householdSize: number;
         autoExited: boolean;
         entryDate: string;
         exitDate?: string | null;
@@ -31630,6 +31747,7 @@ export type GetEnrollmentQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -31690,6 +31808,7 @@ export type GetEnrollmentQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -31795,6 +31914,7 @@ export type GetEnrollmentDetailsQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -31855,6 +31975,7 @@ export type GetEnrollmentDetailsQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -31938,6 +32059,7 @@ export type GetEnrollmentDetailsQuery = {
             expirationDate?: string | null;
             id: string;
             name: string;
+            note?: string | null;
             url?: string | null;
             tags: Array<string>;
             redacted: boolean;
@@ -31998,6 +32120,7 @@ export type GetEnrollmentDetailsQuery = {
             expirationDate?: string | null;
             id: string;
             name: string;
+            note?: string | null;
             url?: string | null;
             tags: Array<string>;
             redacted: boolean;
@@ -32745,6 +32868,7 @@ export type GetEnrollmentWithHouseholdQuery = {
           id: string;
           lockVersion: number;
           relationshipToHoH: RelationshipToHoH;
+          householdSize: number;
           autoExited: boolean;
           entryDate: string;
           exitDate?: string | null;
@@ -32852,7 +32976,7 @@ export type GetEnrollmentCeAssessmentsQuery = {
         id: string;
         assessmentDate: string;
         assessmentLevel?: AssessmentLevel | null;
-        assessmentLocation: string;
+        assessmentLocation?: string | null;
         assessmentType?: AssessmentType | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
@@ -34335,6 +34459,7 @@ export type FileFieldsFragment = {
   expirationDate?: string | null;
   id: string;
   name: string;
+  note?: string | null;
   url?: string | null;
   tags: Array<string>;
   redacted: boolean;
@@ -40275,7 +40400,7 @@ export type SubmitFormMutation = {
           id: string;
           assessmentDate: string;
           assessmentLevel?: AssessmentLevel | null;
-          assessmentLocation: string;
+          assessmentLocation?: string | null;
           assessmentType?: AssessmentType | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
@@ -40416,6 +40541,7 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
+                note?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 redacted: boolean;
@@ -40476,6 +40602,7 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
+                note?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 redacted: boolean;
@@ -40636,6 +40763,7 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
+                note?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 redacted: boolean;
@@ -40696,6 +40824,7 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
+                note?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 redacted: boolean;
@@ -40800,6 +40929,7 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
+                note?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 redacted: boolean;
@@ -40860,6 +40990,7 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
+                note?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 redacted: boolean;
@@ -40954,6 +41085,7 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
+                note?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 redacted: boolean;
@@ -41014,6 +41146,7 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
+                note?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 redacted: boolean;
@@ -41134,6 +41267,7 @@ export type SubmitFormMutation = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -41212,6 +41346,7 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
+                note?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 redacted: boolean;
@@ -41272,6 +41407,7 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
+                note?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 redacted: boolean;
@@ -41388,6 +41524,7 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
+                note?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 redacted: boolean;
@@ -41448,6 +41585,7 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
+                note?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 redacted: boolean;
@@ -41537,6 +41675,7 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
+                note?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 redacted: boolean;
@@ -41597,6 +41736,7 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
+                note?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 redacted: boolean;
@@ -41722,6 +41862,7 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
+                note?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 redacted: boolean;
@@ -41782,6 +41923,7 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
+                note?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 redacted: boolean;
@@ -41990,6 +42132,7 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
+                note?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 redacted: boolean;
@@ -42050,6 +42193,7 @@ export type SubmitFormMutation = {
                 expirationDate?: string | null;
                 id: string;
                 name: string;
+                note?: string | null;
                 url?: string | null;
                 tags: Array<string>;
                 redacted: boolean;
@@ -43854,6 +43998,7 @@ export type HouseholdFieldsFragment = {
       id: string;
       lockVersion: number;
       relationshipToHoH: RelationshipToHoH;
+      householdSize: number;
       autoExited: boolean;
       entryDate: string;
       exitDate?: string | null;
@@ -43935,6 +44080,7 @@ export type HouseholdClientFieldsFragment = {
     id: string;
     lockVersion: number;
     relationshipToHoH: RelationshipToHoH;
+    householdSize: number;
     autoExited: boolean;
     entryDate: string;
     exitDate?: string | null;
@@ -44113,6 +44259,7 @@ export type JoinHouseholdMutation = {
           id: string;
           lockVersion: number;
           relationshipToHoH: RelationshipToHoH;
+          householdSize: number;
           autoExited: boolean;
           entryDate: string;
           exitDate?: string | null;
@@ -44202,6 +44349,7 @@ export type JoinHouseholdMutation = {
           id: string;
           lockVersion: number;
           relationshipToHoH: RelationshipToHoH;
+          householdSize: number;
           autoExited: boolean;
           entryDate: string;
           exitDate?: string | null;
@@ -44304,6 +44452,7 @@ export type SplitHouseholdMutation = {
           id: string;
           lockVersion: number;
           relationshipToHoH: RelationshipToHoH;
+          householdSize: number;
           autoExited: boolean;
           entryDate: string;
           exitDate?: string | null;
@@ -44393,6 +44542,7 @@ export type SplitHouseholdMutation = {
           id: string;
           lockVersion: number;
           relationshipToHoH: RelationshipToHoH;
+          householdSize: number;
           autoExited: boolean;
           entryDate: string;
           exitDate?: string | null;
@@ -44491,6 +44641,7 @@ export type GetHouseholdQuery = {
         id: string;
         lockVersion: number;
         relationshipToHoH: RelationshipToHoH;
+        householdSize: number;
         autoExited: boolean;
         entryDate: string;
         exitDate?: string | null;
@@ -44604,6 +44755,7 @@ export type InventoryFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -44664,6 +44816,7 @@ export type InventoryFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -44945,6 +45098,7 @@ export type OrganizationDetailFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -45005,6 +45159,7 @@ export type OrganizationDetailFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -45095,6 +45250,7 @@ export type OrganizationFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -45155,6 +45311,7 @@ export type OrganizationFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -45279,6 +45436,7 @@ export type GetOrganizationQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -45339,6 +45497,7 @@ export type GetOrganizationQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -45542,6 +45701,7 @@ export type ProjectAllFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -45602,6 +45762,7 @@ export type ProjectAllFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -46336,6 +46497,7 @@ export type FunderFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -46396,6 +46558,7 @@ export type FunderFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -46640,6 +46803,7 @@ export type GetProjectQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -46700,6 +46864,7 @@ export type GetProjectQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -47155,6 +47320,7 @@ export type GetProjectAssessmentsQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -47215,6 +47381,7 @@ export type GetProjectAssessmentsQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -47363,6 +47530,7 @@ export type GetFunderQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -47423,6 +47591,7 @@ export type GetFunderQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -47530,6 +47699,7 @@ export type GetInventoryQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -47590,6 +47760,7 @@ export type GetInventoryQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -47738,6 +47909,7 @@ export type GetProjectInventoriesQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -47798,6 +47970,7 @@ export type GetProjectInventoriesQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -48051,6 +48224,7 @@ export type GetProjectFundersQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -48111,6 +48285,7 @@ export type GetProjectFundersQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -48671,6 +48846,7 @@ export type UpdateReferralPostingMutation = {
             expirationDate?: string | null;
             id: string;
             name: string;
+            note?: string | null;
             url?: string | null;
             tags: Array<string>;
             redacted: boolean;
@@ -48731,6 +48907,7 @@ export type UpdateReferralPostingMutation = {
             expirationDate?: string | null;
             id: string;
             name: string;
+            note?: string | null;
             url?: string | null;
             tags: Array<string>;
             redacted: boolean;
@@ -48919,6 +49096,7 @@ export type GetReferralPostingQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -48979,6 +49157,7 @@ export type GetReferralPostingQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -49206,6 +49385,7 @@ export type ReferralPostingDetailFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -49266,6 +49446,7 @@ export type ReferralPostingDetailFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -49388,6 +49569,7 @@ export type EsgFundingServiceFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -49448,6 +49630,7 @@ export type EsgFundingServiceFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -49547,6 +49730,7 @@ export type GetEsgFundingReportQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -49607,6 +49791,7 @@ export type GetEsgFundingReportQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -49968,6 +50153,7 @@ export type ServiceDetailFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -50028,6 +50214,7 @@ export type ServiceDetailFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -50138,6 +50325,7 @@ export type ServiceFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -50198,6 +50386,7 @@ export type ServiceFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -50308,6 +50497,7 @@ export type ClientServiceFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -50368,6 +50558,7 @@ export type ClientServiceFieldsFragment = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        note?: string | null;
         url?: string | null;
         tags: Array<string>;
         redacted: boolean;
@@ -50497,6 +50688,7 @@ export type GetServiceQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -50557,6 +50749,7 @@ export type GetServiceQuery = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          note?: string | null;
           url?: string | null;
           tags: Array<string>;
           redacted: boolean;
@@ -50701,6 +50894,7 @@ export type DeleteServiceMutation = {
             expirationDate?: string | null;
             id: string;
             name: string;
+            note?: string | null;
             url?: string | null;
             tags: Array<string>;
             redacted: boolean;
@@ -50761,6 +50955,7 @@ export type DeleteServiceMutation = {
             expirationDate?: string | null;
             id: string;
             name: string;
+            note?: string | null;
             url?: string | null;
             tags: Array<string>;
             redacted: boolean;
@@ -50904,6 +51099,7 @@ export type GetEnrollmentServicesQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -50964,6 +51160,7 @@ export type GetEnrollmentServicesQuery = {
               expirationDate?: string | null;
               id: string;
               name: string;
+              note?: string | null;
               url?: string | null;
               tags: Array<string>;
               redacted: boolean;
@@ -52895,6 +53092,7 @@ export const FileFieldsFragmentDoc = gql`
     expirationDate
     id
     name
+    note
     url
     tags
     access {
@@ -54889,6 +55087,7 @@ export const HouseholdClientFieldsFragmentDoc = gql`
       id
       lockVersion
       relationshipToHoH
+      householdSize
       ...EnrollmentRangeFields
       autoExited
       currentUnit {

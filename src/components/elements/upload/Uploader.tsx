@@ -17,7 +17,14 @@ import FileThumbnailIcon from '@/components/elements/upload/FileThumbnailIcon';
 import { DirectUpload, FileFieldsFragment } from '@/types/gqlTypes';
 import { ensureArray } from '@/utils/arrays';
 
-const DEFAULT_MAX_BYTES = 3000000;
+// Max upload size (12 MiB). Keep in sync by hand with ClientFileBase::MAX_FILE_SIZE in hmis-warehouse
+// (app/models/concerns/client_file_base.rb), which is the source of truth.
+//
+// The backend enforces the limit in the createDirectUpload mutation (before any bytes are uploaded)
+// and again when the file record is saved. It is duplicated here so the Uploader can display the
+// max file size to the user ("max. 12.0MB") and reject an oversized file as soon as it is picked.
+const BYTES_PER_MB = 1024 * 1024;
+const DEFAULT_MAX_BYTES = 12 * BYTES_PER_MB;
 const IMAGE_FILE_TYPES = ['.png', '.jpg', '.jpeg', '.gif'];
 
 const getFileTypesFromAccept = (accept: Accept) => {
@@ -34,7 +41,7 @@ const getFileTypesFromAccept = (accept: Accept) => {
 };
 
 const getReadableSize = (maxSize: number) =>
-  `${(maxSize / 1000000).toFixed(1)}MB`;
+  `${(maxSize / BYTES_PER_MB).toFixed(1)}MB`;
 
 const isFileFieldsFragment = (
   value: string | FileFieldsFragment

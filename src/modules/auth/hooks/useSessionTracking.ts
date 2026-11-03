@@ -4,16 +4,14 @@ import { HMIS_APP_SESSION_UID_EVENT } from '@/modules/auth/api/constants';
 import * as storage from '@/modules/auth/api/storage';
 
 export const useSessionTracking = () => {
-  const [expiry, setExpiry] = useState(storage.getSessionTracking);
+  const [tracking, setTracking] = useState(storage.getSessionTracking);
 
   useEffect(() => {
     const handleSessionUserIdEvent = (evt: Event) => {
-      const expiry = (evt as CustomEvent).detail;
-      if (expiry) {
-        setExpiry(expiry);
-      } else {
-        setExpiry(undefined);
-      }
+      const { detail } = evt as CustomEvent<
+        storage.HmisSessionTracking | undefined
+      >;
+      setTracking(detail || undefined);
     };
 
     document.addEventListener(
@@ -26,5 +24,5 @@ export const useSessionTracking = () => {
         handleSessionUserIdEvent
       );
   }, []);
-  return expiry;
+  return tracking;
 };

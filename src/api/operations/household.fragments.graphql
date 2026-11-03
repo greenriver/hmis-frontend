@@ -29,6 +29,10 @@ fragment HouseholdClientFields on HouseholdClient {
     id
     lockVersion
     relationshipToHoH
+    # Keeps each member's cached Enrollment.householdSize current. Without it, adding or
+    # removing a member updates the Household but leaves every member's Enrollment stale.
+    # See #9387.
+    householdSize
     ...EnrollmentRangeFields
     autoExited
     currentUnit {
