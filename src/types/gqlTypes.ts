@@ -861,6 +861,8 @@ export enum CeMatchRuleFieldSource {
   Client = 'CLIENT',
   /** Custom */
   CustomDataElement = 'CUSTOM_DATA_ELEMENT',
+  /** Household */
+  Household = 'HOUSEHOLD',
   /** HUD */
   Psde = 'PSDE',
 }

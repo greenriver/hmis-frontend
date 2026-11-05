@@ -94,6 +94,7 @@ export const HmisEnums = {
   CeMatchRuleFieldSource: {
     CLIENT: 'Client',
     CUSTOM_DATA_ELEMENT: 'Custom',
+    HOUSEHOLD: 'Household',
     PSDE: 'HUD',
   },
   CeMatchRuleOwnerType: {
