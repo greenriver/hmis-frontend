@@ -25819,7 +25819,6 @@ export type GetClientFilesQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-  includeOrganizationName?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type GetClientFilesQuery = {
@@ -25850,22 +25849,8 @@ export type GetClientFilesQuery = {
         enrollment?: {
           __typename?: 'Enrollment';
           id: string;
-          lockVersion: number;
-          entryDate: string;
-          exitDate?: string | null;
-          autoExited: boolean;
-          moveInDate?: string | null;
-          lastBedNightDate?: string | null;
           projectName: string;
-          organizationName?: string;
-          projectType?: ProjectType | null;
-          inProgress: boolean;
-          relationshipToHoH: RelationshipToHoH;
-          access: {
-            __typename?: 'EnrollmentAccess';
-            id: string;
-            canViewEnrollmentDetails: boolean;
-          };
+          organizationName: string;
         } | null;
         access: {
           __typename?: 'FileAccess';
@@ -63508,12 +63493,7 @@ export type GetFileQueryResult = Apollo.QueryResult<
   GetFileQueryVariables
 >;
 export const GetClientFilesDocument = gql`
-  query GetClientFiles(
-    $id: ID!
-    $limit: Int = 10
-    $offset: Int = 0
-    $includeOrganizationName: Boolean = false
-  ) {
+  query GetClientFiles($id: ID!, $limit: Int = 10, $offset: Int = 0) {
     client(id: $id) {
       id
       files(limit: $limit, offset: $offset) {
@@ -63523,14 +63503,15 @@ export const GetClientFilesDocument = gql`
         nodes {
           ...FileFields
           enrollment {
-            ...ClientEnrollmentFields
+            id
+            projectName
+            organizationName
           }
         }
       }
     }
   }
   ${FileFieldsFragmentDoc}
-  ${ClientEnrollmentFieldsFragmentDoc}
 `;
 
 /**
@@ -63548,7 +63529,6 @@ export const GetClientFilesDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
- *      includeOrganizationName: // value for 'includeOrganizationName'
  *   },
  * });
  */
