@@ -215,12 +215,7 @@ query GetFile($id: ID!) {
   }
 }
 
-query GetClientFiles(
-  $id: ID!
-  $limit: Int = 10
-  $offset: Int = 0
-  $includeOrganizationName: Boolean = false
-) {
+query GetClientFiles($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   client(id: $id) {
     id
     files(limit: $limit, offset: $offset) {
@@ -229,8 +224,11 @@ query GetClientFiles(
       nodesCount
       nodes {
         ...FileFields
+        # Only the fields the files table displays
         enrollment {
-          ...ClientEnrollmentFields
+          id
+          projectName
+          organizationName
         }
       }
     }
