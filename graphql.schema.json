@@ -28289,6 +28289,18 @@
             "deprecationReason": null
           },
           {
+            "name": "externalFormObjectKey",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "identifier",
             "description": null,
             "type": {
@@ -29798,12 +29810,6 @@
           {
             "name": "FILE",
             "description": "File",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "FORM_DEFINITION",
-            "description": "Form definition",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -55330,12 +55336,6 @@
           {
             "name": "CLIENT_ALERT",
             "description": "Client alert",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "FORM_DEFINITION",
-            "description": "Form definition",
             "isDeprecated": false,
             "deprecationReason": null
           },

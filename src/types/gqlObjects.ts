@@ -9481,6 +9481,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
+        name: 'externalFormObjectKey',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'identifier',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },

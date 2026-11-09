@@ -1,14 +1,13 @@
 import { Alert, Button, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { generatePath, useNavigate } from 'react-router';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import EditIconButton from '@/components/elements/EditIconButton';
 import PageTitle from '@/components/layout/PageTitle';
+import FormDefinitionDialog from '@/modules/admin/components/forms/FormDefinitionDialog';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
-
-import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { cache } from '@/providers/apolloClient';
 import { AdminDashboardRoutes } from '@/routes/routes';
@@ -17,11 +16,6 @@ import {
   DeleteFormDefinitionDraftMutation,
   DeleteFormDefinitionDraftMutationVariables,
   FormDefinitionFieldsForEditorFragment,
-  FormDefinitionInput,
-  MutationUpdateFormDefinitionArgs,
-  StaticFormRole,
-  UpdateFormDefinitionDocument,
-  UpdateFormDefinitionMutation,
 } from '@/types/gqlTypes';
 
 interface FormEditorHeaderProps {
@@ -35,22 +29,7 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
 }) => {
   const navigate = useNavigate();
 
-  // Dialog for updating form definitions
-  const { openFormDialog: openEditDialog, renderFormDialog: renderEditDialog } =
-    useStaticFormDialog<
-      UpdateFormDefinitionMutation,
-      MutationUpdateFormDefinitionArgs
-    >({
-      formRole: StaticFormRole.FormDefinition,
-      initialValues: formDefinition || {},
-      localConstants: { definitionId: formDefinition.id },
-      mutationDocument: UpdateFormDefinitionDocument,
-      getErrors: (data) => data.updateFormDefinition?.errors || [],
-      getVariables: (values) => ({
-        input: values as FormDefinitionInput,
-        id: formDefinition.id || '',
-      }),
-    });
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   const isFirstDraft = formDefinition.version === '0';
 
@@ -72,7 +51,12 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
 
   return (
     <>
-      {renderEditDialog({ title: 'Edit Form Details' })}
+      {editDialogOpen && (
+        <FormDefinitionDialog
+          formDefinition={formDefinition}
+          onClose={() => setEditDialogOpen(false)}
+        />
+      )}
       <Stack
         direction='row'
         spacing={2}
@@ -85,7 +69,7 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
           endElement={
             <EditIconButton
               title='Edit Title'
-              onClick={openEditDialog}
+              onClick={() => setEditDialogOpen(true)}
               sx={{ ml: 1, mb: 0.5 }}
             />
           }

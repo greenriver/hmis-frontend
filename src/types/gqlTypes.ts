@@ -3805,6 +3805,7 @@ export type FormDefinitionForJsonResult = {
 
 export type FormDefinitionInput = {
   definition?: InputMaybe<Scalars['String']['input']>;
+  externalFormObjectKey?: InputMaybe<Scalars['String']['input']>;
   identifier?: InputMaybe<Scalars['String']['input']>;
   role?: InputMaybe<FormRole>;
   title?: InputMaybe<Scalars['String']['input']>;
@@ -4002,8 +4003,6 @@ export enum FormRole {
   ExternalForm = 'EXTERNAL_FORM',
   /** File */
   File = 'FILE',
-  /** Form definition */
-  FormDefinition = 'FORM_DEFINITION',
   /** Form rule */
   FormRule = 'FORM_RULE',
   /** Funder */
@@ -8470,8 +8469,6 @@ export type StartCeReferralStepPayload = {
 export enum StaticFormRole {
   /** Client alert */
   ClientAlert = 'CLIENT_ALERT',
-  /** Form definition */
-  FormDefinition = 'FORM_DEFINITION',
   /** Form rule */
   FormRule = 'FORM_RULE',
   /** Project config */
@@ -36192,6 +36189,7 @@ export type FormDefinitionFieldsForEditorFragment = {
   __typename?: 'FormDefinition';
   version: string;
   rawDefinition: any;
+  externalFormObjectKey?: string | null;
   id: string;
   role: FormRole;
   title: string;
@@ -36776,6 +36774,7 @@ export type UpdateFormDefinitionMutation = {
       __typename?: 'FormDefinition';
       version: string;
       rawDefinition: any;
+      externalFormObjectKey?: string | null;
       id: string;
       role: FormRole;
       title: string;
@@ -42249,6 +42248,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
     __typename?: 'FormDefinition';
     version: string;
     rawDefinition: any;
+    externalFormObjectKey?: string | null;
     id: string;
     role: FormRole;
     title: string;
@@ -55164,6 +55164,7 @@ export const FormDefinitionFieldsForEditorFragmentDoc = gql`
     ...FormDefinitionFields
     version
     rawDefinition
+    externalFormObjectKey
   }
   ${FormDefinitionFieldsFragmentDoc}
 `;
