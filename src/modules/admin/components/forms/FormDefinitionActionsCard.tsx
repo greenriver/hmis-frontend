@@ -49,7 +49,7 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
   const { externalFormObjectKey } = formIdentifier.displayVersion;
   const { managedInVersionControl, access } = formIdentifier;
   const { canManageForm, canPublishForm, canDuplicateForm } = access;
-  // Retiring is supported for all forms, but only offered for External Forms for now
+  // Only External Forms can be retired (enforced by RetireFormDefinition)
   const canRetire =
     isPublished &&
     canPublishForm &&
@@ -139,7 +139,7 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
               confirmText: 'Retire',
               color: 'error',
             }}
-            dialogContent='Retiring this form stops it from being offered for new data entry. Existing records stay editable. Its External Form Key can then be used by another form. The public page is not taken down; publish the replacement form to the same key.'
+            dialogContent='Retiring this form stops it from being offered for new data entry. Existing records stay editable.'
           >
             Retire Form
           </GenericMutationButton>
