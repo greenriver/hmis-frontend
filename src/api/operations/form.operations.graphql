@@ -87,3 +87,15 @@ mutation DeleteFormDefinitionDraft($id: ID!) {
     }
   }
 }
+
+# used for retiring a form, so it has no published version
+mutation RetireFormDefinition($id: ID!) {
+  retireFormDefinition(id: $id) {
+    formIdentifier {
+      ...FormIdentifierDetails
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

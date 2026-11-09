@@ -8,12 +8,20 @@ import CommonCard from '@/components/elements/CommonCard';
 import NewTabIcon from '@/components/elements/NewTabIcon';
 import DuplicateFormButton from '@/modules/admin/components/forms/DuplicateFormButton';
 import EditFormButton from '@/modules/admin/components/forms/EditFormButton';
+import GenericMutationButton from '@/modules/dataFetching/components/GenericMutationButton';
 import {
   formatRelativeDateTime,
   parseHmisDateString,
 } from '@/modules/hmis/hmisUtil';
 import { AdminDashboardRoutes } from '@/routes/routes';
-import { FormIdentifierDetailsFragment, FormStatus } from '@/types/gqlTypes';
+import {
+  FormIdentifierDetailsFragment,
+  FormRole,
+  FormStatus,
+  RetireFormDefinitionDocument,
+  RetireFormDefinitionMutation,
+  RetireFormDefinitionMutationVariables,
+} from '@/types/gqlTypes';
 
 interface Props {
   formIdentifier: FormIdentifierDetailsFragment;
@@ -41,6 +49,11 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
   const { externalFormObjectKey } = formIdentifier.displayVersion;
   const { managedInVersionControl, access } = formIdentifier;
   const { canManageForm, canPublishForm, canDuplicateForm } = access;
+  // Retiring is supported for all forms, but only offered for External Forms for now
+  const canRetire =
+    isPublished &&
+    canPublishForm &&
+    formIdentifier.displayVersion.role === FormRole.ExternalForm;
 
   return (
     <CommonCard title='Actions' TitleComponent='h5'>
@@ -77,7 +90,8 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
         {/* Show divider if any of the buttons below will be shown */}
         {((managedInVersionControl && canDuplicateForm) ||
           canManageForm ||
-          (hasDraft && canPublishForm)) && <Divider />}
+          (hasDraft && canPublishForm) ||
+          canRetire) && <Divider />}
         {managedInVersionControl && canDuplicateForm && (
           <DuplicateFormButton formIdentifier={formIdentifier} />
         )}
@@ -106,6 +120,29 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
               {draftUpdatedBy && `by ${draftUpdatedBy.name}`}
             </Typography>
           </>
+        )}
+        {canRetire && (
+          <GenericMutationButton<
+            RetireFormDefinitionMutation,
+            RetireFormDefinitionMutationVariables
+          >
+            queryDocument={RetireFormDefinitionDocument}
+            variables={{ id: formIdentifier.displayVersion.id }}
+            idPath='retireFormDefinition.formIdentifier.id'
+            ButtonProps={{
+              variant: 'outlined',
+              color: 'error',
+              fullWidth: true,
+            }}
+            ConfirmationDialogProps={{
+              title: 'Retire Form',
+              confirmText: 'Retire',
+              color: 'error',
+            }}
+            dialogContent='Retiring this form stops it from being offered for new data entry. Existing records stay editable. Its External Form Key can then be used by another form. The public page is not taken down; publish the replacement form to the same key.'
+          >
+            Retire Form
+          </GenericMutationButton>
         )}
       </Stack>
     </CommonCard>
