@@ -177,6 +177,8 @@ fragment FormIdentifierDetails on FormIdentifier {
   }
   displayVersion {
     externalFormObjectKey
+    externalFormPublicUrl
+    externalFormLastPublishedAt
     ...FormDefinitionMetadata
   }
   draftVersion {

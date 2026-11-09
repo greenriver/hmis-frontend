@@ -4,16 +4,25 @@ import React from 'react';
 import { generatePath } from 'react-router';
 import ButtonLink from '@/components/elements/ButtonLink';
 import CommonCard from '@/components/elements/CommonCard';
+import ExternalLink from '@/components/elements/ExternalLink';
 
 import NewTabIcon from '@/components/elements/NewTabIcon';
 import DuplicateFormButton from '@/modules/admin/components/forms/DuplicateFormButton';
 import EditFormButton from '@/modules/admin/components/forms/EditFormButton';
+import GenericMutationButton from '@/modules/dataFetching/components/GenericMutationButton';
 import {
   formatRelativeDateTime,
   parseHmisDateString,
 } from '@/modules/hmis/hmisUtil';
 import { AdminDashboardRoutes } from '@/routes/routes';
-import { FormIdentifierDetailsFragment, FormStatus } from '@/types/gqlTypes';
+import {
+  FormIdentifierDetailsFragment,
+  FormRole,
+  FormStatus,
+  PublishExternalFormDocument,
+  PublishExternalFormMutation,
+  PublishExternalFormMutationVariables,
+} from '@/types/gqlTypes';
 
 interface Props {
   formIdentifier: FormIdentifierDetailsFragment;
@@ -38,9 +47,20 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
     ? parseHmisDateString(formIdentifier.draftVersion?.dateUpdated)
     : undefined;
 
-  const { externalFormObjectKey } = formIdentifier.displayVersion;
+  const {
+    externalFormObjectKey,
+    externalFormPublicUrl,
+    externalFormLastPublishedAt,
+  } = formIdentifier.displayVersion;
   const { managedInVersionControl, access } = formIdentifier;
   const { canManageForm, canPublishForm, canDuplicateForm } = access;
+
+  // Publishing in the Form Builder doesn't change the live External Form page; this action does
+  const canPublishToPublicUrl =
+    isPublished &&
+    canPublishForm &&
+    formIdentifier.displayVersion.role === FormRole.ExternalForm;
+  const publicUrlPublishedOn = parseHmisDateString(externalFormLastPublishedAt);
 
   return (
     <CommonCard title='Actions' TitleComponent='h5'>
@@ -73,6 +93,36 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
             Published {publishedOn ? formatRelativeDateTime(publishedOn) : ''}{' '}
             {publishedBy && `by ${publishedBy.name}`}
           </Typography>
+        )}
+        {canPublishToPublicUrl && (
+          <>
+            <GenericMutationButton<
+              PublishExternalFormMutation,
+              PublishExternalFormMutationVariables
+            >
+              queryDocument={PublishExternalFormDocument}
+              variables={{ id: formIdentifier.displayVersion.id }}
+              idPath='publishExternalForm.formIdentifier.id'
+              ButtonProps={{ variant: 'outlined', fullWidth: true }}
+              ConfirmationDialogProps={{
+                title: 'Publish to Public URL',
+                confirmText: 'Publish',
+              }}
+              dialogContent='This replaces the live public page with the published version of this form.'
+            >
+              Publish to Public URL
+            </GenericMutationButton>
+            <Typography variant='caption'>
+              {publicUrlPublishedOn
+                ? `Published to public URL ${formatRelativeDateTime(publicUrlPublishedOn)}`
+                : 'This version has not been published to the public URL'}
+            </Typography>
+            {externalFormPublicUrl && (
+              <ExternalLink href={externalFormPublicUrl} variant='body2'>
+                View public form
+              </ExternalLink>
+            )}
+          </>
         )}
         {/* Show divider if any of the buttons below will be shown */}
         {((managedInVersionControl && canDuplicateForm) ||

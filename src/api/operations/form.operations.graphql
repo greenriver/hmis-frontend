@@ -87,3 +87,15 @@ mutation DeleteFormDefinitionDraft($id: ID!) {
     }
   }
 }
+
+# used for publishing an External Form to its public URL
+mutation PublishExternalForm($id: ID!) {
+  publishExternalForm(id: $id) {
+    formIdentifier {
+      ...FormIdentifierDetails
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

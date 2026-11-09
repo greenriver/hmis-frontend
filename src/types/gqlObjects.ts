@@ -4608,7 +4608,15 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'externalFormLastPublishedAt',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
         name: 'externalFormObjectKey',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'externalFormPublicUrl',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
