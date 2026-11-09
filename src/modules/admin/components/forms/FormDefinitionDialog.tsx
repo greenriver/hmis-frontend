@@ -168,7 +168,7 @@ const FormDefinitionDialog: React.FC<Props> = ({ formDefinition, onClose }) => {
               helperText={
                 objectKeyLocked
                   ? 'This form has been published. Contact support to change the key.'
-                  : 'Path for the public form. This cannot be changed after the form is published. It must contain only lowercase letters, numbers, underscores, dashes, and slashes.'
+                  : 'Path for the public form. This cannot be changed after the form is published. It must contain only lowercase letters, numbers, underscores, dashes, periods, and slashes.'
               }
             />
           )}
