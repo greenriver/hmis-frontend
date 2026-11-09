@@ -4,7 +4,6 @@ import React from 'react';
 import { generatePath } from 'react-router';
 import ButtonLink from '@/components/elements/ButtonLink';
 import CommonCard from '@/components/elements/CommonCard';
-import ExternalLink from '@/components/elements/ExternalLink';
 
 import NewTabIcon from '@/components/elements/NewTabIcon';
 import DuplicateFormButton from '@/modules/admin/components/forms/DuplicateFormButton';
@@ -55,11 +54,13 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
   const { managedInVersionControl, access } = formIdentifier;
   const { canManageForm, canPublishForm, canDuplicateForm } = access;
 
-  // Publishing in the Form Builder doesn't change the live External Form page; this action does
-  const canPublishToPublicUrl =
-    isPublished &&
-    canPublishForm &&
-    formIdentifier.displayVersion.role === FormRole.ExternalForm;
+  // Publishing in the Form Builder doesn't change the live External Form page; Publish to Public URL does
+  const isPublishedExternalForm =
+    isPublished && formIdentifier.displayVersion.role === FormRole.ExternalForm;
+  const canPublishToPublicUrl = isPublishedExternalForm && canPublishForm;
+  const showPublicUrlSection =
+    isPublishedExternalForm &&
+    (canPublishToPublicUrl || !!externalFormPublicUrl);
   const publicUrlPublishedOn = parseHmisDateString(externalFormLastPublishedAt);
 
   return (
@@ -94,6 +95,21 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
             {publishedBy && `by ${publishedBy.name}`}
           </Typography>
         )}
+        {showPublicUrlSection && (
+          <>
+            <Divider />
+            {externalFormPublicUrl && (
+              <ButtonLink
+                to={externalFormPublicUrl}
+                openInNew
+                fullWidth
+                Icon={NewTabIcon}
+              >
+                View Public Form
+              </ButtonLink>
+            )}
+          </>
+        )}
         {canPublishToPublicUrl && (
           <>
             <GenericMutationButton<
@@ -117,11 +133,6 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
                 ? `Published to public URL ${formatRelativeDateTime(publicUrlPublishedOn)}`
                 : 'This version has not been published to the public URL'}
             </Typography>
-            {externalFormPublicUrl && (
-              <ExternalLink href={externalFormPublicUrl} variant='body2'>
-                View public form
-              </ExternalLink>
-            )}
           </>
         )}
         {/* Show divider if any of the buttons below will be shown */}
