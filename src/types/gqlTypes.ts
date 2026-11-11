@@ -4003,6 +4003,8 @@ export enum FormRole {
   ExternalForm = 'EXTERNAL_FORM',
   /** File */
   File = 'FILE',
+  /** Form definition */
+  FormDefinition = 'FORM_DEFINITION',
   /** Form rule */
   FormRule = 'FORM_RULE',
   /** Funder */
@@ -8469,6 +8471,8 @@ export type StartCeReferralStepPayload = {
 export enum StaticFormRole {
   /** Client alert */
   ClientAlert = 'CLIENT_ALERT',
+  /** Form definition */
+  FormDefinition = 'FORM_DEFINITION',
   /** Form rule */
   FormRule = 'FORM_RULE',
   /** Project config */

@@ -16,9 +16,12 @@ import {
   hasErrors,
   partitionValidations,
 } from '@/modules/errors/util';
-import FormActions from '@/modules/form/components/FormActions';
+import FormActions, {
+  FormActionProps,
+} from '@/modules/form/components/FormActions';
 import FormSelect from '@/modules/form/components/FormSelect';
-import { isPickListOption } from '@/modules/form/types';
+import { getRequiredLabel } from '@/modules/form/components/RequiredLabel';
+import { FormActionTypes, isPickListOption } from '@/modules/form/types';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   FormDefinitionFieldsForEditorFragment,
@@ -94,6 +97,13 @@ const FormDefinitionDialog: React.FC<Props> = ({ formDefinition, onClose }) => {
       onError,
     });
 
+  const loading = updateLoading || createLoading;
+  // Matches the old static form: type, title and identifier are required to create; title is required to edit.
+  // The External Form Key is optional until publishing.
+  const missingRequired = isEdit
+    ? !title.trim()
+    : !role || !title.trim() || !identifier.trim();
+
   const onSubmit = () => {
     if (formDefinition) {
       updateFormDefinition({
@@ -120,7 +130,7 @@ const FormDefinitionDialog: React.FC<Props> = ({ formDefinition, onClose }) => {
   };
 
   return (
-    <CommonDialog open fullWidth>
+    <CommonDialog open fullWidth onClose={onClose}>
       <DialogTitle>
         {isEdit ? 'Edit Form Details' : 'New Form Definition'}
       </DialogTitle>
@@ -134,7 +144,7 @@ const FormDefinitionDialog: React.FC<Props> = ({ formDefinition, onClose }) => {
           )}
           {!isEdit && (
             <FormSelect
-              label='Form Type'
+              label={getRequiredLabel('Form Type', true)}
               value={role}
               options={roleOptions || []}
               loading={rolesLoading}
@@ -144,7 +154,7 @@ const FormDefinitionDialog: React.FC<Props> = ({ formDefinition, onClose }) => {
             />
           )}
           <TextInput
-            label='Form Title'
+            label={getRequiredLabel('Form Title', true)}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             helperText={
@@ -153,7 +163,7 @@ const FormDefinitionDialog: React.FC<Props> = ({ formDefinition, onClose }) => {
           />
           {!isEdit && (
             <TextInput
-              label='Form Identifier'
+              label={getRequiredLabel('Form Identifier', true)}
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
               helperText='Unique system identifier for the form. This cannot be changed. It must contain only letters, numbers, underscores, and dashes, and must start with a letter.'
@@ -178,7 +188,26 @@ const FormDefinitionDialog: React.FC<Props> = ({ formDefinition, onClose }) => {
         <FormActions
           onSubmit={onSubmit}
           onDiscard={onClose}
-          loading={updateLoading || createLoading}
+          loading={loading}
+          config={
+            [
+              {
+                id: 'submit',
+                label: isEdit ? 'Save Changes' : 'Create Form',
+                action: FormActionTypes.Submit,
+                buttonProps: {
+                  variant: 'contained',
+                  disabled: missingRequired || loading,
+                },
+              },
+              {
+                id: 'discard',
+                label: 'Discard',
+                action: FormActionTypes.Discard,
+                buttonProps: { variant: 'gray' },
+              },
+            ] as FormActionProps['config'] /* 'gray' isn't a typed MUI variant; matches FormActions' default */
+          }
         />
       </DialogActions>
     </CommonDialog>

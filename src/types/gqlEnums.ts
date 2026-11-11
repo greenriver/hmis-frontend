@@ -595,6 +595,7 @@ export const HmisEnums = {
     EXIT: 'Exit',
     EXTERNAL_FORM: 'External form',
     FILE: 'File',
+    FORM_DEFINITION: 'Form definition',
     FORM_RULE: 'Form rule',
     FUNDER: 'Funder',
     HMIS_PARTICIPATION: 'HMIS participation',
@@ -1929,6 +1930,7 @@ export const HmisEnums = {
   },
   StaticFormRole: {
     CLIENT_ALERT: 'Client alert',
+    FORM_DEFINITION: 'Form definition',
     FORM_RULE: 'Form rule',
     PROJECT_CONFIG: 'Project config',
   },

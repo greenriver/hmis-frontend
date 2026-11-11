@@ -29814,6 +29814,12 @@
             "deprecationReason": null
           },
           {
+            "name": "FORM_DEFINITION",
+            "description": "Form definition",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "FORM_RULE",
             "description": "Form rule",
             "isDeprecated": false,
@@ -55336,6 +55342,12 @@
           {
             "name": "CLIENT_ALERT",
             "description": "Client alert",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FORM_DEFINITION",
+            "description": "Form definition",
             "isDeprecated": false,
             "deprecationReason": null
           },
