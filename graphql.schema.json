@@ -45981,6 +45981,12 @@
             "deprecationReason": null
           },
           {
+            "name": "EXTERNAL_FORM_SUBMISSION_NOTIFICATIONS",
+            "description": "External Form Submission Notifications",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "SENDS_DIRECT_CE_REFERRALS",
             "description": "Outgoing Referrals",
             "isDeprecated": false,
