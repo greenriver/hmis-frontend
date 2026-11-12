@@ -6850,6 +6850,8 @@ export enum ProjectConfigType {
   AutoExit = 'AUTO_EXIT',
   /** Coordinated Entry Referrals */
   CoordinatedEntry = 'COORDINATED_ENTRY',
+  /** External Form Submission Notifications */
+  ExternalFormSubmissionNotifications = 'EXTERNAL_FORM_SUBMISSION_NOTIFICATIONS',
   /** Outgoing Referrals */
   SendsDirectCeReferrals = 'SENDS_DIRECT_CE_REFERRALS',
   /** Staff Assignment */
