@@ -130,7 +130,6 @@ const ClientFilesPage = () => {
           key: 'organizationName',
           optional: {
             defaultHidden: true,
-            queryVariableField: 'includeOrganizationName',
           },
           render: (file) => {
             if (file.enrollment) {
