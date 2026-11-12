@@ -69,8 +69,8 @@ const CeMatchStructuredExpressionBuilder: React.FC<Props> = ({
     loading: customAssessmentFormsLoading,
     error: customAssessmentFormsError,
   } = useGetCeMatchCustomAssessmentFormsQuery();
-  // PSDE fields come from a static backend registry, so they can be loaded once
-  // for the whole builder and shared by every requirement clause.
+  // PSDE and household fields come from static backend registries, so they can be
+  // loaded once for the whole builder and shared by every requirement clause.
   const {
     data: psdeFieldsData,
     loading: psdeFieldsLoading,
@@ -78,17 +78,29 @@ const CeMatchStructuredExpressionBuilder: React.FC<Props> = ({
   } = useGetCeMatchFieldsQuery({
     variables: { fieldSource: CeMatchRuleFieldSource.Psde },
   });
+  const {
+    data: householdFieldsData,
+    loading: householdFieldsLoading,
+    error: householdFieldsError,
+  } = useGetCeMatchFieldsQuery({
+    variables: { fieldSource: CeMatchRuleFieldSource.Household },
+  });
 
   const loading =
-    clientItemsLoading || customAssessmentFormsLoading || psdeFieldsLoading;
+    clientItemsLoading ||
+    customAssessmentFormsLoading ||
+    psdeFieldsLoading ||
+    householdFieldsLoading;
   const clientItems = clientItemsData?.ceMatchFields || [];
   const psdeFields = psdeFieldsData?.ceMatchFields || [];
+  const householdFields = householdFieldsData?.ceMatchFields || [];
   const customAssessmentForms =
     customAssessmentFormsData?.ceMatchCustomAssessmentForms || [];
 
   if (clientItemsError) throw clientItemsError;
   if (customAssessmentFormsError) throw customAssessmentFormsError;
   if (psdeFieldsError) throw psdeFieldsError;
+  if (householdFieldsError) throw householdFieldsError;
 
   return (
     <Stack gap={2}>
@@ -152,6 +164,7 @@ const CeMatchStructuredExpressionBuilder: React.FC<Props> = ({
                     index={index}
                     clientItems={clientItems}
                     psdeFields={psdeFields}
+                    householdFields={householdFields}
                     customAssessmentForms={customAssessmentForms}
                   />
                 </Stack>

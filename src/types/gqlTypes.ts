@@ -861,6 +861,8 @@ export enum CeMatchRuleFieldSource {
   Client = 'CLIENT',
   /** Custom */
   CustomDataElement = 'CUSTOM_DATA_ELEMENT',
+  /** Household */
+  Household = 'HOUSEHOLD',
   /** HUD */
   Psde = 'PSDE',
 }
@@ -6848,6 +6850,8 @@ export enum ProjectConfigType {
   AutoExit = 'AUTO_EXIT',
   /** Coordinated Entry Referrals */
   CoordinatedEntry = 'COORDINATED_ENTRY',
+  /** External Form Submission Notifications */
+  ExternalFormSubmissionNotifications = 'EXTERNAL_FORM_SUBMISSION_NOTIFICATIONS',
   /** Outgoing Referrals */
   SendsDirectCeReferrals = 'SENDS_DIRECT_CE_REFERRALS',
   /** Staff Assignment */

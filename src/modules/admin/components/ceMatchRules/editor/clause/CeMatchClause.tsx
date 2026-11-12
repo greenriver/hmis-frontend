@@ -27,6 +27,7 @@ interface Props {
   index: number;
   clientItems: CeMatchFieldDetailsFragment[];
   psdeFields: CeMatchFieldDetailsFragment[];
+  householdFields: CeMatchFieldDetailsFragment[];
   customAssessmentForms: CeMatchCustomAssessmentFormFieldsFragment[];
 }
 
@@ -39,6 +40,7 @@ const CeMatchClause: React.FC<Props> = ({
   index,
   clientItems,
   psdeFields,
+  householdFields,
   customAssessmentForms,
 }) => {
   // Path to the current clause in the RHF form state
@@ -87,10 +89,17 @@ const CeMatchClause: React.FC<Props> = ({
   const fields = useMemo(() => {
     if (source === CeMatchRuleFieldSource.Client) return clientItems;
     if (source === CeMatchRuleFieldSource.Psde) return psdeFields;
+    if (source === CeMatchRuleFieldSource.Household) return householdFields;
     if (source === CeMatchRuleFieldSource.CustomDataElement)
       return customAssessmentFields;
     return [];
-  }, [clientItems, psdeFields, source, customAssessmentFields]);
+  }, [
+    clientItems,
+    psdeFields,
+    householdFields,
+    source,
+    customAssessmentFields,
+  ]);
 
   const selectedField = useMemo(
     () => fields.find((field) => field.expressionField === fieldValue),
