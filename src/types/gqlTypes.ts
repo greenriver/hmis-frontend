@@ -3805,6 +3805,7 @@ export type FormDefinitionForJsonResult = {
 
 export type FormDefinitionInput = {
   definition?: InputMaybe<Scalars['String']['input']>;
+  externalFormObjectKey?: InputMaybe<Scalars['String']['input']>;
   identifier?: InputMaybe<Scalars['String']['input']>;
   role?: InputMaybe<FormRole>;
   title?: InputMaybe<Scalars['String']['input']>;
@@ -36194,6 +36195,7 @@ export type FormDefinitionFieldsForEditorFragment = {
   __typename?: 'FormDefinition';
   version: string;
   rawDefinition: any;
+  externalFormObjectKey?: string | null;
   id: string;
   role: FormRole;
   title: string;
@@ -36778,6 +36780,7 @@ export type UpdateFormDefinitionMutation = {
       __typename?: 'FormDefinition';
       version: string;
       rawDefinition: any;
+      externalFormObjectKey?: string | null;
       id: string;
       role: FormRole;
       title: string;
@@ -42251,6 +42254,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
     __typename?: 'FormDefinition';
     version: string;
     rawDefinition: any;
+    externalFormObjectKey?: string | null;
     id: string;
     role: FormRole;
     title: string;
@@ -55166,6 +55170,7 @@ export const FormDefinitionFieldsForEditorFragmentDoc = gql`
     ...FormDefinitionFields
     version
     rawDefinition
+    externalFormObjectKey
   }
   ${FormDefinitionFieldsFragmentDoc}
 `;
