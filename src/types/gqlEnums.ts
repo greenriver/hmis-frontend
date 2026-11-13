@@ -1451,6 +1451,8 @@ export const HmisEnums = {
     AUTO_ENTER: 'Auto Enter',
     AUTO_EXIT: 'Auto Exit',
     COORDINATED_ENTRY: 'Coordinated Entry Referrals',
+    EXTERNAL_FORM_SUBMISSION_NOTIFICATIONS:
+      'External Form Submission Notifications',
     SENDS_DIRECT_CE_REFERRALS: 'Outgoing Referrals',
     STAFF_ASSIGNMENT: 'Staff Assignment',
   },

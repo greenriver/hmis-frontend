@@ -21,6 +21,9 @@ import {
   PublishExternalFormDocument,
   PublishExternalFormMutation,
   PublishExternalFormMutationVariables,
+  RetireFormDefinitionDocument,
+  RetireFormDefinitionMutation,
+  RetireFormDefinitionMutationVariables,
 } from '@/types/gqlTypes';
 
 interface Props {
@@ -53,6 +56,11 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
   } = formIdentifier.displayVersion;
   const { managedInVersionControl, access } = formIdentifier;
   const { canManageForm, canPublishForm, canDuplicateForm } = access;
+  // Only External Forms can be retired (enforced by RetireFormDefinition)
+  const canRetire =
+    isPublished &&
+    canPublishForm &&
+    formIdentifier.displayVersion.role === FormRole.ExternalForm;
 
   // Publishing in the Form Builder doesn't change the live External Form page; Publish to Public URL does
   const isPublishedExternalForm =
@@ -138,7 +146,8 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
         {/* Show divider if any of the buttons below will be shown */}
         {((managedInVersionControl && canDuplicateForm) ||
           canManageForm ||
-          (hasDraft && canPublishForm)) && <Divider />}
+          (hasDraft && canPublishForm) ||
+          canRetire) && <Divider />}
         {managedInVersionControl && canDuplicateForm && (
           <DuplicateFormButton formIdentifier={formIdentifier} />
         )}
@@ -167,6 +176,29 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
               {draftUpdatedBy && `by ${draftUpdatedBy.name}`}
             </Typography>
           </>
+        )}
+        {canRetire && (
+          <GenericMutationButton<
+            RetireFormDefinitionMutation,
+            RetireFormDefinitionMutationVariables
+          >
+            queryDocument={RetireFormDefinitionDocument}
+            variables={{ id: formIdentifier.displayVersion.id }}
+            idPath='retireFormDefinition.formIdentifier.id'
+            ButtonProps={{
+              variant: 'outlined',
+              color: 'error',
+              fullWidth: true,
+            }}
+            ConfirmationDialogProps={{
+              title: 'Retire Form',
+              confirmText: 'Retire',
+              color: 'error',
+            }}
+            dialogContent='Retiring this form stops it from being offered for new data entry. Existing records stay editable.'
+          >
+            Retire Form
+          </GenericMutationButton>
         )}
       </Stack>
     </CommonCard>
