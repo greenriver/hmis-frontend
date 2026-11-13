@@ -129,17 +129,30 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
             queryDocument={RetireFormDefinitionDocument}
             variables={{ id: formIdentifier.displayVersion.id }}
             idPath='retireFormDefinition.formIdentifier.id'
+            buttonTooltip={
+              hasDraft
+                ? 'Delete or publish the draft before retiring this form'
+                : undefined
+            }
             ButtonProps={{
               variant: 'outlined',
               color: 'error',
               fullWidth: true,
+              disabled: hasDraft,
             }}
             ConfirmationDialogProps={{
               title: 'Retire Form',
               confirmText: 'Retire',
               color: 'error',
             }}
-            dialogContent='Retiring this form stops it from being offered for new data entry. Existing records stay editable.'
+            dialogContent={
+              <>
+                Retiring this form removes it from data entry in Open Path.
+                Existing records stay editable.
+                {formIdentifier.displayVersion.role === FormRole.ExternalForm &&
+                  ' Its External Form Key can then be used by another form. The public page stays online and submissions are still accepted until the page is taken down.'}
+              </>
+            }
           >
             Retire Form
           </GenericMutationButton>
