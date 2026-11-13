@@ -85,18 +85,6 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
         >
           View Published Form
         </ButtonLink>
-        {/* In Dev only, expose link to external form preview. This is not available in non-dev environments. */}
-        {externalFormObjectKey && import.meta.env.MODE === 'development' && (
-          <ButtonLink
-            to={`/hmis_external_api/external_forms/${externalFormObjectKey}`}
-            openInNew
-            fullWidth
-            Icon={NewTabIcon}
-            disabled={!isPublished}
-          >
-            External Form Preview
-          </ButtonLink>
-        )}
         {isPublished && (
           <Typography variant='caption'>
             Published {publishedOn ? formatRelativeDateTime(publishedOn) : ''}{' '}
@@ -106,6 +94,17 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
         {showPublicUrlSection && (
           <>
             <Divider />
+            {import.meta.env.MODE === 'development' && (
+              <ButtonLink
+                to={`/hmis_external_api/external_forms/${externalFormObjectKey}`}
+                openInNew
+                fullWidth
+                Icon={NewTabIcon}
+                disabled={!isPublished}
+              >
+                [Dev] View Public Form
+              </ButtonLink>
+            )}
             {externalFormPublicUrl && (
               <ButtonLink
                 to={externalFormPublicUrl}
@@ -139,7 +138,9 @@ const FormDefinitionActionsCard: React.FC<Props> = ({ formIdentifier }) => {
             <Typography variant='caption'>
               {publicUrlPublishedOn
                 ? `Published to public URL ${formatRelativeDateTime(publicUrlPublishedOn)}`
-                : 'This version has not been published to the public URL'}
+                : externalFormPublicUrl
+                  ? 'An older version is live at the public URL. Publish to update it.'
+                  : 'This version has not been published to the public URL'}
             </Typography>
           </>
         )}
