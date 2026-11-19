@@ -42,7 +42,7 @@ RUN --mount=type=cache,target=/app/node_modules \
 #####################################################################
 # nginx container
 #####################################################################
-FROM nginx:1.30-trixie
+FROM nginx:1.30.7-trixie@sha256:7fad6c0dff97965adbddf28027d934b111fc0221a554315dc274712f3fba24d3
 ARG USERID=${USERID:-10000}
 ARG GROUPID=${GROUPID:-10001}
 
