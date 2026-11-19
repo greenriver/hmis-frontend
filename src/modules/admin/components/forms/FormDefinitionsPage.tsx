@@ -1,43 +1,16 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button, Grid, Paper } from '@mui/material';
-import { generatePath, useNavigate } from 'react-router';
+import { useState } from 'react';
+import FormDefinitionDialog from './FormDefinitionDialog';
 import FormDefinitionTable from './FormDefinitionTable';
 import PageTitle from '@/components/layout/PageTitle';
 import useDebouncedState from '@/hooks/useDebouncedState';
-import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
-import { AdminDashboardRoutes } from '@/routes/routes';
-import {
-  CreateFormDefinitionDocument,
-  CreateFormDefinitionMutation,
-  FormDefinitionInput,
-  MutationCreateFormDefinitionArgs,
-  StaticFormRole,
-} from '@/types/gqlTypes';
 
 const FormDefinitionsPage = () => {
-  const navigate = useNavigate();
   const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
-
-  // Dialog for creating new form definitions
-  const {
-    openFormDialog: openCreateDialog,
-    renderFormDialog: renderCreateDialog,
-  } = useStaticFormDialog<
-    CreateFormDefinitionMutation,
-    MutationCreateFormDefinitionArgs
-  >({
-    formRole: StaticFormRole.FormDefinition,
-    mutationDocument: CreateFormDefinitionDocument,
-    getErrors: (data) => data.createFormDefinition?.errors || [],
-    getVariables: (values) => ({ input: values as FormDefinitionInput }),
-    onCompleted: (data) => {
-      const identifier = data?.createFormDefinition?.formDefinition?.identifier;
-      if (identifier)
-        navigate(generatePath(AdminDashboardRoutes.VIEW_FORM, { identifier }));
-    },
-  });
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
   return (
     <>
       <PageTitle
@@ -47,7 +20,7 @@ const FormDefinitionsPage = () => {
             <Button
               startIcon={<AddIcon />}
               variant='outlined'
-              onClick={() => openCreateDialog()}
+              onClick={() => setCreateDialogOpen(true)}
             >
               New Form
             </Button>
@@ -77,7 +50,9 @@ const FormDefinitionsPage = () => {
           </Paper>
         </Grid>
       </Grid>
-      {renderCreateDialog({ title: 'New Form Definition' })}
+      {createDialogOpen && (
+        <FormDefinitionDialog onClose={() => setCreateDialogOpen(false)} />
+      )}
     </>
   );
 };
