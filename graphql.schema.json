@@ -6037,6 +6037,12 @@
             "deprecationReason": null
           },
           {
+            "name": "HOUSEHOLD",
+            "description": "Household",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "PSDE",
             "description": "HUD",
             "isDeprecated": false,
@@ -45971,6 +45977,12 @@
           {
             "name": "COORDINATED_ENTRY",
             "description": "Coordinated Entry Referrals",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "EXTERNAL_FORM_SUBMISSION_NOTIFICATIONS",
+            "description": "External Form Submission Notifications",
             "isDeprecated": false,
             "deprecationReason": null
           },
