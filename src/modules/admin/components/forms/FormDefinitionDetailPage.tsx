@@ -87,7 +87,7 @@ const FormDefinitionDetailPage = () => {
                       displayVersion.externalFormObjectKey
                     ) : (
                       <Typography variant='body2' color='error.dark'>
-                        Contact support to configure
+                        Not set. Set it in Edit Form Details on a new draft.
                       </Typography>
                     )}
                   </CommonLabeledTextBlock>

@@ -163,6 +163,7 @@ fragment FormDefinitionFieldsForEditor on FormDefinition {
   ...FormDefinitionFields
   version
   rawDefinition
+  externalFormObjectKey
 }
 
 fragment FormIdentifierDetails on FormIdentifier {
@@ -177,6 +178,8 @@ fragment FormIdentifierDetails on FormIdentifier {
   }
   displayVersion {
     externalFormObjectKey
+    externalFormPublicUrl
+    externalFormLastPublishedAt
     ...FormDefinitionMetadata
   }
   draftVersion {
